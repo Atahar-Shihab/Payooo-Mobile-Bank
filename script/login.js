@@ -9,7 +9,7 @@ document.getElementById('login-btn').addEventListener('click', function() {
     console.log(pin);
 
     if (number === '00000000000' && pin === '0000') {
-       alert('Login successful! Welcome to Payooo Mobile Bank.');
+       alert('Login successful! Welcome to Payoo Mobile Bank.');
        window.location.assign('/home.html');
         
     } else {
