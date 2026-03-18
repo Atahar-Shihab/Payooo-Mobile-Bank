@@ -20,3 +20,22 @@ function setBalance(value){
     balanceElement.innerText = value;
 
 }
+
+
+function showonly(id) {
+
+    
+
+const addmoney = document.getElementById('add-money');
+const cashout = document.getElementById('cashout');
+
+
+addmoney.classList.add('hidden');
+cashout.classList.add('hidden');
+
+const selectedSection = document.getElementById(id);
+selectedSection.classList.remove('hidden');
+
+
+
+}

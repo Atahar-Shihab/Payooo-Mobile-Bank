@@ -81,27 +81,27 @@
         <div class="buttons grid grid-cols-3 gap-3">
 
 
-            <button class="btn flex-col h-full py-4 btn-primary btn-soft">
+            <button onclick="showonly('add-money')" class="btn flex-col h-full py-4 btn-primary btn-soft">
                 <img src="./assets/opt-1.png" alt="">
                 <p>Add Money</p>
             </button>
-            <button class="btn flex-col h-full py-4 btn-primary btn-soft">
+            <button onclick="showonly('cashout')" class="btn flex-col h-full py-4 btn-primary btn-soft">
                 <img src="./assets/opt-2.png" alt="">
                 <p>Cash out</p>
             </button>
-            <button class="btn flex-col h-full py-4 btn-primary btn-soft">
+            <button onclick="showonly('transfer-money')" class="btn flex-col h-full py-4 btn-primary btn-soft">
                 <img src="./assets/opt-3.png" alt="">
                 <p>Transfer Money</p>
             </button>
-            <button class="btn flex-col h-full py-4 btn-primary btn-soft">
+            <button onclick="showonly('get-bonus')" class="btn flex-col h-full py-4 btn-primary btn-soft">
                 <img src="./assets/opt-4.png" alt="">
                 <p>Get Bonus</p>
             </button>
-            <button class="btn flex-col h-full py-4 btn-primary btn-soft">
+            <button onclick="showonly('pay-bill')" class="btn flex-col h-full py-4 btn-primary btn-soft">
                 <img src="./assets/opt-5.png" alt="">
                 <p>Pay Bill</p>
             </button>
-            <button class="btn flex-col h-full py-4 btn-primary btn-soft">
+            <button onclick="showonly('transactions')" class="btn flex-col h-full py-4 btn-primary btn-soft">
                 <img src="./assets/opt-6.png" alt="">
                 <p>Transactions</p>
             </button>
@@ -114,7 +114,7 @@
 
 
 
-<section id="add-money" class="w-11/12 mx-auto py-5">
+<section id='add-money' class="w-11/12 mx-auto py-5 hidden">
     <h2 class="text-2xl font-bold mb-4">Add Money</h2>
                         <div class="card bg-base-100 w-full shadow rounded-2xl">
             <div class="card-body">
@@ -142,7 +142,7 @@
 
 
 
-    <section id="cashout" class="w-11/12 mx-auto py-5 hidden">
+    <section id='cashout' class="w-11/12 mx-auto py-5 hidden">
 
         <h2 class="text-2xl font-bold">Cashout</h2>
                 <div class="card bg-base-100 w-full shadow rounded-2xl">
