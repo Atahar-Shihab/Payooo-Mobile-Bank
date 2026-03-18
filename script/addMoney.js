@@ -29,6 +29,35 @@ document.getElementById("add-money-btn").addEventListener('click', function() {
         const newBalance = currentBalance + Number(amount);
         setBalance(newBalance);
         alert(`Money added successfully! from ${bankAccount} bank at ${new Date().toLocaleString()}. Amount: ${amount} Taka. Account number: ${accno}. New balance: ${newBalance} Taka.`);
+
+
+
+
+
+
+        const history = document.getElementById('history-container');
+
+        if (history.innerText === 'No transactions yet.') {
+            history.innerText = '';
+        }
+
+        
+
+
+        const newHistory = document.createElement('div');
+        newHistory.innerHTML = `
+        <div class="transaction-card p-5 bg-base-100">
+
+        Add Money Success from ${bankAccount} bank at ${new Date().toLocaleString()}. Amount: ${amount} Taka. Account number: ${accno}. New balance: ${newBalance} Taka.
+        </div>
+
+
+        `;
+        history.append(newHistory);
+    
+
+
+
     }
     
 

@@ -26,6 +26,26 @@ document.getElementById('cashout-btn').addEventListener('click', function() {
     if (pin === '0000') {
         alert(`Cashout successful! You have withdrawn ${cashoutamount} Taka. Your new balance is ${newBalance} Taka.`);
         document.getElementById('balance').innerText = newBalance;
+
+                const history = document.getElementById('history-container');
+
+        if (history.innerText === 'No transactions yet.') {
+            history.innerText = '';
+        }
+
+        
+
+
+        const newHistory = document.createElement('div');
+        newHistory.innerHTML = `
+        <div class="transaction-card p-5 bg-base-100">
+        Cashout from ${cashoutnumber} at ${new Date().toLocaleString()}. Amount: ${cashoutamount} Taka. New balance: ${newBalance} Taka.
+        
+        </div>
+
+
+        `;
+        history.append(newHistory);
     } else {
         alert('Invalid pin. Please try again.');
         return;
