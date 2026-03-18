@@ -13,3 +13,10 @@ function getBalance() {
     return Number(balanceElement.innerText);
 
 }
+
+
+function setBalance(value){
+    const balanceElement = document.getElementById('balance');
+    balanceElement.innerText = value;
+
+}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
@@ -112,7 +112,37 @@
 
     </section>
 
-    <section id="cashout" class="w-11/12 mx-auto py-5">
+
+
+<section id="add-money" class="w-11/12 mx-auto py-5">
+    <h2 class="text-2xl font-bold mb-4">Add Money</h2>
+                        <div class="card bg-base-100 w-full shadow rounded-2xl">
+            <div class="card-body">
+                <fieldset class="fieldset">
+                    <label class="label text-neutral font-bold">Select A Bank</label>
+                    <select id="add-money-bank" class="select w-full rounded-full bg-base-200 mb-6">
+  <option disabled selected class="text-neutral/50">Select bank</option>
+  <option value="DBBL">DBBL</option>
+  <option value="City Bank">City Bank</option>
+  <option value="IBBL">IBBL</option>
+</select>
+                    <label class="label text-neutral font-bold">Bank Account Number</label>
+                    <input id="add-money-number" maxlength="11" minlength="11" type="text" class="input w-full rounded-full bg-base-200" placeholder="Bank Account Number"/>
+                    <br>
+                    <label class="label text-neutral font-bold">Amount to add</label>
+                    <input id="add-money-amount" type="number" class="input w-full rounded-full bg-base-200" placeholder="Amount"/>
+                    <br>
+                    <label class="label text-neutral font-bold">4 Digit Pin</label>
+                    <input id="add-money-pin" type="password" maxlength="4" class="input w-full rounded-full bg-base-200" placeholder="4 Digit Pin" />
+                    <button id="add-money-btn" class="btn btn-primary mt-4 rounded-full">Add Money</button>
+                </fieldset>
+            </div>
+        </div>
+</section>
+
+
+
+    <section id="cashout" class="w-11/12 mx-auto py-5 hidden">
 
         <h2 class="text-2xl font-bold">Cashout</h2>
                 <div class="card bg-base-100 w-full shadow rounded-2xl">
@@ -133,6 +163,7 @@
 
     </section>
 <script src="./script/machine.js"></script>
+<script src="./script/addMoney.js"></script>
 <script src="./script/cashout.js"></script>
 </body>
 
