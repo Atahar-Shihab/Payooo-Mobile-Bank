@@ -37,7 +37,8 @@ document.getElementById("add-money-btn").addEventListener('click', function() {
 
         const history = document.getElementById('history-container');
 
-        if (history.innerText === 'No transactions yet.') {
+        if (history.innerText == 'No transactions yet.') {
+            console.log('No transactions yet.');
             history.innerText = '';
         }
 
