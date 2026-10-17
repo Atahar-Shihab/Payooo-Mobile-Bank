@@ -1,78 +1,50 @@
-<img src="./assets/Logo-full.png" width="200"  style="background:white;padding:10px;"/>
+# Payoo
 
-# PAYOO - Smart MFS Interface 
+Payoo is a polished, responsive demo for a mobile financial-services wallet. It is a frontend-only learning project: no real authentication, payment processing, or sensitive financial data is involved.
 
-## Overview
-PAYOO is a smart Mobile Financial Services (MFS) interface that provides a seamless digital banking experience. Built with HTML, CSS, DaisyUI, and Vanilla JavaScript, it offers a user-friendly platform for managing money transfers and financial transactions. The application supports key banking operations including adding money, cashouts, bonus rewards, and comprehensive transaction history tracking.
+## Highlights
 
-## Features 
-- **Simple Login Interface** - Secure authentication with username and password
-- **Home Dashboard** - View account balance and quick access to all services
-- **Add Money** - Deposit funds into your PAYOO account
-- **Cash Out** - Withdraw money with PIN verification
-- **Money Transfer** - Send money to other users securely
-- **Bonus Rewards** - Earn and track promotional bonuses
-- **Transaction History** - Complete record of all financial activities
-- **PIN Security System** - Every transaction requires PIN authentication for enhanced security
-- **User-Friendly Interface** - Responsive design built with DaisyUI for optimal experience across devices
+- Responsive sign-in and wallet dashboard
+- Add money, cash out, send money, pay bills, and redeem rewards
+- Friendly validation and in-app success/error feedback
+- Transaction activity and balance persisted in browser `localStorage`
+- Accessible semantic forms, keyboard-friendly controls, and responsive layouts
 
-## UI 
-<table>
-    <tr>
-        <td>
-        <img src="./ui/Login page.png" >
-        </td>
-        <td >
-        <img src="./assets/Logo-full.png" width="100%" style="background:white;padding:10px;">
-        </td>
-    </tr>
-    <tr>
-        <td>
-        <img src="./ui/Cashout.png" >
-        </td>
-        <td >
-        <img src="./ui/Add Money.png" >
-        </td>
-    </tr>
-    <tr>
-        <td>
-        <img src="./ui/Transactions.png" >
-        </td>
-        <td >
-        <img src="./ui/Pay Bill.png" >
-        </td>
-    </tr>
-    <tr>
-        <td>
-        <img src="./ui/send money.png" >
-        </td>
-        <td >
-        <img src="./ui/Home Page.png">
-        </td>
-    </tr>
-    
-</table>
+## Demo access
 
-## How to use
+| Field | Value |
+| --- | --- |
+| Mobile number | `00000000000` |
+| PIN | `0000` |
+| Reward code | `PAYOO100` |
 
-### 1. Clone the Repository
+## Run locally
+
+This project has no build step. Open `index.html` in a browser, or serve the folder with any static web server.
 
 ```bash
-git clone https://github.com/ProgrammingHero1/payoo-resources.git
+npx serve .
 ```
 
-### 2. Install Dependencies
+## Project structure
 
-Copy the project assets and set up required CDNs:
+```text
+assets/
+  css/app.css          # Design system and responsive UI
+  logo.png             # Brand asset
+script/
+  app.js               # Auth, state, validation, transactions, rendering
+index.html             # Sign-in screen
+home.html              # Wallet dashboard
+```
 
-- **Tailwind CSS** - Add to `<head>`:
+## Notes
 
+- Wallet data is stored only in the current browser under `payoo-wallet`.
+- Use the “Clear history” action to remove local transaction activity. To reset all demo data, remove the `payoo-wallet` local-storage key in browser developer tools.
+- CDN-hosted fonts and icons need an internet connection; the core page remains usable without them.
 
-- **DaisyUI** - Add after Tailwind:
+## Screens
 
-
-- **Font Awesome** - Add Font Awesome icons:
-
-
-### 3. Start Building the Application
-
+<img src="./ui/Login page.png" width="300" alt="Payoo login screen" />
+<img src="./ui/Home Page.png" width="300" alt="Payoo home screen" />

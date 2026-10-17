@@ -1,64 +1,40 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payoo | Login</title>
-    <link rel="shortcut icon" href="./assets/logo.png" type="image/x-icon">
-
-    <!-- Tailwind + DaisyUI -->
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
-
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Outfit:wght@100..900&display=swap"
-        rel="stylesheet">
-
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <style>
-        * {
-            font-family: "Outfit", sans-serif;
-        }
-    </style>
-
-</head>
-
-<body class="min-h-screen max-w-md bg-base-200 mx-auto">
-
-    <div class="logo w-[200px] mx-auto pt-32">
-
-        <img src="./assets/Logo-full.png" alt="">
-
-    </div>
-
-    <div class="form pt-10">
-        <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow mx-auto rounded-2xl">
-            <div class="card-body">
-                <fieldset class="fieldset">
-                    <label class="label text-neutral font-bold">Mobile Number</label>
-                    <input id="input-number" maxlength="11" minlength="11" type="text" class="input rounded-full bg-base-200" placeholder="Mobile Number"/>
-                    <br>
-                    <label class="label text-neutral font-bold">4 Digit Pin</label>
-                    <input id="input-pin" type="password" maxlength="4" class="input rounded-full bg-base-200" placeholder="4 Digit Pin" />
-                    <button id="login-btn" class="btn btn-primary mt-4 rounded-full">Login</button>
-                </fieldset>
-            </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b8f7c" />
+    <title>Payoo — Secure digital wallet</title>
+    <link rel="icon" href="./assets/logo.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <link rel="stylesheet" href="./assets/css/app.css" />
+  </head>
+  <body class="auth-page">
+    <main class="auth-shell">
+      <section class="auth-intro" aria-labelledby="welcome-title">
+        <a class="brand brand--light" href="./index.html" aria-label="Payoo home"><img src="./assets/logo.png" alt="" /><span>pay<span>oo</span></span></a>
+        <div class="intro-copy"><p class="eyebrow">DIGITAL WALLET</p><h1 id="welcome-title">Your money,<br />made effortless.</h1><p>Send, save, pay and manage every moment from one beautifully simple place.</p></div>
+        <div class="security-note"><i class="fa-solid fa-shield-heart"></i> Built for everyday peace of mind</div>
+      </section>
+      <section class="auth-panel" aria-labelledby="sign-in-title">
+        <div class="auth-card">
+          <div class="mobile-brand brand"><img src="./assets/logo.png" alt="" /><span>pay<span>oo</span></span></div>
+          <p class="eyebrow">WELCOME BACK</p><h2 id="sign-in-title">Sign in to Payoo</h2><p class="muted">Enter your details to access your wallet.</p>
+          <form id="login-form" class="form-stack" novalidate>
+            <label for="input-number">Mobile number</label>
+            <div class="input-wrap"><span>+880</span><input id="input-number" name="mobile" inputmode="numeric" autocomplete="tel" maxlength="11" placeholder="01XXXXXXXXX" required /></div>
+            <label for="input-pin">4-digit PIN</label>
+            <div class="input-wrap"><i class="fa-solid fa-lock"></i><input id="input-pin" name="pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="4" placeholder="••••" required /><button class="icon-button" type="button" data-password-toggle="input-pin" aria-label="Show PIN"><i class="fa-regular fa-eye"></i></button></div>
+            <button class="button button--primary button--wide" type="submit">Sign in <i class="fa-solid fa-arrow-right"></i></button>
+          </form>
+          <div class="demo-credentials"><i class="fa-regular fa-circle-question"></i><span>Demo: <strong>00000000000</strong> · PIN <strong>0000</strong></span></div>
         </div>
-    </div>
-
-
-    <script src="./script/login.js"></script>
-
-</body>
-
+      </section>
+    </main>
+    <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+    <script src="./script/app.js"></script>
+  </body>
 </html>
