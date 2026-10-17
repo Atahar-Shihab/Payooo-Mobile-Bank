@@ -1,31 +1,91 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="theme-color" content="#0b8f7c" />
-    <title>Payoo — My wallet</title><link rel="icon" href="./assets/logo.png" type="image/png" /><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" /><link rel="stylesheet" href="./assets/css/app.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#17162f" />
+    <title>Payoo — Your money, in motion</title>
+    <link rel="icon" href="./assets/logo.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <link rel="stylesheet" href="./assets/css/app.css" />
   </head>
-  <body class="app-page"><div class="app-shell">
-    <header class="topbar"><a class="brand" href="./home.html" aria-label="Payoo dashboard"><img src="./assets/logo.png" alt="" /><span>pay<span>oo</span></span></a><div class="topbar-actions"><button class="notification-button" aria-label="Notifications"><i class="fa-regular fa-bell"></i><span></span></button><button id="logout-btn" class="button button--ghost">Log out <i class="fa-solid fa-arrow-right-from-bracket"></i></button></div></header>
-    <main>
-      <section class="hero" aria-labelledby="dashboard-title"><div><p class="eyebrow">GOOD TO SEE YOU</p><h1 id="dashboard-title">Welcome back, Shihab <span>👋</span></h1><p>Here’s your financial snapshot for today.</p></div><p class="date" id="today-date"></p></section>
-      <section class="balance-card" aria-label="Wallet balance"><div class="balance-card__top"><div><p>Available balance</p><h2><span class="currency">৳</span> <span id="balance">45,000.00</span></h2></div><div class="balance-icon"><i class="fa-solid fa-wallet"></i></div></div><div class="balance-card__footer"><span><i class="fa-solid fa-circle-check"></i> Wallet active</span><button id="balance-visibility" class="text-button" type="button"><i class="fa-regular fa-eye"></i> Hide balance</button></div></section>
-      <section class="quick-actions" aria-labelledby="actions-title"><div class="section-heading"><div><p class="eyebrow">SERVICES</p><h2 id="actions-title">What would you like to do?</h2></div></div><div class="action-grid">
-        <button class="action-card is-active" data-action="add-money"><span class="action-icon action-icon--green"><i class="fa-solid fa-plus"></i></span><strong>Add money</strong><small>Top up wallet</small></button>
-        <button class="action-card" data-action="cashout"><span class="action-icon action-icon--orange"><i class="fa-solid fa-arrow-up-right-dots"></i></span><strong>Cash out</strong><small>Withdraw funds</small></button>
-        <button class="action-card" data-action="transfer"><span class="action-icon action-icon--blue"><i class="fa-solid fa-paper-plane"></i></span><strong>Send money</strong><small>To anyone</small></button>
-        <button class="action-card" data-action="pay-bill"><span class="action-icon action-icon--purple"><i class="fa-regular fa-file-lines"></i></span><strong>Pay bill</strong><small>Stay on top</small></button>
-        <button class="action-card" data-action="bonus"><span class="action-icon action-icon--yellow"><i class="fa-solid fa-gift"></i></span><strong>Rewards</strong><small>Redeem bonus</small></button>
-        <button class="action-card" data-action="history"><span class="action-icon action-icon--gray"><i class="fa-solid fa-clock-rotate-left"></i></span><strong>History</strong><small>All activity</small></button>
-      </div></section>
-      <section class="workspace" aria-live="polite">
-        <article id="add-money" class="transaction-panel"><div class="panel-heading"><div><span class="panel-icon"><i class="fa-solid fa-plus"></i></span><div><h2>Add money</h2><p>Instantly top up from your bank account.</p></div></div></div><form class="transaction-form" data-transaction="add-money" novalidate><label>Choose bank<select name="bank" required><option value="">Select your bank</option><option>DBBL</option><option>City Bank</option><option>IBBL</option></select></label><label>Bank account number<input name="account" inputmode="numeric" maxlength="11" placeholder="11-digit account number" required /></label><label>Amount<input name="amount" inputmode="decimal" placeholder="Enter amount" required /></label><label>4-digit PIN<input name="pin" type="password" inputmode="numeric" maxlength="4" placeholder="Enter your PIN" required /></label><button class="button button--primary" type="submit">Add money <i class="fa-solid fa-arrow-right"></i></button></form></article>
-        <article id="cashout" class="transaction-panel hidden"><div class="panel-heading"><div><span class="panel-icon panel-icon--orange"><i class="fa-solid fa-arrow-up-right-dots"></i></span><div><h2>Cash out</h2><p>Withdraw securely through an agent.</p></div></div></div><form class="transaction-form" data-transaction="cashout" novalidate><label>Agent number<input name="recipient" inputmode="numeric" maxlength="11" placeholder="01XXXXXXXXX" required /></label><label>Amount<input name="amount" inputmode="decimal" placeholder="Enter amount" required /></label><label>4-digit PIN<input name="pin" type="password" inputmode="numeric" maxlength="4" placeholder="Enter your PIN" required /></label><button class="button button--primary" type="submit">Confirm cash out <i class="fa-solid fa-arrow-right"></i></button></form></article>
-        <article id="transfer" class="transaction-panel hidden"><div class="panel-heading"><div><span class="panel-icon panel-icon--blue"><i class="fa-solid fa-paper-plane"></i></span><div><h2>Send money</h2><p>Transfer to any Payoo mobile number.</p></div></div></div><form class="transaction-form" data-transaction="transfer" novalidate><label>Recipient mobile number<input name="recipient" inputmode="numeric" maxlength="11" placeholder="01XXXXXXXXX" required /></label><label>Amount<input name="amount" inputmode="decimal" placeholder="Enter amount" required /></label><label>4-digit PIN<input name="pin" type="password" inputmode="numeric" maxlength="4" placeholder="Enter your PIN" required /></label><button class="button button--primary" type="submit">Send money <i class="fa-solid fa-arrow-right"></i></button></form></article>
-        <article id="pay-bill" class="transaction-panel hidden"><div class="panel-heading"><div><span class="panel-icon panel-icon--purple"><i class="fa-regular fa-file-lines"></i></span><div><h2>Pay a bill</h2><p>Make payments without the queue.</p></div></div></div><form class="transaction-form" data-transaction="pay-bill" novalidate><label>Biller name<input name="biller" placeholder="e.g. DESCO" required /></label><label>Bill reference<input name="reference" placeholder="Bill or customer number" required /></label><label>Amount<input name="amount" inputmode="decimal" placeholder="Enter amount" required /></label><label>4-digit PIN<input name="pin" type="password" inputmode="numeric" maxlength="4" placeholder="Enter your PIN" required /></label><button class="button button--primary" type="submit">Pay bill <i class="fa-solid fa-arrow-right"></i></button></form></article>
-        <article id="bonus" class="transaction-panel hidden"><div class="panel-heading"><div><span class="panel-icon panel-icon--yellow"><i class="fa-solid fa-gift"></i></span><div><h2>Redeem reward</h2><p>Apply a bonus code to your wallet.</p></div></div></div><form class="transaction-form" data-transaction="bonus" novalidate><label>Bonus code<input name="code" placeholder="Enter code (PAYOO100)" required /></label><label>4-digit PIN<input name="pin" type="password" inputmode="numeric" maxlength="4" placeholder="Enter your PIN" required /></label><button class="button button--primary" type="submit">Redeem reward <i class="fa-solid fa-arrow-right"></i></button></form><p class="form-hint">Try code <strong>PAYOO100</strong> for ৳100.</p></article>
-        <article id="history" class="transaction-panel hidden"><div class="panel-heading"><div><span class="panel-icon panel-icon--gray"><i class="fa-solid fa-clock-rotate-left"></i></span><div><h2>Transaction history</h2><p>Your latest wallet activity.</p></div></div><button id="clear-history" class="text-button" type="button">Clear history</button></div><div id="history-container" class="history-list"></div></article>
-      </section>
-    </main>
-  </div><div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div><script src="./script/app.js"></script></body>
+  <body class="app-page">
+    <div class="app-layout">
+      <aside class="sidebar" aria-label="Primary navigation">
+        <a class="brand brand--sidebar" href="./home.html" aria-label="Payoo home">
+          <span class="brand-mark"><img src="./assets/logo.png" alt="" /></span>
+          <span>pay<span>oo</span></span>
+        </a>
+        <p class="sidebar-label">MENU</p>
+        <nav class="sidebar-nav">
+          <button class="nav-link is-active" data-view="overview"><i class="fa-solid fa-grid-2"></i><span>Overview</span></button>
+          <button class="nav-link" data-view="activity"><i class="fa-solid fa-arrow-right-arrow-left"></i><span>Transactions</span></button>
+          <button class="nav-link" data-view="insights"><i class="fa-solid fa-chart-pie"></i><span>Insights</span></button>
+          <button class="nav-link" data-view="rewards"><i class="fa-solid fa-sparkles"></i><span>Rewards</span><em>new</em></button>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="mini-wallet"><span class="mini-wallet__icon"><i class="fa-solid fa-shield-heart"></i></span><div><small>Payoo protection</small><strong>Wallet secured</strong></div></div>
+          <button id="logout-btn" class="logout-button"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out</button>
+        </div>
+      </aside>
+
+      <div class="page-content">
+        <header class="topbar">
+          <button class="mobile-menu" id="mobile-menu" aria-label="Open navigation"><i class="fa-solid fa-bars"></i></button>
+          <div class="page-title"><p id="today-date"></p><h1 id="page-heading">Good morning, Shihab <span>✦</span></h1></div>
+          <div class="topbar-actions">
+            <button id="notification-btn" class="round-button notification-button" aria-label="Open notifications"><i class="fa-regular fa-bell"></i><b></b></button>
+            <button class="profile-button" data-view="overview" aria-label="Open profile"><span>AS</span><i class="fa-solid fa-chevron-down"></i></button>
+          </div>
+        </header>
+
+        <main>
+          <section id="overview-view" class="app-view">
+            <div class="intro-row"><div><p class="eyebrow">YOUR WALLET</p><h2>Money that moves with you.</h2></div><button class="text-cta" data-view="activity">View all activity <i class="fa-solid fa-arrow-right"></i></button></div>
+            <section class="wallet-grid" aria-label="Wallet overview">
+              <article class="balance-card">
+                <div class="card-glow"></div>
+                <div class="balance-top"><div><p>Available balance</p><h2><span>৳</span> <strong id="balance">45,000.00</strong></h2></div><button id="balance-visibility" class="balance-visibility" type="button" aria-label="Hide balance"><i class="fa-regular fa-eye"></i></button></div>
+                <div class="balance-footer"><span><i class="fa-solid fa-circle-check"></i> Verified wallet</span><span>•••• 9184</span></div>
+              </article>
+              <article class="income-card stat-card"><span class="stat-icon stat-icon--mint"><i class="fa-solid fa-arrow-down"></i></span><div><p>Money in</p><strong id="income-total">৳0.00</strong><small class="positive"><i class="fa-solid fa-arrow-trend-up"></i> This month</small></div></article>
+              <article class="spend-card stat-card"><span class="stat-icon stat-icon--coral"><i class="fa-solid fa-arrow-up"></i></span><div><p>Money out</p><strong id="spend-total">৳0.00</strong><small>Across all activity</small></div></article>
+            </section>
+
+            <section class="service-section"><div class="section-header"><div><p class="eyebrow">QUICK ACTIONS</p><h2>What can we help with?</h2></div><span class="shortcut-hint"><i class="fa-solid fa-bolt"></i> Fast & secure</span></div><div class="service-grid">
+              <button class="service-card service-card--primary" data-action="add-money"><span class="service-icon"><i class="fa-solid fa-plus"></i></span><strong>Add money</strong><small>Top up from bank</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
+              <button class="service-card" data-action="transfer"><span class="service-icon service-icon--blue"><i class="fa-solid fa-paper-plane"></i></span><strong>Send money</strong><small>To a Payoo user</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
+              <button class="service-card" data-action="cashout"><span class="service-icon service-icon--orange"><i class="fa-solid fa-money-bill-transfer"></i></span><strong>Cash out</strong><small>From an agent</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
+              <button class="service-card" data-action="pay-bill"><span class="service-icon service-icon--purple"><i class="fa-regular fa-file-lines"></i></span><strong>Pay bill</strong><small>Utilities & more</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
+            </div></section>
+
+            <section class="dashboard-grid">
+              <article class="surface-card contacts-card"><div class="section-header"><div><p class="eyebrow">SEND AGAIN</p><h2>Your people</h2></div><button class="round-button small-round" data-action="transfer" aria-label="Send money"><i class="fa-solid fa-plus"></i></button></div><div class="contacts-list">
+                <button class="contact" data-contact="01700000001"><span class="avatar avatar--violet">NA</span><strong>Nusrat A.</strong><small>01700 000 001</small></button>
+                <button class="contact" data-contact="01800000002"><span class="avatar avatar--orange">RK</span><strong>Rafi K.</strong><small>01800 000 002</small></button>
+                <button class="contact" data-contact="01900000003"><span class="avatar avatar--mint">SM</span><strong>Samia M.</strong><small>01900 000 003</small></button>
+              </div></article>
+              <article class="surface-card activity-card"><div class="section-header"><div><p class="eyebrow">RECENT ACTIVITY</p><h2>Latest movements</h2></div><button class="text-cta" data-view="activity">All activity <i class="fa-solid fa-arrow-right"></i></button></div><div id="activity-preview" class="activity-list"></div></article>
+            </section>
+          </section>
+
+          <section id="activity-view" class="app-view hidden"><div class="view-banner"><div><p class="eyebrow">YOUR MONEY STORY</p><h2>Transaction activity</h2><p>Every wallet movement in one clear, searchable feed.</p></div><button class="button button--dark" data-action="transfer"><i class="fa-solid fa-paper-plane"></i> Send money</button></div><div class="surface-card table-card"><div class="activity-toolbar"><div class="search-field"><i class="fa-solid fa-magnifying-glass"></i><input id="history-search" type="search" placeholder="Search your activity" /></div><button id="clear-history" class="subtle-button"><i class="fa-regular fa-trash-can"></i> Clear</button></div><div id="history-container" class="full-history"></div></div></section>
+
+          <section id="insights-view" class="app-view hidden"><div class="view-banner"><div><p class="eyebrow">CLEARER CHOICES</p><h2>Financial insights</h2><p>A calm overview of how your money is moving.</p></div></div><div class="insight-grid"><article class="surface-card chart-card"><div class="section-header"><div><p class="eyebrow">WEEKLY FLOW</p><h2>Money movement</h2></div><span class="chart-badge">This week</span></div><div class="bar-chart" aria-label="Weekly activity chart"><span style="--size:32%"></span><span style="--size:54%"></span><span style="--size:40%"></span><span style="--size:76%"></span><span style="--size:63%"></span><span style="--size:88%"></span><span style="--size:58%"></span></div><div class="chart-labels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div></article><article class="surface-card goal-card"><span class="goal-orbit"><i class="fa-solid fa-umbrella-beach"></i></span><p class="eyebrow">SAVINGS GOAL</p><h2>Dream getaway</h2><p>Keep building your travel fund.</p><div class="goal-progress"><div><span id="goal-progress"></span></div><strong id="goal-label">0%</strong></div><div class="goal-footer"><span id="goal-saved">৳0 saved</span><span>of ৳60,000</span></div><button id="save-goal" class="button button--soft"><i class="fa-solid fa-plus"></i> Add ৳500</button></article></div></section>
+
+          <section id="rewards-view" class="app-view hidden"><div class="rewards-hero"><div><p class="eyebrow">PAYOO PLUS</p><h2>A little more for every move.</h2><p>Unlock exclusive treats as you use your wallet.</p><button class="button button--light" data-action="bonus">Explore rewards <i class="fa-solid fa-arrow-right"></i></button></div><div class="reward-orb"><i class="fa-solid fa-gift"></i><span>100</span></div></div><div class="reward-grid"><article class="surface-card reward-card"><span class="reward-card__emoji">☕</span><p>PAYOO CAFÉ</p><h3>50% off your next coffee</h3><small>Available after your next transaction</small></article><article class="surface-card reward-card"><span class="reward-card__emoji">🚕</span><p>RIDE MORE</p><h3>৳30 off a ride home</h3><small>New members only</small></article><article class="surface-card reward-card"><span class="reward-card__emoji">🎁</span><p>WELCOME BONUS</p><h3>Claim ৳100 right now</h3><button class="subtle-button" data-action="bonus">Claim reward <i class="fa-solid fa-arrow-right"></i></button></article></div></section>
+        </main>
+      </div>
+    </div>
+
+    <nav class="mobile-nav" aria-label="Mobile navigation"><button class="mobile-nav__item is-active" data-view="overview"><i class="fa-solid fa-grid-2"></i><span>Home</span></button><button class="mobile-nav__item" data-view="activity"><i class="fa-solid fa-arrow-right-arrow-left"></i><span>Activity</span></button><button class="mobile-pay" data-action="transfer" aria-label="Send money"><i class="fa-solid fa-paper-plane"></i></button><button class="mobile-nav__item" data-view="insights"><i class="fa-solid fa-chart-pie"></i><span>Insights</span></button><button class="mobile-nav__item" data-view="rewards"><i class="fa-solid fa-sparkles"></i><span>Rewards</span></button></nav>
+
+    <dialog id="transaction-modal" class="transaction-modal"><div class="modal-top"><button id="modal-back" class="back-button hidden" type="button"><i class="fa-solid fa-arrow-left"></i></button><p id="modal-step">SECURE TRANSACTION</p><button id="modal-close" class="round-button small-round" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div><div id="modal-content"></div></dialog>
+    <dialog id="notification-modal" class="notification-modal"><button class="modal-close-text" type="button" data-close-notifications>Close</button><p class="eyebrow">PAYOO UPDATES</p><h2>All caught up!</h2><p>Your wallet is verified and ready for secure transfers.</p><div class="notice"><i class="fa-solid fa-shield-heart"></i><span>Your security is our priority. Never share your PIN.</span></div></dialog>
+    <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+    <script src="./script/app.js"></script>
+  </body>
 </html>

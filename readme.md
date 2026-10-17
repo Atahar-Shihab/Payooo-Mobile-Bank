@@ -1,14 +1,17 @@
-# Payoo
+# Payoo — Digital Wallet Experience
 
-Payoo is a polished, responsive demo for a mobile financial-services wallet. It is a frontend-only learning project: no real authentication, payment processing, or sensitive financial data is involved.
+Payoo is a portfolio-grade, frontend-only digital wallet experience. It demonstrates how a financial product can feel calm, trustworthy, and useful through purposeful interface design, responsive layouts, and polished interaction states.
 
-## Highlights
+> This is a learning project. It does not connect to a bank or process real payments.
 
-- Responsive sign-in and wallet dashboard
-- Add money, cash out, send money, pay bills, and redeem rewards
-- Friendly validation and in-app success/error feedback
-- Transaction activity and balance persisted in browser `localStorage`
-- Accessible semantic forms, keyboard-friendly controls, and responsive layouts
+## Experience highlights
+
+- A fully responsive fintech dashboard with desktop sidebar and mobile bottom navigation
+- Secure demo sign-in, persistent wallet state, and balance privacy control
+- Complete transaction flows for adding money, transfers, cash outs, bill payments, and rewards
+- Validated inputs, friendly error messages, success receipts, and transaction history search
+- Financial context: money-in/out totals, weekly activity visualization, a savings goal, contacts, and rewards
+- Accessible structure: semantic controls, visible labels, keyboard-friendly dialogs, and live feedback
 
 ## Demo access
 
@@ -20,31 +23,42 @@ Payoo is a polished, responsive demo for a mobile financial-services wallet. It 
 
 ## Run locally
 
-This project has no build step. Open `index.html` in a browser, or serve the folder with any static web server.
+No build step is required. Open `index.html`, or serve the directory with a static server:
 
 ```bash
 npx serve .
 ```
 
+## GitHub Pages deployment
+
+The included workflow deploys every push to `main` using GitHub Actions.
+
+1. Open the repository’s **Settings → Pages**.
+2. Under **Build and deployment**, set **Source** to **GitHub Actions**.
+3. Push to `main` (or run the “Deploy static site to GitHub Pages” workflow manually).
+
+For this repository, the dashboard’s direct URL is:
+
+```text
+https://atahar-shihab.github.io/Payooo-Mobile-Bank/home.html
+```
+
+`https://atahar-shihab.github.io/home.html` is a different GitHub Pages site, so it correctly returns 404.
+
 ## Project structure
 
 ```text
+.github/workflows/
+  deploy-pages.yml     # GitHub Pages deployment
 assets/
   css/app.css          # Design system and responsive UI
-  logo.png             # Brand asset
+  logo.png             # Existing brand asset
 script/
-  app.js               # Auth, state, validation, transactions, rendering
-index.html             # Sign-in screen
-home.html              # Wallet dashboard
+  app.js               # Auth, state, modals, transactions, and rendering
+index.html             # Sign-in experience
+home.html              # Wallet application dashboard
 ```
 
-## Notes
+## Local data
 
-- Wallet data is stored only in the current browser under `payoo-wallet`.
-- Use the “Clear history” action to remove local transaction activity. To reset all demo data, remove the `payoo-wallet` local-storage key in browser developer tools.
-- CDN-hosted fonts and icons need an internet connection; the core page remains usable without them.
-
-## Screens
-
-<img src="./ui/Login page.png" width="300" alt="Payoo login screen" />
-<img src="./ui/Home Page.png" width="300" alt="Payoo home screen" />
+The browser stores demo state under `payoo-wallet-v2`. Use **Clear** in the activity feed to remove transactions, or delete that local-storage key in browser developer tools to reset the full demo state.
