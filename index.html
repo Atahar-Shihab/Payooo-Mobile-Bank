@@ -23,6 +23,14 @@
         <div class="auth-card">
           <div class="mobile-brand brand"><img src="./assets/logo.png" alt="" /><span>pay<span>oo</span></span></div>
           <p class="eyebrow">WELCOME BACK</p><h2 id="sign-in-title">Sign in to Payoo</h2><p class="muted">Enter your details to access your wallet.</p>
+          <div id="active-session-banner" class="session-banner hidden">
+            <i class="fa-solid fa-circle-check"></i>
+            <div>
+              <strong>Active session found</strong>
+              <small>You're signed in on this browser.</small>
+            </div>
+            <a href="./home.html" class="button button--soft button--sm">Continue <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
           <form id="login-form" class="form-stack" novalidate>
             <label for="input-number">Mobile number</label>
             <div class="input-wrap"><span>+880</span><input id="input-number" name="mobile" inputmode="numeric" autocomplete="tel" maxlength="11" placeholder="01XXXXXXXXX" required /></div>
@@ -30,7 +38,14 @@
             <div class="input-wrap"><i class="fa-solid fa-lock"></i><input id="input-pin" name="pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="4" placeholder="••••" required /><button class="icon-button" type="button" data-password-toggle="input-pin" aria-label="Show PIN"><i class="fa-regular fa-eye"></i></button></div>
             <button class="button button--primary button--wide" type="submit">Sign in <i class="fa-solid fa-arrow-right"></i></button>
           </form>
-          <div class="demo-credentials"><i class="fa-regular fa-circle-question"></i><span>Demo: <strong>00000000000</strong> · PIN <strong>0000</strong></span></div>
+          <div class="demo-credentials" id="demo-badge" role="button" tabindex="0" title="Click to auto-fill demo credentials">
+            <i class="fa-regular fa-circle-question"></i>
+            <div class="demo-copy">
+              <span>Demo: <strong>00000000000</strong> · PIN <strong>0000</strong></span>
+              <small>Click to auto-fill</small>
+            </div>
+            <span class="demo-chip"><i class="fa-solid fa-wand-magic-sparkles"></i> Auto-fill</span>
+          </div>
         </div>
       </section>
     </main>

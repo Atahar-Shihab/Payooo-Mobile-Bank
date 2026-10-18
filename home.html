@@ -16,7 +16,7 @@
     <div class="app-layout">
       <aside class="sidebar" aria-label="Primary navigation">
         <a class="brand brand--sidebar" href="./home.html" aria-label="Payoo home">
-          <span class="brand-mark"><img src="./assets/logo.png" alt="" /></span>
+          <span class="brand-mark"><img src="./assets/logo.png" alt="Payoo Logo" /></span>
           <span>pay<span>oo</span></span>
         </a>
         <p class="sidebar-label">MENU</p>
@@ -37,54 +37,213 @@
           <button class="mobile-menu" id="mobile-menu" aria-label="Open navigation"><i class="fa-solid fa-bars"></i></button>
           <div class="page-title"><p id="today-date"></p><h1 id="page-heading">Good morning, Shihab <span>✦</span></h1></div>
           <div class="topbar-actions">
-            <button id="notification-btn" class="round-button notification-button" aria-label="Open notifications"><i class="fa-regular fa-bell"></i><b></b></button>
-            <button class="profile-button" data-view="overview" aria-label="Open profile"><span>AS</span><i class="fa-solid fa-chevron-down"></i></button>
+            <button id="notification-btn" class="round-button notification-button" aria-label="Open notifications"><i class="fa-regular fa-bell"></i><b id="notif-badge"></b></button>
+            <button id="profile-btn" class="profile-button" aria-label="Open profile"><span id="user-initials">AS</span><i class="fa-solid fa-chevron-down"></i></button>
           </div>
         </header>
 
         <main>
+          <!-- Overview View -->
           <section id="overview-view" class="app-view">
             <div class="intro-row"><div><p class="eyebrow">YOUR WALLET</p><h2>Money that moves with you.</h2></div><button class="text-cta" data-view="activity">View all activity <i class="fa-solid fa-arrow-right"></i></button></div>
             <section class="wallet-grid" aria-label="Wallet overview">
               <article class="balance-card">
                 <div class="card-glow"></div>
                 <div class="balance-top"><div><p>Available balance</p><h2><span>৳</span> <strong id="balance">45,000.00</strong></h2></div><button id="balance-visibility" class="balance-visibility" type="button" aria-label="Hide balance"><i class="fa-regular fa-eye"></i></button></div>
-                <div class="balance-footer"><span><i class="fa-solid fa-circle-check"></i> Verified wallet</span><span>•••• 9184</span></div>
+                <div class="balance-footer"><span><i class="fa-solid fa-circle-check"></i> Verified wallet</span><span id="account-mask">•••• 9184</span></div>
               </article>
-              <article class="income-card stat-card"><span class="stat-icon stat-icon--mint"><i class="fa-solid fa-arrow-down"></i></span><div><p>Money in</p><strong id="income-total">৳0.00</strong><small class="positive"><i class="fa-solid fa-arrow-trend-up"></i> This month</small></div></article>
+              <article class="income-card stat-card"><span class="stat-icon stat-icon--mint"><i class="fa-solid fa-arrow-down"></i></span><div><p>Money in</p><strong id="income-total">৳0.00</strong><small class="positive"><i class="fa-solid fa-arrow-trend-up"></i> Lifetime inflow</small></div></article>
               <article class="spend-card stat-card"><span class="stat-icon stat-icon--coral"><i class="fa-solid fa-arrow-up"></i></span><div><p>Money out</p><strong id="spend-total">৳0.00</strong><small>Across all activity</small></div></article>
             </section>
 
-            <section class="service-section"><div class="section-header"><div><p class="eyebrow">QUICK ACTIONS</p><h2>What can we help with?</h2></div><span class="shortcut-hint"><i class="fa-solid fa-bolt"></i> Fast & secure</span></div><div class="service-grid">
-              <button class="service-card service-card--primary" data-action="add-money"><span class="service-icon"><i class="fa-solid fa-plus"></i></span><strong>Add money</strong><small>Top up from bank</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
-              <button class="service-card" data-action="transfer"><span class="service-icon service-icon--blue"><i class="fa-solid fa-paper-plane"></i></span><strong>Send money</strong><small>To a Payoo user</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
-              <button class="service-card" data-action="cashout"><span class="service-icon service-icon--orange"><i class="fa-solid fa-money-bill-transfer"></i></span><strong>Cash out</strong><small>From an agent</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
-              <button class="service-card" data-action="pay-bill"><span class="service-icon service-icon--purple"><i class="fa-regular fa-file-lines"></i></span><strong>Pay bill</strong><small>Utilities & more</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
-            </div></section>
+            <section class="service-section">
+              <div class="section-header"><div><p class="eyebrow">QUICK ACTIONS</p><h2>What can we help with?</h2></div><span class="shortcut-hint"><i class="fa-solid fa-bolt"></i> Instant & secure</span></div>
+              <div class="service-grid">
+                <button class="service-card service-card--primary" data-action="add-money"><span class="service-icon"><i class="fa-solid fa-plus"></i></span><strong>Add money</strong><small>Top up from bank or card</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
+                <button class="service-card" data-action="transfer"><span class="service-icon service-icon--blue"><i class="fa-solid fa-paper-plane"></i></span><strong>Send money</strong><small>Instant to any Payoo user</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
+                <button class="service-card" data-action="cashout"><span class="service-icon service-icon--orange"><i class="fa-solid fa-money-bill-transfer"></i></span><strong>Cash out</strong><small>From nearby agent with fee preview</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
+                <button class="service-card" data-action="recharge"><span class="service-icon service-icon--teal"><i class="fa-solid fa-mobile-screen-button"></i></span><strong>Mobile recharge</strong><small>GP, Robi, Banglalink & more</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
+                <button class="service-card" data-action="pay-bill"><span class="service-icon service-icon--purple"><i class="fa-regular fa-file-lines"></i></span><strong>Pay bill</strong><small>DESCO, DPDC, WASA & Internet</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
+                <button class="service-card" data-action="request"><span class="service-icon service-icon--indigo"><i class="fa-solid fa-hand-holding-dollar"></i></span><strong>Request money</strong><small>Split bill or request payment</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
+              </div>
+            </section>
 
             <section class="dashboard-grid">
-              <article class="surface-card contacts-card"><div class="section-header"><div><p class="eyebrow">SEND AGAIN</p><h2>Your people</h2></div><button class="round-button small-round" data-action="transfer" aria-label="Send money"><i class="fa-solid fa-plus"></i></button></div><div class="contacts-list">
-                <button class="contact" data-contact="01700000001"><span class="avatar avatar--violet">NA</span><strong>Nusrat A.</strong><small>01700 000 001</small></button>
-                <button class="contact" data-contact="01800000002"><span class="avatar avatar--orange">RK</span><strong>Rafi K.</strong><small>01800 000 002</small></button>
-                <button class="contact" data-contact="01900000003"><span class="avatar avatar--mint">SM</span><strong>Samia M.</strong><small>01900 000 003</small></button>
-              </div></article>
-              <article class="surface-card activity-card"><div class="section-header"><div><p class="eyebrow">RECENT ACTIVITY</p><h2>Latest movements</h2></div><button class="text-cta" data-view="activity">All activity <i class="fa-solid fa-arrow-right"></i></button></div><div id="activity-preview" class="activity-list"></div></article>
+              <article class="surface-card contacts-card">
+                <div class="section-header"><div><p class="eyebrow">SEND AGAIN</p><h2>Your people</h2></div><button id="add-contact-btn" class="round-button small-round" type="button" aria-label="Add new contact" title="Add contact"><i class="fa-solid fa-plus"></i></button></div>
+                <div id="contacts-list" class="contacts-list"></div>
+              </article>
+              <article class="surface-card activity-card">
+                <div class="section-header"><div><p class="eyebrow">RECENT ACTIVITY</p><h2>Latest movements</h2></div><button class="text-cta" data-view="activity">All activity <i class="fa-solid fa-arrow-right"></i></button></div>
+                <div id="activity-preview" class="activity-list"></div>
+              </article>
             </section>
           </section>
 
-          <section id="activity-view" class="app-view hidden"><div class="view-banner"><div><p class="eyebrow">YOUR MONEY STORY</p><h2>Transaction activity</h2><p>Every wallet movement in one clear, searchable feed.</p></div><button class="button button--dark" data-action="transfer"><i class="fa-solid fa-paper-plane"></i> Send money</button></div><div class="surface-card table-card"><div class="activity-toolbar"><div class="search-field"><i class="fa-solid fa-magnifying-glass"></i><input id="history-search" type="search" placeholder="Search your activity" /></div><button id="clear-history" class="subtle-button"><i class="fa-regular fa-trash-can"></i> Clear</button></div><div id="history-container" class="full-history"></div></div></section>
+          <!-- Activity / Transactions View -->
+          <section id="activity-view" class="app-view hidden">
+            <div class="view-banner"><div><p class="eyebrow">YOUR MONEY STORY</p><h2>Transaction activity</h2><p>Every wallet movement in one clear, searchable and exportable feed.</p></div><button class="button button--dark" data-action="transfer"><i class="fa-solid fa-paper-plane"></i> Send money</button></div>
+            <div class="surface-card table-card">
+              <div class="activity-toolbar">
+                <div class="search-field"><i class="fa-solid fa-magnifying-glass"></i><input id="history-search" type="search" placeholder="Search transactions..." /></div>
+                <div class="activity-toolbar-actions">
+                  <button id="export-csv" class="subtle-button" type="button" title="Download transactions as CSV"><i class="fa-solid fa-file-arrow-down"></i> Export CSV</button>
+                  <button id="clear-history" class="subtle-button" type="button"><i class="fa-regular fa-trash-can"></i> Clear</button>
+                </div>
+              </div>
+              <div id="activity-filters" class="activity-filters">
+                <button class="filter-pill is-active" data-filter="all">All</button>
+                <button class="filter-pill" data-filter="inflow">Inflow (+)</button>
+                <button class="filter-pill" data-filter="outflow">Outflow (−)</button>
+                <button class="filter-pill" data-filter="transfer">Transfers</button>
+                <button class="filter-pill" data-filter="pay-bill">Bills</button>
+                <button class="filter-pill" data-filter="recharge">Recharge</button>
+                <button class="filter-pill" data-filter="cashout">Cash out</button>
+              </div>
+              <div id="history-container" class="full-history"></div>
+            </div>
+          </section>
 
-          <section id="insights-view" class="app-view hidden"><div class="view-banner"><div><p class="eyebrow">CLEARER CHOICES</p><h2>Financial insights</h2><p>A calm overview of how your money is moving.</p></div></div><div class="insight-grid"><article class="surface-card chart-card"><div class="section-header"><div><p class="eyebrow">WEEKLY FLOW</p><h2>Money movement</h2></div><span class="chart-badge">This week</span></div><div class="bar-chart" aria-label="Weekly activity chart"><span style="--size:32%"></span><span style="--size:54%"></span><span style="--size:40%"></span><span style="--size:76%"></span><span style="--size:63%"></span><span style="--size:88%"></span><span style="--size:58%"></span></div><div class="chart-labels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div></article><article class="surface-card goal-card"><span class="goal-orbit"><i class="fa-solid fa-umbrella-beach"></i></span><p class="eyebrow">SAVINGS GOAL</p><h2>Dream getaway</h2><p>Keep building your travel fund.</p><div class="goal-progress"><div><span id="goal-progress"></span></div><strong id="goal-label">0%</strong></div><div class="goal-footer"><span id="goal-saved">৳0 saved</span><span>of ৳60,000</span></div><button id="save-goal" class="button button--soft"><i class="fa-solid fa-plus"></i> Add ৳500</button></article></div></section>
+          <!-- Insights View -->
+          <section id="insights-view" class="app-view hidden">
+            <div class="view-banner"><div><p class="eyebrow">CLEARER CHOICES</p><h2>Financial insights</h2><p>A dynamic, real-time overview of your weekly flow and spending categories.</p></div></div>
+            <div class="insight-grid">
+              <article class="surface-card chart-card">
+                <div class="section-header"><div><p class="eyebrow">WEEKLY FLOW</p><h2>Money movement</h2></div><span class="chart-badge">Past 7 days</span></div>
+                <div class="chart-metrics">
+                  <div><span>Weekly spending</span><strong id="chart-week-total">৳0.00</strong></div>
+                  <div><span>Daily average</span><strong id="chart-daily-avg">৳0.00</strong></div>
+                </div>
+                <div id="weekly-chart" class="bar-chart" aria-label="Weekly activity chart"></div>
+                <div class="chart-labels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+              </article>
+              <article class="surface-card goal-card">
+                <span class="goal-orbit"><i class="fa-solid fa-umbrella-beach"></i></span>
+                <p class="eyebrow">SAVINGS GOAL</p>
+                <h2>Dream getaway</h2>
+                <p>Keep building your personal travel & safety fund.</p>
+                <div class="goal-progress"><div><span id="goal-progress"></span></div><strong id="goal-label">0%</strong></div>
+                <div class="goal-footer"><span id="goal-saved">৳0 saved</span><span>of ৳60,000</span></div>
+                <div class="goal-actions">
+                  <button id="save-goal" class="button button--soft" type="button"><i class="fa-solid fa-plus"></i> Add ৳500</button>
+                  <button id="save-goal-1000" class="button button--soft" type="button"><i class="fa-solid fa-plus"></i> Add ৳1,000</button>
+                  <button id="withdraw-goal" class="subtle-button" type="button" title="Withdraw from savings back to wallet"><i class="fa-solid fa-arrow-turn-down"></i> Withdraw ৳500</button>
+                </div>
+              </article>
+            </div>
+            <article id="category-card" class="surface-card category-card">
+              <div class="section-header"><div><p class="eyebrow">SPENDING DISTRIBUTION</p><h2>Category breakdown</h2></div></div>
+              <div id="category-list" class="category-list"></div>
+            </article>
+          </section>
 
-          <section id="rewards-view" class="app-view hidden"><div class="rewards-hero"><div><p class="eyebrow">PAYOO PLUS</p><h2>A little more for every move.</h2><p>Unlock exclusive treats as you use your wallet.</p><button class="button button--light" data-action="bonus">Explore rewards <i class="fa-solid fa-arrow-right"></i></button></div><div class="reward-orb"><i class="fa-solid fa-gift"></i><span>100</span></div></div><div class="reward-grid"><article class="surface-card reward-card"><span class="reward-card__emoji">☕</span><p>PAYOO CAFÉ</p><h3>50% off your next coffee</h3><small>Available after your next transaction</small></article><article class="surface-card reward-card"><span class="reward-card__emoji">🚕</span><p>RIDE MORE</p><h3>৳30 off a ride home</h3><small>New members only</small></article><article class="surface-card reward-card"><span class="reward-card__emoji">🎁</span><p>WELCOME BONUS</p><h3>Claim ৳100 right now</h3><button class="subtle-button" data-action="bonus">Claim reward <i class="fa-solid fa-arrow-right"></i></button></article></div></section>
+          <!-- Rewards View -->
+          <section id="rewards-view" class="app-view hidden">
+            <div class="rewards-hero">
+              <div>
+                <p class="eyebrow">PAYOO PLUS</p>
+                <h2>A little more for every move.</h2>
+                <p>Unlock exclusive treats, cashbacks, and vouchers as you transact.</p>
+                <button class="button button--light" data-action="bonus">Claim welcome bonus <i class="fa-solid fa-arrow-right"></i></button>
+              </div>
+              <div class="reward-orb"><i class="fa-solid fa-gift"></i><span>150</span><small style="font-size: 0.65rem; font-weight: 700; opacity: 0.9;">pts</small></div>
+            </div>
+            <div class="reward-grid">
+              <article class="surface-card reward-card">
+                <span class="reward-card__emoji">☕</span>
+                <p>PAYOO CAFÉ</p>
+                <h3>50% off your next coffee</h3>
+                <small>Use code <strong>CAFE50</strong> at checkout</small>
+                <button class="subtle-button copy-promo" data-code="CAFE50" type="button"><i class="fa-regular fa-copy"></i> Copy code</button>
+              </article>
+              <article class="surface-card reward-card">
+                <span class="reward-card__emoji">🚕</span>
+                <p>RIDE MORE</p>
+                <h3>৳30 off a ride home</h3>
+                <small>Use code <strong>RIDE30</strong> with partner rides</small>
+                <button class="subtle-button copy-promo" data-code="RIDE30" type="button"><i class="fa-regular fa-copy"></i> Copy code</button>
+              </article>
+              <article class="surface-card reward-card">
+                <span class="reward-card__emoji">🎁</span>
+                <p>WELCOME BONUS</p>
+                <h3>Claim ৳100 right now</h3>
+                <small>Enter promo code <strong>PAYOO100</strong></small>
+                <button class="subtle-button" data-action="bonus" type="button">Claim reward <i class="fa-solid fa-arrow-right"></i></button>
+              </article>
+            </div>
+          </section>
         </main>
       </div>
     </div>
 
-    <nav class="mobile-nav" aria-label="Mobile navigation"><button class="mobile-nav__item is-active" data-view="overview"><i class="fa-solid fa-grid-2"></i><span>Home</span></button><button class="mobile-nav__item" data-view="activity"><i class="fa-solid fa-arrow-right-arrow-left"></i><span>Activity</span></button><button class="mobile-pay" data-action="transfer" aria-label="Send money"><i class="fa-solid fa-paper-plane"></i></button><button class="mobile-nav__item" data-view="insights"><i class="fa-solid fa-chart-pie"></i><span>Insights</span></button><button class="mobile-nav__item" data-view="rewards"><i class="fa-solid fa-sparkles"></i><span>Rewards</span></button></nav>
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+      <button class="mobile-nav__item is-active" data-view="overview"><i class="fa-solid fa-grid-2"></i><span>Home</span></button>
+      <button class="mobile-nav__item" data-view="activity"><i class="fa-solid fa-arrow-right-arrow-left"></i><span>Activity</span></button>
+      <button class="mobile-pay" data-action="transfer" aria-label="Send money"><i class="fa-solid fa-paper-plane"></i></button>
+      <button class="mobile-nav__item" data-view="insights"><i class="fa-solid fa-chart-pie"></i><span>Insights</span></button>
+      <button class="mobile-nav__item" data-view="rewards"><i class="fa-solid fa-sparkles"></i><span>Rewards</span></button>
+    </nav>
 
-    <dialog id="transaction-modal" class="transaction-modal"><div class="modal-top"><button id="modal-back" class="back-button hidden" type="button"><i class="fa-solid fa-arrow-left"></i></button><p id="modal-step">SECURE TRANSACTION</p><button id="modal-close" class="round-button small-round" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div><div id="modal-content"></div></dialog>
-    <dialog id="notification-modal" class="notification-modal"><button class="modal-close-text" type="button" data-close-notifications>Close</button><p class="eyebrow">PAYOO UPDATES</p><h2>All caught up!</h2><p>Your wallet is verified and ready for secure transfers.</p><div class="notice"><i class="fa-solid fa-shield-heart"></i><span>Your security is our priority. Never share your PIN.</span></div></dialog>
+    <!-- Modals -->
+    <!-- Transaction Modal -->
+    <dialog id="transaction-modal" class="transaction-modal">
+      <div class="modal-top">
+        <button id="modal-back" class="back-button hidden" type="button"><i class="fa-solid fa-arrow-left"></i></button>
+        <p id="modal-step">SECURE TRANSACTION</p>
+        <button id="modal-close" class="round-button small-round" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="modal-content"></div>
+    </dialog>
+
+    <!-- Official Transaction Receipt Modal -->
+    <dialog id="receipt-modal" class="receipt-modal">
+      <div class="modal-top">
+        <p>TRANSACTION RECEIPT</p>
+        <button id="receipt-close" class="round-button small-round" type="button" aria-label="Close receipt"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="receipt-content"></div>
+    </dialog>
+
+    <!-- Notification Modal -->
+    <dialog id="notification-modal" class="notification-modal">
+      <div class="notif-header">
+        <h2>Notifications</h2>
+        <button class="modal-close-text" type="button" data-close-notifications>Close</button>
+      </div>
+      <div id="notif-list" class="notif-list"></div>
+      <div class="notif-footer">
+        <button id="mark-read-btn" class="subtle-button" type="button"><i class="fa-solid fa-check-double"></i> Mark read</button>
+        <button id="clear-notif-btn" class="subtle-button" type="button"><i class="fa-regular fa-trash-can"></i> Clear all</button>
+      </div>
+    </dialog>
+
+    <!-- Profile & Preferences Modal -->
+    <dialog id="profile-modal" class="profile-modal">
+      <div class="modal-top">
+        <p>ACCOUNT PROFILE</p>
+        <button id="profile-close" class="round-button small-round" type="button" aria-label="Close profile"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="profile-content"></div>
+    </dialog>
+
+    <!-- Add Contact Modal -->
+    <dialog id="contact-modal" class="transaction-modal">
+      <div class="modal-top">
+        <p>SAVED CONTACTS</p>
+        <button id="contact-close" class="round-button small-round" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content">
+        <h2>Add a person</h2>
+        <p>Save a frequent recipient for fast, one-tap transfers.</p>
+        <form id="add-contact-form" class="modal-form">
+          <label>Full name<input name="name" placeholder="e.g. Tanvir Ahmed" required /></label>
+          <label>Mobile number<input name="phone" inputmode="numeric" maxlength="11" placeholder="01XXXXXXXXX" required /></label>
+          <button class="button button--primary" type="submit">Save contact <i class="fa-solid fa-check"></i></button>
+        </form>
+      </div>
+    </dialog>
+
     <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
     <script src="./script/app.js"></script>
   </body>
