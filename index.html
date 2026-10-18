@@ -3,53 +3,325 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0b8f7c" />
-    <title>Payoo — Secure digital wallet</title>
+    <meta name="theme-color" content="#17162f" />
+    <title>Payoo — Next-Gen Digital Wallet in Cinematic Motion</title>
     <link rel="icon" href="./assets/logo.png" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <link rel="stylesheet" href="./assets/css/app.css" />
+    <!-- Three.js for 3D Cinematic Visuals -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   </head>
-  <body class="auth-page">
-    <main class="auth-shell">
-      <section class="auth-intro" aria-labelledby="welcome-title">
-        <a class="brand brand--light" href="./index.html" aria-label="Payoo home"><img src="./assets/logo.png" alt="" /><span>pay<span>oo</span></span></a>
-        <div class="intro-copy"><p class="eyebrow">DIGITAL WALLET</p><h1 id="welcome-title">Your money,<br />made effortless.</h1><p>Send, save, pay and manage every moment from one beautifully simple place.</p></div>
-        <div class="security-note"><i class="fa-solid fa-shield-heart"></i> Built for everyday peace of mind</div>
-      </section>
-      <section class="auth-panel" aria-labelledby="sign-in-title">
-        <div class="auth-card">
-          <div class="mobile-brand brand"><img src="./assets/logo.png" alt="" /><span>pay<span>oo</span></span></div>
-          <p class="eyebrow">WELCOME BACK</p><h2 id="sign-in-title">Sign in to Payoo</h2><p class="muted">Enter your details to access your wallet.</p>
-          <div id="active-session-banner" class="session-banner hidden">
-            <i class="fa-solid fa-circle-check"></i>
-            <div>
-              <strong>Active session found</strong>
-              <small>You're signed in on this browser.</small>
-            </div>
-            <a href="./home.html" class="button button--soft button--sm">Continue <i class="fa-solid fa-arrow-right"></i></a>
+  <body class="landing-body">
+    <!-- 3D Cinematic Background Canvas -->
+    <div id="cinematic-canvas-container" class="cinematic-canvas-container" aria-hidden="true">
+      <canvas id="cinematic-canvas"></canvas>
+    </div>
+
+    <!-- Main Landing Page Shell -->
+    <div class="landing-page">
+      <!-- Navigation Bar -->
+      <header class="landing-nav">
+        <a class="brand brand--light" href="./index.html" aria-label="Payoo home">
+          <img src="./assets/logo.png" alt="Payoo Logo" />
+          <span>pay<span>oo</span></span>
+        </a>
+        <nav class="landing-nav__links" aria-label="Landing navigation">
+          <a href="#hero">3D Showcase</a>
+          <a href="#features">Features</a>
+          <a href="#preview">Live Preview</a>
+          <a href="#security">Security</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+        <a href="#signin-portal" class="button button--primary button--sm">
+          Launch Demo <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </header>
+
+      <!-- Hero Section with 3D Holographic Stage & Sign In Portal -->
+      <section id="hero" class="landing-hero" aria-labelledby="hero-title">
+        <div class="landing-hero__content">
+          <div class="hero-pill">
+            <span class="pulse-dot"></span> NEXT-GEN DIGITAL BANKING
           </div>
-          <form id="login-form" class="form-stack" novalidate>
-            <label for="input-number">Mobile number</label>
-            <div class="input-wrap"><span>+880</span><input id="input-number" name="mobile" inputmode="numeric" autocomplete="tel" maxlength="11" placeholder="01XXXXXXXXX" required /></div>
-            <label for="input-pin">4-digit PIN</label>
-            <div class="input-wrap"><i class="fa-solid fa-lock"></i><input id="input-pin" name="pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="4" placeholder="••••" required /><button class="icon-button" type="button" data-password-toggle="input-pin" aria-label="Show PIN"><i class="fa-regular fa-eye"></i></button></div>
-            <button class="button button--primary button--wide" type="submit">Sign in <i class="fa-solid fa-arrow-right"></i></button>
-          </form>
-          <div class="demo-credentials" id="demo-badge" role="button" tabindex="0" title="Click to auto-fill demo credentials">
-            <i class="fa-regular fa-circle-question"></i>
-            <div class="demo-copy">
-              <span>Demo: <strong>00000000000</strong> · PIN <strong>0000</strong></span>
-              <small>Click to auto-fill</small>
+          <h1 id="hero-title">
+            Your money,<br />
+            <span class="gradient-text">in cinematic motion.</span>
+          </h1>
+          <p class="hero-desc">
+            Experience effortless peer-to-peer transfers with zero fees, instant mobile airtime recharge across 5 networks, utility bill payments, and dynamic financial flow analytics in Bangladesh's premier fintech digital wallet.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#signin-portal" class="button button--primary button--lg">
+              <i class="fa-solid fa-bolt"></i> Launch Live Demo
+            </a>
+            <a href="#features" class="button button--glass button--lg">
+              <i class="fa-solid fa-compass"></i> Explore Features
+            </a>
+          </div>
+
+          <!-- 3D Cinematic Camera Controls -->
+          <div class="cinematic-bar">
+            <span><i class="fa-solid fa-video"></i> 3D Camera:</span>
+            <button class="cinematic-pill is-active" data-cam="orbit" type="button" title="Cinematic Orbit View">
+              <i class="fa-solid fa-globe"></i> Orbit
+            </button>
+            <button class="cinematic-pill" data-cam="focus" type="button" title="Card Close-Up Focus">
+              <i class="fa-solid fa-credit-card"></i> Card Focus
+            </button>
+            <button class="cinematic-pill" data-cam="wave" type="button" title="Cyber Ocean Fly-Through">
+              <i class="fa-solid fa-water"></i> Wave Flow
+            </button>
+          </div>
+
+          <div class="hero-drag-hint">
+            <i class="fa-solid fa-hand-pointer"></i>
+            <span>Drag anywhere in 3D space to orbit and inspect the holographic card</span>
+          </div>
+
+          <div class="hero-metrics">
+            <div>
+              <strong>৳0.00</strong>
+              <span>Transfer Fees</span>
             </div>
-            <span class="demo-chip"><i class="fa-solid fa-wand-magic-sparkles"></i> Auto-fill</span>
+            <div>
+              <strong>Instant</strong>
+              <span>5 Operators</span>
+            </div>
+            <div>
+              <strong>Tier-2</strong>
+              <span>KYC Verified</span>
+            </div>
+            <div>
+              <strong>100%</strong>
+              <span>Client-Side Safe</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Sign-In / Demo Access Portal -->
+        <div id="signin-portal" class="landing-hero__portal">
+          <div class="auth-card auth-card--glass">
+            <p class="eyebrow">INSTANT DEMO PORTAL</p>
+            <h2>Sign in to Payoo</h2>
+            <p class="muted">Experience the dashboard with 1-click credentials.</p>
+
+            <!-- Active session alert if already logged in -->
+            <div id="active-session-banner" class="session-banner hidden">
+              <i class="fa-solid fa-circle-check"></i>
+              <div>
+                <strong>Active session found</strong>
+                <small>You're signed in on this device.</small>
+              </div>
+              <a href="./home.html" class="button button--soft button--sm">Continue <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+
+            <form id="login-form" class="form-stack" novalidate>
+              <label for="input-number">Mobile number</label>
+              <div class="input-wrap">
+                <span>+880</span>
+                <input id="input-number" name="mobile" inputmode="numeric" autocomplete="tel" maxlength="11" placeholder="01XXXXXXXXX" required />
+              </div>
+
+              <label for="input-pin">4-digit PIN</label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-lock"></i>
+                <input id="input-pin" name="pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="4" placeholder="••••" required />
+                <button class="icon-button" type="button" data-password-toggle="input-pin" aria-label="Show PIN"><i class="fa-regular fa-eye"></i></button>
+              </div>
+
+              <button class="button button--primary button--wide button--lg" type="submit">
+                Sign in to Dashboard <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </form>
+
+            <div class="demo-credentials" id="demo-badge" role="button" tabindex="0" title="Click to auto-fill demo credentials">
+              <i class="fa-regular fa-circle-question"></i>
+              <div class="demo-copy">
+                <span>Demo: <strong>00000000000</strong> · PIN <strong>0000</strong></span>
+                <small>Click to auto-fill credentials</small>
+              </div>
+              <span class="demo-chip"><i class="fa-solid fa-wand-magic-sparkles"></i> Auto-fill</span>
+            </div>
           </div>
         </div>
       </section>
-    </main>
+
+      <!-- Feature Highlights Section -->
+      <section id="features" class="landing-section" aria-labelledby="features-title">
+        <div class="landing-section__header">
+          <p class="eyebrow">INTELLIGENT ECOSYSTEM</p>
+          <h2 id="features-title">Engineered for everyday financial freedom.</h2>
+          <p>Every interaction is designed to eliminate friction, provide complete fee transparency, and put you in control of your money.</p>
+        </div>
+
+        <div class="feature-grid--landing">
+          <article class="feature-card--glass">
+            <div class="feature-icon-box feature-icon-box--violet">
+              <i class="fa-solid fa-paper-plane"></i>
+            </div>
+            <h3>Instant P2P & Recharge</h3>
+            <p>Send money to any mobile number with zero platform fees, and top up mobile airtime across Grameenphone, Banglalink, Robi, Airtel, and Teletalk.</p>
+          </article>
+
+          <article class="feature-card--glass">
+            <div class="feature-icon-box feature-icon-box--mint">
+              <i class="fa-solid fa-receipt"></i>
+            </div>
+            <h3>Official Receipts & CSV</h3>
+            <p>Inspect verified transaction slips with unique IDs, download printed records, and export your entire financial history to CSV with one click.</p>
+          </article>
+
+          <article class="feature-card--glass">
+            <div class="feature-icon-box feature-icon-box--orange">
+              <i class="fa-solid fa-chart-line"></i>
+            </div>
+            <h3>Dynamic 7-Day Analytics</h3>
+            <p>Visualize daily money movement with interactive hover tooltips, categorical spend distribution, and real-time inflow/outflow balance totals.</p>
+          </article>
+
+          <article class="feature-card--glass">
+            <div class="feature-icon-box feature-icon-box--blue">
+              <i class="fa-solid fa-piggy-bank"></i>
+            </div>
+            <h3>Savings Goals & DPS</h3>
+            <p>Build your dream travel fund with dedicated savings targets. Add ৳500 or ৳1,000 deposits, and withdraw funds back into your active wallet anytime.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Live Interactive Dashboard Preview Section -->
+      <section id="preview" class="landing-section" aria-labelledby="preview-title">
+        <div class="preview-showcase">
+          <div>
+            <p class="eyebrow">SEAMLESS BY DESIGN</p>
+            <h2 id="preview-title" style="font-family: Manrope, sans-serif; font-size: 2.4rem; letter-spacing: -0.04em; margin: 0 0 16px; color: #fff;">
+              A calm, trustworthy wallet interface.
+            </h2>
+            <p style="color: rgba(255, 255, 255, 0.72); font-size: 0.95rem; line-height: 1.65; margin: 0 0 24px;">
+              Designed with purposeful hierarchy: glanceable balance privacy controls, transparent 1.49% agent fee calculators for cash outs, and an active notification center.
+            </p>
+            <ul style="display: grid; gap: 12px; padding: 0; list-style: none; margin: 0 0 30px; font-size: 0.88rem; color: rgba(255, 255, 255, 0.85);">
+              <li><i class="fa-solid fa-circle-check" style="color: #29dfb2; margin-right: 8px;"></i> Desktop sidebar with quick navigation</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #29dfb2; margin-right: 8px;"></i> Mobile bottom navigation bar with floating action button</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #29dfb2; margin-right: 8px;"></i> Zero-dependency synthesized audio feedback for payments</li>
+            </ul>
+            <a href="#signin-portal" class="button button--primary button--lg">
+              Test Live Wallet <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+
+          <div class="phone-mockup">
+            <div class="phone-mockup__screen">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <span style="font-weight: 800; font-family: Manrope; color: var(--ink);">pay<span style="color:#6955f6;">oo</span></span>
+                <span style="font-size: 0.65rem; background: #e3f8f0; color: #17936f; padding: 2px 7px; border-radius: 10px; font-weight: 800;">VERIFIED</span>
+              </div>
+              <div style="background: linear-gradient(120deg, #2f2492, #6955f6); border-radius: 14px; padding: 14px; color: #fff; margin-bottom: 14px;">
+                <p style="margin: 0 0 4px; font-size: 0.65rem; opacity: 0.8;">Available balance</p>
+                <h3 style="margin: 0; font-size: 1.3rem; font-family: Manrope;">৳ 45,000.00</h3>
+                <small style="font-size: 0.58rem; opacity: 0.7; display: block; margin-top: 10px;">•••• 9184</small>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; text-align: center; font-size: 0.62rem; font-weight: 700;">
+                <div style="background: #fff; border: 1px solid #e7e6f0; border-radius: 9px; padding: 8px 4px;">
+                  <i class="fa-solid fa-plus" style="color:#6955f6; display: block; margin-bottom: 3px;"></i> Add Money
+                </div>
+                <div style="background: #fff; border: 1px solid #e7e6f0; border-radius: 9px; padding: 8px 4px;">
+                  <i class="fa-solid fa-paper-plane" style="color:#527dd4; display: block; margin-bottom: 3px;"></i> Send
+                </div>
+                <div style="background: #fff; border: 1px solid #e7e6f0; border-radius: 9px; padding: 8px 4px;">
+                  <i class="fa-solid fa-mobile-screen" style="color:#19b889; display: block; margin-bottom: 3px;"></i> Recharge
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Security & Architecture Section -->
+      <section id="security" class="landing-section" aria-labelledby="security-title">
+        <div class="landing-section__header">
+          <p class="eyebrow">SECURITY FIRST</p>
+          <h2 id="security-title">Built with everyday peace of mind.</h2>
+          <p>Payoo is crafted with strict client-side isolation, data persistence, and zero surveillance tracking.</p>
+        </div>
+
+        <div class="security-grid">
+          <div class="security-pillar">
+            <i class="fa-solid fa-shield-halved"></i>
+            <h4>Encrypted Sandbox</h4>
+            <p>All demo data resides safely in your browser's private storage, isolated from external servers.</p>
+          </div>
+          <div class="security-pillar">
+            <i class="fa-solid fa-key"></i>
+            <h4>PIN Authorization</h4>
+            <p>Every transaction, transfer, withdrawal, and recharge requires strict 4-digit PIN validation.</p>
+          </div>
+          <div class="security-pillar">
+            <i class="fa-solid fa-user-lock"></i>
+            <h4>No Third-Party Tracking</h4>
+            <p>Zero trackers, telemetry, or external analytics cookies. Pure, lightning-fast performance.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section id="faq" class="landing-section" aria-labelledby="faq-title">
+        <div class="landing-section__header">
+          <p class="eyebrow">COMMON QUESTIONS</p>
+          <h2 id="faq-title">Frequently asked questions.</h2>
+        </div>
+
+        <div class="faq-grid">
+          <details class="faq-item" open>
+            <summary>How do I sign in to the live demo?</summary>
+            <p>Use the demo mobile number <strong>00000000000</strong> and PIN <strong>0000</strong>. You can also simply click the <strong>Auto-fill</strong> badge to populate credentials in one tap, or enter any valid 11-digit Bangladeshi mobile number.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Is real money required to test transactions?</summary>
+            <p>No. Payoo is a frontend portfolio demonstration project. All balances, bank accounts, and transactions are simulated client-side using localStorage.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>How do I reset my demo balance and history?</summary>
+            <p>Inside the wallet dashboard, open the Account Profile modal (top right avatar) and click <strong>Reset Demo Data</strong>, or use the <strong>Clear</strong> button in the transaction activity feed.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Does the application work on mobile devices?</summary>
+            <p>Yes. The entire application is fully responsive with an adaptive mobile bottom navigation bar, touch-friendly sheets, and mobile gyroscope 3D tilt support.</p>
+          </details>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="landing-footer">
+        <div class="landing-footer__top">
+          <a class="brand brand--light" href="./index.html">
+            <img src="./assets/logo.png" alt="Payoo" />
+            <span>pay<span>oo</span></span>
+          </a>
+          <div style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.7);">
+            Demo Access: <strong>00000000000</strong> · PIN: <strong>0000</strong> · Voucher: <strong>PAYOO100</strong>
+          </div>
+        </div>
+        <div class="landing-footer__bottom">
+          <span>© 2026 Payoo Mobile Bank Experience. Built for educational and portfolio demonstration.</span>
+          <span>Designed with Three.js & WebGL</span>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Notification Toast Region -->
     <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- 3D Cinematic Visual Engine Script -->
+    <script src="./script/landing-3d.js"></script>
+    <!-- Core Application Logic Script -->
     <script src="./script/app.js"></script>
   </body>
 </html>

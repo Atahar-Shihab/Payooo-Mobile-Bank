@@ -8,6 +8,15 @@ Payoo is a portfolio-grade, frontend-only digital wallet and fintech super-app e
 
 ## ✨ Features & Highlights
 
+### 🌐 3D Cinematic Visual Engine & Landing Experience
+- **Interactive 3D Holographic Card**: Powered by Three.js (WebGL), featuring realistic metallic embossed textures, gold EMV chip, contactless wave icons, and responsive mouse parallax tilt / 360° drag inspection.
+- **Cinematic Camera Moves**: 3 autonomous, switchable camera paths:
+  1. **Orbit View**: Slow breathing cinematic dolly that glides around the floating card with depth of field.
+  2. **Card Focus**: Macro close-up view with dynamic specular rim lighting following your cursor.
+  3. **Wave Flow**: Wide-angle fly-through over the undulating cyber energy ocean.
+- **Undulating Cyber Wave**: 1,200+ particle network undulating dynamically to represent live global money movement.
+- **Mobile Gyroscope Support**: Tilting a mobile device dynamically tilts the 3D card in real time.
+
 ### 💳 Core Wallet & Operations
 - **Overview Dashboard**: High-contrast available balance card with privacy toggle, verified wallet badges, and lifetime money in/out stats.
 - **6 Quick Action Services**:
