@@ -1,11 +1,11 @@
 /**
- * Payoo 3D Cinematic Visual Engine
+ * Payoo 3D Ambient Visual Engine
  * Powered by Three.js (WebGL)
  * Features:
  * - Interactive 3D Holographic Debit Card with dynamic canvas-embossed textures
  * - Flowing cyber energy particle wave (digital currency flow)
  * - Holographic orbital rings and floating 3D Taka (৳) tokens
- * - Autonomous cinematic camera paths (Orbit, Focus, Wave) with mouse parallax
+ * - Smooth ambient parallax responsive to user mouse movement
  */
 
 (() => {
@@ -24,7 +24,6 @@
   })();
 
   if (!hasWebGL || typeof THREE === "undefined") {
-    console.warn("WebGL or Three.js not available; rendering CSS 3D fallback.");
     const container = document.querySelector("#cinematic-canvas-container");
     if (container) container.classList.add("has-fallback");
     return;
@@ -32,14 +31,14 @@
 
   // Scene setup
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x0e0c22, 0.045);
+  scene.fog = new THREE.FogExp2(0x0a081a, 0.045);
 
   const container = document.querySelector("#cinematic-canvas-container") || document.body;
   let width = window.innerWidth;
   let height = window.innerHeight;
 
   const camera = new THREE.PerspectiveCamera(46, width / height, 0.1, 100);
-  camera.position.set(0, 0.5, 7.5);
+  camera.position.set(0, 0.4, 7.5);
 
   const renderer = new THREE.WebGLRenderer({
     canvas,
@@ -121,7 +120,6 @@
 
     if (!isBack) {
       // Front of Card
-      // Brand logo
       ctx.fillStyle = "#ffffff";
       ctx.font = "800 52px Manrope, sans-serif";
       ctx.fillText("pay", 70, 100);
@@ -180,119 +178,132 @@
       // Cardholder Details
       ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
       ctx.font = "700 18px 'DM Sans', sans-serif";
-      ctx.fillText("CARDHOLDER", 70, 520);
-      ctx.fillText("EXPIRES", 480, 520);
+      ctx.letterSpacing = "2px";
+      ctx.fillText("CARDHOLDER", 70, 510);
+      ctx.fillText("EXPIRES", 720, 510);
 
       ctx.fillStyle = "#ffffff";
-      ctx.font = "700 28px 'DM Sans', sans-serif";
-      ctx.fillText("SHIHAB ATAHAR", 70, 565);
-      ctx.fillText("10 / 30", 480, 565);
-
-      // Verified shield emblem
-      ctx.fillStyle = "#29dfb2";
-      ctx.font = "700 24px 'DM Sans', sans-serif";
-      ctx.fillText("✓ VERIFIED WALLET", 730, 565);
+      ctx.font = "800 24px Manrope, sans-serif";
+      ctx.letterSpacing = "1px";
+      ctx.fillText("SHIHAB ATAHAR", 70, 545);
+      ctx.fillText("10/29", 720, 545);
     } else {
-      // Back of Card
-      // Magnetic stripe
+      // Back of card
       ctx.fillStyle = "#0c0a1a";
-      ctx.fillRect(0, 70, 1024, 110);
+      ctx.fillRect(0, 80, 1024, 110);
 
-      // Signature & CVV Panel
-      ctx.fillStyle = "#eceaf8";
-      ctx.fillRect(70, 240, 660, 75);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+      ctx.fillRect(70, 260, 620, 70);
 
-      ctx.fillStyle = "#1b1a33";
-      ctx.font = "italic 700 26px 'DM Sans', cursive";
-      ctx.fillText("Shihab Atahar", 90, 290);
+      ctx.fillStyle = "#1e1a38";
+      ctx.font = "italic 700 30px monospace";
+      ctx.fillText("8 8 4", 620, 308);
 
-      // CVV white box
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(740, 240, 120, 75);
-      ctx.fillStyle = "#1b1a33";
-      ctx.font = "700 30px 'DM Sans', monospace";
-      ctx.fillText("742", 770, 290);
-
-      // Support text
-      ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
-      ctx.font = "500 18px 'DM Sans', sans-serif";
-      ctx.fillText("For customer support, open the Payoo App or call +880 9600 000 000.", 70, 410);
-      ctx.fillText("This card is secured with 256-bit client-side state encryption.", 70, 445);
-      ctx.fillText("Issued for demonstration & portfolio testing purposes.", 70, 480);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+      ctx.font = "500 16px 'DM Sans', sans-serif";
+      ctx.fillText("Authorized signature · Not valid unless signed", 70, 370);
+      ctx.fillText("Issued for demonstration purposes by Payoo Mobile Bank Ltd.", 70, 410);
     }
 
     const texture = new THREE.CanvasTexture(texCanvas);
-    texture.anisotropy = 16;
+    texture.generateMipmaps = true;
+    texture.minFilter = THREE.LinearMipmapLinearFilter;
     return texture;
   }
 
-  // Create 3D Card Mesh
-  const cardGeometry = new THREE.BoxGeometry(4.3, 2.7, 0.06);
+  // Card geometry: realistic rounded card aspect ratio
+  const cardWidth = 3.6;
+  const cardHeight = 2.25;
+  const cardThickness = 0.04;
+  const cornerRadius = 0.16;
+
+  function createRoundedBox(w, h, d, r) {
+    const shape = new THREE.Shape();
+    const x = -w / 2, y = -h / 2;
+    shape.moveTo(x + r, y);
+    shape.lineTo(x + w - r, y);
+    shape.quadraticCurveTo(x + w, y, x + w, y + r);
+    shape.lineTo(x + w, y + h - r);
+    shape.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    shape.lineTo(x + r, y + h);
+    shape.quadraticCurveTo(x, y + h, x, y + h - r);
+    shape.lineTo(x, y + r);
+    shape.quadraticCurveTo(x, y, x + r, y);
+
+    const extrudeSettings = {
+      depth: d,
+      bevelEnabled: true,
+      bevelSegments: 4,
+      steps: 1,
+      bevelSize: 0.02,
+      bevelThickness: 0.02
+    };
+
+    return new THREE.ExtrudeGeometry(shape, extrudeSettings);
+  }
+
+  const cardGeometry = createRoundedBox(cardWidth, cardHeight, cardThickness, cornerRadius);
 
   const frontTexture = createCardTexture(false);
   const backTexture = createCardTexture(true);
 
-  const edgeMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x5643cf,
-    metalness: 0.85,
-    roughness: 0.2,
-    clearcoat: 0.8
-  });
-
-  const frontMaterial = new THREE.MeshPhysicalMaterial({
+  const cardFrontMaterial = new THREE.MeshPhysicalMaterial({
     map: frontTexture,
-    metalness: 0.55,
+    metalness: 0.45,
     roughness: 0.22,
     clearcoat: 0.85,
     clearcoatRoughness: 0.15,
-    reflectivity: 0.85
+    reflectivity: 0.9
   });
 
-  const backMaterial = new THREE.MeshPhysicalMaterial({
+  const cardBackMaterial = new THREE.MeshPhysicalMaterial({
     map: backTexture,
-    metalness: 0.55,
-    roughness: 0.25,
-    clearcoat: 0.85,
-    clearcoatRoughness: 0.15
+    metalness: 0.4,
+    roughness: 0.3,
+    clearcoat: 0.6
   });
 
-  // Box materials order: right, left, top, bottom, front, back
+  const cardEdgeMaterial = new THREE.MeshStandardMaterial({
+    color: 0x8a78ff,
+    metalness: 0.85,
+    roughness: 0.2
+  });
+
   const cardMaterials = [
-    edgeMaterial,
-    edgeMaterial,
-    edgeMaterial,
-    edgeMaterial,
-    frontMaterial,
-    backMaterial
+    cardEdgeMaterial,
+    cardFrontMaterial,
+    cardBackMaterial
   ];
 
-  const cardMesh = new THREE.Mesh(cardGeometry, cardMaterials);
+  const cardMesh = new THREE.Mesh(cardGeometry, cardFrontMaterial);
+  cardMesh.rotation.y = 0.15;
   cardGroup.add(cardMesh);
 
-  // Holographic Orbital Rings
-  const ring1Geom = new THREE.TorusGeometry(3.6, 0.02, 16, 120);
-  const ring1Mat = new THREE.MeshBasicMaterial({
+  // Subtle Orbital Rings around card
+  const ring1Geometry = new THREE.TorusGeometry(3.1, 0.012, 16, 100);
+  const ring1Material = new THREE.MeshBasicMaterial({
     color: 0x6955f6,
     transparent: true,
-    opacity: 0.65
+    opacity: 0.35,
+    wireframe: true
   });
-  const ring1 = new THREE.Mesh(ring1Geom, ring1Mat);
-  ring1.rotation.x = Math.PI / 2.8;
+  const ring1 = new THREE.Mesh(ring1Geometry, ring1Material);
+  ring1.rotation.x = Math.PI / 2.3;
   cardGroup.add(ring1);
 
-  const ring2Geom = new THREE.TorusGeometry(4.2, 0.015, 16, 120);
-  const ring2Mat = new THREE.MeshBasicMaterial({
+  const ring2Geometry = new THREE.TorusGeometry(3.6, 0.008, 16, 100);
+  const ring2Material = new THREE.MeshBasicMaterial({
     color: 0x29dfb2,
     transparent: true,
-    opacity: 0.5
+    opacity: 0.25
   });
-  const ring2 = new THREE.Mesh(ring2Geom, ring2Mat);
+  const ring2 = new THREE.Mesh(ring2Geometry, ring2Material);
   ring2.rotation.x = Math.PI / 1.7;
-  ring2.rotation.y = Math.PI / 4;
+  ring2.rotation.y = 0.4;
   cardGroup.add(ring2);
 
-  // Floating Currency Coin Tokens
-  function createToken(symbol = "৳", color = 0x8d7eff) {
+  // Subtle Floating Tokens (৳ and ✦)
+  function createToken(symbol, color = 0x6955f6) {
     const tokenCanvas = document.createElement("canvas");
     tokenCanvas.width = 256;
     tokenCanvas.height = 256;
@@ -382,49 +393,16 @@
   const particleField = new THREE.Points(particleGeometry, particleMaterial);
   scene.add(particleField);
 
-  // Mouse & Cinematic Camera State
+  // Mouse & Ambient Parallax State
   let mouseX = 0;
   let mouseY = 0;
   let targetRotationX = 0;
   let targetRotationY = 0;
-  let isDragging = false;
-  let prevMouseX = 0;
-  let prevMouseY = 0;
 
-  // Camera presets
-  let cameraMode = "orbit"; // "orbit" | "focus" | "wave"
-  const cameraTargets = {
-    orbit: { x: 0, y: 0.3, z: 7.2, lookX: 0, lookY: 0, lookZ: 0 },
-    focus: { x: 0, y: 0.1, z: 5.1, lookX: 0, lookY: 0, lookZ: 0 },
-    wave: { x: 0, y: -1.6, z: 6.8, lookX: 0, lookY: -0.8, lookZ: 0 }
-  };
-
-  // Mouse move handler
+  // Gentle mouse move listener
   window.addEventListener("mousemove", (e) => {
     mouseX = (e.clientX / window.innerWidth) * 2 - 1;
     mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-
-    if (isDragging) {
-      const deltaX = e.clientX - prevMouseX;
-      const deltaY = e.clientY - prevMouseY;
-      cardGroup.rotation.y += deltaX * 0.008;
-      cardGroup.rotation.x += deltaY * 0.008;
-      prevMouseX = e.clientX;
-      prevMouseY = e.clientY;
-    }
-  });
-
-  // Drag interaction to spin card
-  window.addEventListener("mousedown", (e) => {
-    // Only drag when clicking canvas background, not forms/buttons
-    if (e.target.closest("button, a, input, form, select, label, .auth-card")) return;
-    isDragging = true;
-    prevMouseX = e.clientX;
-    prevMouseY = e.clientY;
-  });
-
-  window.addEventListener("mouseup", () => {
-    isDragging = false;
   });
 
   // Mobile Device Orientation / Gyroscope tilt support
@@ -435,58 +413,53 @@
     }
   });
 
-  // Camera mode buttons on landing page
-  document.querySelectorAll("[data-cam]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll("[data-cam]").forEach((b) => b.classList.remove("is-active"));
-      btn.classList.add("is-active");
-      cameraMode = btn.dataset.cam || "orbit";
-    });
-  });
-
-  // Resize handler
-  window.addEventListener("resize", () => {
+  // Responsive Resize handler
+  const handleResize = () => {
     width = window.innerWidth;
     height = window.innerHeight;
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     renderer.setSize(width, height);
-  });
 
-  // Main Cinematic Render Loop
+    // Reposition card gracefully on wide screens vs mobile
+    if (width > 1024) {
+      cardGroup.position.x = 2.0;
+      cardGroup.scale.set(0.95, 0.95, 0.95);
+    } else {
+      cardGroup.position.x = 0;
+      cardGroup.scale.set(0.75, 0.75, 0.75);
+    }
+  };
+  window.addEventListener("resize", handleResize);
+  handleResize();
+
+  // Main Ambient Render Loop
   const clock = new THREE.Clock();
 
   function animate() {
     requestAnimationFrame(animate);
-
     const elapsedTime = clock.getElapsedTime();
 
-    // 1. Floating card animation
-    if (!isDragging) {
-      // Gentle levitation oscillation
-      cardGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.18;
+    // 1. Floating card animation - calm, elegant levitation
+    cardGroup.position.y = Math.sin(elapsedTime * 1.1) * 0.12;
 
-      // Parallax mouse tilt
-      targetRotationY = mouseX * 0.45;
-      targetRotationX = -mouseY * 0.35;
+    // Smooth Parallax mouse tilt
+    targetRotationY = mouseX * 0.28;
+    targetRotationX = -mouseY * 0.20;
 
-      cardGroup.rotation.y += (targetRotationY - cardGroup.rotation.y) * 0.06;
-      cardGroup.rotation.x += (targetRotationX - cardGroup.rotation.x) * 0.06;
-      cardGroup.rotation.z = Math.sin(elapsedTime * 0.8) * 0.04;
-    }
+    cardGroup.rotation.y += (targetRotationY - cardGroup.rotation.y) * 0.05;
+    cardGroup.rotation.x += (targetRotationX - cardGroup.rotation.x) * 0.05;
+    cardGroup.rotation.z = Math.sin(elapsedTime * 0.7) * 0.025;
 
-    // 2. Orbital rings rotation
-    ring1.rotation.z += 0.007;
-    ring2.rotation.z -= 0.009;
+    // 2. Orbital rings slow rotation
+    ring1.rotation.z += 0.004;
+    ring2.rotation.z -= 0.005;
 
-    // 3. Tumbling token coins
-    token1.rotation.y += 0.015;
-    token1.rotation.x = Math.sin(elapsedTime * 1.2) * 0.3;
-    token1.position.y = 1.8 + Math.sin(elapsedTime * 1.3) * 0.2;
-
-    token2.rotation.y -= 0.018;
-    token2.rotation.z = Math.cos(elapsedTime * 1.4) * 0.25;
-    token2.position.y = -1.6 + Math.cos(elapsedTime * 1.5) * 0.15;
+    // 3. Floating token coins
+    token1.rotation.y += 0.01;
+    token1.position.y = 1.6 + Math.sin(elapsedTime * 1.2) * 0.15;
+    token2.rotation.y -= 0.012;
+    token2.position.y = -1.5 + Math.cos(elapsedTime * 1.3) * 0.12;
 
     // 4. Undulating Cyber Wave
     const posAttr = particleGeometry.attributes.position;
@@ -496,44 +469,25 @@
         const u = ix / waveColumns;
         const v = iy / waveRows;
         const waveHeight =
-          Math.sin(u * 7 + elapsedTime * 1.8) * 0.4 +
-          Math.cos(v * 6 + elapsedTime * 1.4) * 0.35 +
-          Math.sin((u + v) * 5 + elapsedTime) * 0.25;
+          Math.sin(u * 6 + elapsedTime * 1.2) * 0.35 +
+          Math.cos(v * 5 + elapsedTime * 0.9) * 0.3 +
+          Math.sin((u + v) * 4 + elapsedTime * 0.8) * 0.2;
 
-        posAttr.setY(idx, -3.2 + waveHeight);
+        posAttr.setY(idx, -3.3 + waveHeight);
         idx++;
       }
     }
     posAttr.needsUpdate = true;
 
-    // 5. Cinematic Autonomous Camera Moves
-    const preset = cameraTargets[cameraMode] || cameraTargets.orbit;
+    // 5. Calm camera position
+    const targetCamX = mouseX * 0.3;
+    const targetCamY = 0.3 + mouseY * 0.2;
+    camera.position.x += (targetCamX - camera.position.x) * 0.03;
+    camera.position.y += (targetCamY - camera.position.y) * 0.03;
+    camera.lookAt(0, 0, 0);
 
-    let targetCamX = preset.x;
-    let targetCamY = preset.y;
-    let targetCamZ = preset.z;
-
-    if (cameraMode === "orbit") {
-      // Cinematic slow breathing dolly
-      targetCamX = preset.x + Math.sin(elapsedTime * 0.3) * 1.2 + mouseX * 0.8;
-      targetCamY = preset.y + Math.cos(elapsedTime * 0.25) * 0.4 + mouseY * 0.5;
-      targetCamZ = preset.z + Math.sin(elapsedTime * 0.2) * 0.6;
-    } else if (cameraMode === "focus") {
-      targetCamX = mouseX * 0.6;
-      targetCamY = mouseY * 0.4;
-    } else if (cameraMode === "wave") {
-      targetCamX = Math.sin(elapsedTime * 0.4) * 1.8;
-      targetCamY = preset.y + Math.cos(elapsedTime * 0.3) * 0.2;
-    }
-
-    // Smooth camera lerp
-    camera.position.x += (targetCamX - camera.position.x) * 0.04;
-    camera.position.y += (targetCamY - camera.position.y) * 0.04;
-    camera.position.z += (targetCamZ - camera.position.z) * 0.04;
-    camera.lookAt(preset.lookX, preset.lookY, preset.lookZ);
-
-    // Accent light pulse
-    accentLight.intensity = 1.0 + Math.sin(elapsedTime * 2.2) * 0.4;
+    // Soft ambient accent light pulse
+    accentLight.intensity = 1.0 + Math.sin(elapsedTime * 1.5) * 0.25;
 
     renderer.render(scene, camera);
   }
