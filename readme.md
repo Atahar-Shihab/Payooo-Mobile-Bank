@@ -1,148 +1,288 @@
-# Payoo — Digital Wallet Experience
+<div align="center">
 
-Payoo is a portfolio-grade, frontend-only digital wallet and fintech super-app experience. It demonstrates how a modern financial product can feel calm, trustworthy, transparent, and delightful through purposeful interface design, responsive layouts, interactive analytics, and polished feedback states.
+  <!-- Animated Hero Banner with Live Neon Laser Light Border & Holographic Card -->
+  <a href="https://atahar-shihab.github.io/Payooo-Mobile-Bank/">
+    <img src="./assets/readme-hero.svg" alt="Payoo Mobile Bank — Next-Gen Fintech Super App" width="100%"/>
+  </a>
 
-> **Disclaimer**: This is an educational demonstration project. It does not connect to actual banking rails or process real monetary transactions.
+  <br/><br/>
 
----
+  <!-- Live Status & Technology Badges -->
+  <p align="center">
+    <a href="https://atahar-shihab.github.io/Payooo-Mobile-Bank/">
+      <img src="https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-29dfb2?style=for-the-badge&logo=githubpages&logoColor=080716" alt="Live Demo"/>
+    </a>
+    <a href="https://github.com/Atahar-Shihab/Payooo-Mobile-Bank/actions/workflows/deploy-pages.yml">
+      <img src="https://img.shields.io/badge/CI%2FCD-Automated%20Deploy-6955f6?style=for-the-badge&logo=githubactions&logoColor=white" alt="CI/CD"/>
+    </a>
+    <img src="https://img.shields.io/badge/3D%20Engine-Three.js%20WebGL-ff5e7e?style=for-the-badge&logo=three.js&logoColor=white" alt="Three.js"/>
+    <img src="https://img.shields.io/badge/PWA-Installable%20Offline-38bdf8?style=for-the-badge&logo=pwa&logoColor=white" alt="PWA"/>
+    <img src="https://img.shields.io/badge/License-MIT-ffd066?style=for-the-badge" alt="License"/>
+  </p>
 
-## ✨ Features & Highlights
+  <!-- Interactive Quick Navigation Pills -->
+  <p align="center">
+    <a href="#-quick-sandbox-access"><code>🔑 Sandbox Login</code></a> •
+    <a href="#-core-fintech-matrix"><code>💳 Feature Matrix</code></a> •
+    <a href="#-interactive-terminal-telemetry"><code>💻 Live Terminal</code></a> •
+    <a href="#-keyboard-shortcuts"><code>⚡ Omnibox Shortcuts</code></a> •
+    <a href="#-architecture--persistence"><code>📁 Architecture</code></a> •
+    <a href="#-local-setup"><code>🚀 Run Locally</code></a>
+  </p>
 
-### 🌐 Ambient 3D Visual Experience
-- **Interactive Holographic Card**: Powered by Three.js (WebGL), featuring realistic metallic embossed textures, gold EMV chip, contactless wave icons, and smooth, refined mouse parallax tilt.
-- **Ambient Cyber Wave**: 1,200+ particle network undulating dynamically to represent live global money movement.
-- **Calm, Distraction-Free Layout**: Built to institutional fintech standards with clean visual hierarchy and zero intrusive camera toggles.
-- **Mobile Gyroscope Support**: Tilting a mobile device dynamically tilts the 3D card in real time.
+  <br/>
 
-### 🌗 Dark Mode & Cyber Slate Theme Switcher
-- **Instant Theme Toggle**: Seamless switch between crisp Light Mode and obsidian dark Cyber Slate Mode (`Alt + T` or topbar icon).
-- High-contrast, glowing neon accents with persistent storage in `localStorage`.
+  <!-- 4 Glowing Glassmorphic Metric Stat Cards with Glint Animations -->
+  <a href="https://atahar-shihab.github.io/Payooo-Mobile-Bank/home.html">
+    <img src="./assets/readme-stats.svg" alt="Payoo Live Ecosystem Metrics" width="100%"/>
+  </a>
 
-### ⚡ Omnibox Command Palette (`Ctrl + K` / `Cmd + K`)
-- Quick-action launcher providing keyboard navigation (`↑` `↓` `Enter`) to search and execute any wallet action, navigate views, toggle theme, export statements, or manage security PIN without touching the mouse.
+</div>
 
-### 💳 Core Wallet & 8 Quick Action Services
-1. **Add Money**: Top up from bank accounts or cards (City Bank, DBBL/Rocket, IBBL, BRAC Bank, Visa/Mastercard) with 8–18 digit account validation and quick-amount chips.
-2. **Send Money**: Free P2P transfers with quick recipient lookup and instant balance deduction.
-3. **Cash Out**: Agent withdrawal with real-time **1.49% fee breakdown preview**.
-4. **Mobile Recharge**: Instant airtime top-up for Grameenphone, Banglalink, Robi, Airtel, and Teletalk with Prepaid/Postpaid selector and quick recharge chips (৳20–৳500).
-5. **Pay Bill**: Utility and ISP bills for DESCO, DPDC, Dhaka WASA, Titas Gas, Carnival Internet, and Link3 with customer reference numbers.
-6. **Request Money**: Direct peer payment requests with custom notes and automatic notification tracking.
-7. **Split Bill (Group Expenses)**: Calculate shared expenses with tip controls (0%, 5%, 10%, 15%), stepper people count, and 1-tap request dispatch to selected contacts.
-8. **Scan to Pay (QR)**: Interactive simulated camera viewfinder with animated laser scan line, flashlight toggle, and 1-tap instant merchant detection (Aarong, Shwapno, North End Coffee).
-
-### 📱 My Personal QR Code & Image Export
-- Dynamically generated SVG QR Code encoded with user's Payoo ID.
-- Verified badge, 1-click **Copy Payoo ID**, and **Save QR Image** (renders SVG to `<canvas>` and exports high-res `.png`).
-
-### 🌍 Global Inward Remittance Calculator
-- Live exchange rates for USD, GBP, EUR, SAR, AED, and MYR.
-- Computes Bangladesh Government's **2.5% Cash Incentive** automatically.
-- Interactive "Simulate Inward Remittance" button crediting foreign funds directly into the wallet with official receipt.
-
-### 🧾 Transaction Receipts & Activity Hub
-- **Interactive Receipt Slips**: Click any transaction to inspect its official receipt modal with unique Transaction ID, exact timestamp, fee breakdown, counterparty details, and post-transaction balance.
-- **Dedicated Print Stylesheet**: 1-click **Print Receipt** cleanly formats the receipt for paper or PDF without navigation or modal overlays (`@media print`).
-- **Multi-Criteria Filtering**: Filter by category (Inflow, Outflow, Transfers, Bills, Recharge, Cash Out) and timeframe (All Time, Today, Past 7 Days, Past 30 Days).
-- **CSV Data Export**: Export complete transaction history as a downloadable `.csv` file.
-
-### 📊 Real-Time Financial Insights
-- **Dynamic Weekly Flow Chart**: Visualizes day-by-day spending across the past 7 days (Mon–Sun) computed dynamically from transaction records, complete with interactive hover tooltips, weekly spend total, and daily average.
-- **Category Spending Distribution**: Automatically categorizes outflows into Transfers, Utility & Bills, Cash Out, Recharge, and Savings with proportional progress bars.
-- **Interactive Savings Goal ("Dream getaway")**: Track progress toward a ৳60,000 target with options to add ৳500, add ৳1,000, or withdraw funds back into the wallet.
-
-### 👥 People, Security & Controls
-- **Contact Manager Suite**: Quick-action buttons to Send, Request, or Delete contacts.
-- **Security PIN Management**: Update the 4-digit transaction authorization PIN via dedicated modal.
-- **Full JSON Backup & Restore**: Export complete wallet state as a `.json` backup file.
-- **Live Notification Center**: Dynamic feed with unread badge counter, "Mark all read", and "Clear all".
-
-### 🎁 Payoo Plus Rewards
-- **Welcome Bonus**: Claim ৳100 with promo code `PAYOO100`.
-- **Merchant Vouchers**: 1-click copy for partner discount codes (`CAFE50`, `RIDE30`).
-
-### 🎵 Modern Audio Feedback
-- Synthesized, zero-dependency audio feedback using the Web Audio API for celebratory transaction chimes, barcode scanner beeps, and soft interaction clicks.
-
-### 📲 Progressive Web App (PWA)
-- Web App Manifest (`manifest.json`) and Service Worker (`sw.js`) for offline asset caching and standalone installation.
+<br/>
 
 ---
 
-## 🔑 Demo Access
+## 💡 Overview
 
-| Field | Value |
-| --- | --- |
-| Mobile number | `00000000000` *(or any valid 11-digit `01XXXXXXXXX`)* |
-| PIN | `0000` |
-| Reward code | `PAYOO100` |
+**Payoo Mobile Bank** is a portfolio-grade, institutional frontend digital wallet and fintech super-app designed for Bangladesh’s dynamic mobile financial ecosystem. Inspired by Stripe, Revolut, and bKash, Payoo delivers an ultra-responsive, zero-latency transaction sandbox running entirely client-side.
 
-> **Pro Tip**: On the sign-in page, click the **Auto-fill** chip on the demo credential box to populate credentials in one click!
+Every monetary interaction—from peer-to-peer transfers and multi-operator recharges to real-time remittance incentives and QR payments—is accompanied by reactive DOM updates, dynamic 7-day flow analytics, downloadable official receipt slips, and synthesized Web Audio feedback.
 
----
-
-## ⌨️ Keyboard Shortcuts
-
-| Shortcut | Action |
-| --- | --- |
-| `Ctrl + K` / `Cmd + K` | Open Omnibox Command Palette |
-| `Alt + T` | Toggle Dark / Light Theme |
-| `Esc` | Close any open modal or command palette |
+> [!NOTE]
+> **Educational Sandbox**: This is a production-grade frontend demonstration application. All transactions, cryptographic simulations, and bank balance states persist client-side via browser `localStorage`. No actual monetary transactions or external banking rails are contacted.
 
 ---
 
-## 🚀 Run Locally
+<div id="-quick-sandbox-access"></div>
 
-No compiler or build step is required. Open `index.html` directly in your browser, or serve the repository with any static file server:
+## 🔑 Quick Sandbox Access
 
-```bash
-# Using npx serve
-npx serve .
+Try the complete wallet immediately without manual registration using the pre-configured credentials:
 
-# Or using Python 3
-python -m http.server 3000
+<div align="center">
+
+| Parameter | Sandbox Value | One-Click Action |
+| :--- | :--- | :--- |
+| **Mobile Number** | `00000000000` *(or any 11-digit `01XXXXXXXXX`)* | Click **Auto-fill** on Sign-in Page |
+| **Security PIN** | `0000` | Pre-loaded in demo sandbox |
+| **Welcome Bonus Code** | `PAYOO100` | Claims **৳100.00** bonus on Rewards page |
+| **Starter Balance** | `৳4,500.00` | Automatically initialized in LocalStorage |
+
+</div>
+
+<details open>
+<summary><strong>🎯 How to Launch the Demo</strong> (Click to collapse)</summary>
+
+1. Navigate to the live demo: **[atahar-shihab.github.io/Payooo-Mobile-Bank](https://atahar-shihab.github.io/Payooo-Mobile-Bank/)**
+2. In the credentials card, click the **Auto-fill** chip to instantly fill in `00000000000` and `0000`.
+3. Click **Sign In to Payoo** to launch the Super-App Dashboard with 3D card tilt and real-time ledger.
+4. Press `Ctrl + K` (or `Cmd + K` on macOS) anywhere inside the dashboard to search actions, switch themes, or trigger services via the Omnibox.
+
+</details>
+
+---
+
+<div id="-core-fintech-matrix"></div>
+
+## 💳 Core Fintech Matrix
+
+Payoo integrates 8 essential mobile financial modules into a unified dashboard:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        PAYOO MFS PLATFORM CORE                         │
+├─────────────────┬─────────────────┬──────────────────┬─────────────────┤
+│   ADD MONEY     │   SEND MONEY    │     CASH OUT     │ MOBILE RECHARGE │
+│ 5 Banks & Cards │  Zero-Fee P2P   │ 1.49% Real-Time  │ 5 BD Operators  │
+│  Instant Top-up │ Instant Balance │  Fee Breakdown   │ Pre & Postpaid  │
+├─────────────────┼─────────────────┼──────────────────┼─────────────────┤
+│    PAY BILL     │  REQUEST MONEY  │    SPLIT BILL    │  SCAN & PAY QR  │
+│ Utility & ISPs  │  Peer Invoicing │ Group Expenses & │ Camera Laser    │
+│ Ref ID Tracking │ Notification Hub│  Tip Calculator  │ Merchant Detect │
+└─────────────────┴─────────────────┴──────────────────┴─────────────────┘
 ```
 
+<details>
+<summary><strong>📊 Detailed Service Directory & Fee Structure</strong> (Click to expand)</summary>
+
+<br/>
+
+| Service | Supported Providers / Channels | Transaction Fee | Limit Per Tx | Real-Time Validations |
+| :--- | :--- | :--- | :--- | :--- |
+| **Add Money** | City Bank, DBBL/Rocket, IBBL, BRAC Bank, Visa, Mastercard | **৳0.00** (Free) | ৳100 – ৳50,000 | 8–18 digit account checks, 4-digit PIN |
+| **Send Money** | Any valid 11-digit Bangladeshi mobile (`013..019`) | **৳0.00** (Free P2P) | ৳10 – ৳25,000 | Recipient validation, non-empty note, balance check |
+| **Cash Out** | Certified Payoo Agent points nationwide | **1.49%** (Auto-calc) | ৳100 – ৳25,000 | Transparent dynamic fee preview slip before confirm |
+| **Mobile Recharge**| Grameenphone, Robi, Banglalink, Airtel, Teletalk | **৳0.00** (Free) | ৳20 – ৳1,000 | Prepaid / Postpaid switch, quick amount chips |
+| **Pay Bill** | DESCO, DPDC, Dhaka WASA, Titas Gas, Carnival, Link3 | **৳0.00** (Free) | ৳50 – ৳50,000 | Customer meter/subscriber account verification |
+| **Request Money**| Any registered Payoo contact / phone number | **৳0.00** (Free) | ৳10 – ৳10,000 | Dispatches in-app notification with payment link |
+| **Split Bill** | Group dinners, flat rent, shared trips | **৳0.00** (Free) | Up to 12 persons | Tip selector (0%, 5%, 10%, 15%), per-person share |
+| **Scan to Pay** | Aarong, Shwapno, Unimart, North End, Yellow | **৳0.00** (Free) | ৳10 – ৳50,000 | Laser viewfinder simulation, merchant auto-fill |
+
+</details>
+
+<details>
+<summary><strong>🌍 Global Remittance Engine (Bangladesh Bank 2.5% Bonus)</strong> (Click to expand)</summary>
+
+<br/>
+
+Payoo implements the legal **2.5% Bangladesh Government Cash Incentive** for incoming foreign wage remittances:
+- **Supported Corridors**: USD ($), GBP (£), EUR (€), SAR (﷼), AED (د.إ), MYR (RM).
+- **Auto-Computation**: Real-time currency conversion + 2.5% government subsidy credited immediately.
+- **Simulate Inward Remittance**: 1-click test button crediting converted funds directly to the user's available balance with an official foreign exchange receipt.
+
+</details>
+
 ---
 
-## 🌐 GitHub Pages Deployment
+<div id="-interactive-terminal-telemetry"></div>
 
-The repository includes a GitHub Actions workflow (`.github/workflows/deploy-pages.yml`) that builds and deploys directly to GitHub Pages on every push to `main`.
+## 💻 Live Terminal Telemetry
 
-For this repository, the dashboard direct URL is:
+<div align="center">
+  <img src="./assets/readme-terminal.svg" alt="Payoo CLI Interactive Status Terminal" width="100%"/>
+</div>
 
-```text
-https://atahar-shihab.github.io/Payooo-Mobile-Bank/home.html
+---
+
+<div id="-keyboard-shortcuts"></div>
+
+## ⚡ Omnibox Command Palette & Shortcuts
+
+Press `Ctrl + K` (Windows/Linux) or `Cmd + K` (macOS) anywhere in the application to access the Omnibox. Type fuzzy search terms to jump anywhere without touching the mouse:
+
+```
+> send         -> Open Send Money Modal
+> theme        -> Toggle Dark / Light Cyber Slate Mode
+> qr           -> Show My Personal QR Code & Image Export
+> remit        -> Open Global Remittance Calculator
+> statement    -> Export Complete Transaction History to CSV
+> pin          -> Change 4-digit Security Authorization PIN
 ```
 
+<div align="center">
+
+| Shortcut | Scope | Action |
+| :---: | :---: | :--- |
+| <kbd>Ctrl</kbd> + <kbd>K</kbd> / <kbd>Cmd</kbd> + <kbd>K</kbd> | Global | Open / Focus Omnibox Command Palette |
+| <kbd>Alt</kbd> + <kbd>T</kbd> | Global | Toggle Dark Mode / Light Mode instantaneously |
+| <kbd>Esc</kbd> | Global | Dismiss modal dialogs, drawers, and command palette |
+| <kbd>↑</kbd> / <kbd>↓</kbd> + <kbd>Enter</kbd> | Omnibox | Navigate search results and execute selected action |
+
+</div>
+
 ---
 
-## 📁 Project Architecture
+<div id="-architecture--persistence"></div>
+
+## 📁 Architecture & Local Persistence
+
+Payoo is built with a zero-compilation, hyper-lightweight frontend stack prioritizing instant startup, 60 FPS animations, and offline resilience:
 
 ```text
 Payooo-Mobile-Bank/
 ├── .github/workflows/
-│   └── deploy-pages.yml      # Automated GitHub Pages CI/CD workflow
+│   └── deploy-pages.yml          # Automated CI/CD GitHub Pages deployment
 ├── assets/
 │   ├── css/
-│   │   └── app.css           # Design tokens, dark mode, responsive grid, modal & slip UI
-│   ├── logo.png              # Brand identity mark
-│   └── opt-1.png..opt-6.png  # Classic service icons
+│   │   └── app.css               # Design system tokens, Cyber Slate mode, print styling
+│   ├── readme-hero.svg           # Animated running-laser banner with 3D card
+│   ├── readme-stats.svg          # 4 Glowing glassmorphism live metric cards
+│   ├── readme-terminal.svg       # Developer simulated telemetry CLI window
+│   ├── logo.png                  # Payoo brand insignia
+│   └── opt-1.png..opt-6.png      # High-res classic service glyphs
 ├── script/
-│   ├── app.js                # Core state engine, QR generator, split bill, remittance, audio
-│   └── landing-3d.js         # Three.js 3D WebGL holographic card & cyber particle wave
-├── index.html                # 3D cinematic landing page with interactive sign-in portal
-├── home.html                 # Comprehensive fintech super-app dashboard
-├── manifest.json             # Progressive Web App manifest
-├── sw.js                     # Service worker for offline asset caching
-└── readme.md                 # Documentation and architecture guide
+│   ├── app.js                    # Reactive state engine, QR generator, split bill, audio synth
+│   └── landing-3d.js             # Three.js WebGL holographic card with realistic lighting
+├── index.html                    # Institutional landing page with 3D card & sign-in portal
+├── home.html                     # Full-featured fintech super-app dashboard
+├── manifest.json                 # PWA Web App Manifest (standalone installable)
+├── sw.js                         # Service Worker with intelligent offline asset caching
+└── readme.md                     # Interactive documentation & project handbook
 ```
+
+<details>
+<summary><strong>💾 LocalStorage Schema & State Machine</strong> (Click to expand)</summary>
+
+<br/>
+
+The entire application state is stored under the `payoo-wallet-v2` key in browser `localStorage`:
+
+```json
+{
+  "balance": 4500.00,
+  "pin": "0000",
+  "phone": "00000000000",
+  "name": "Shihab Atahar",
+  "theme": "dark",
+  "savingsGoal": {
+    "title": "Dream getaway",
+    "target": 60000,
+    "saved": 18500
+  },
+  "transactions": [
+    {
+      "id": "TX-1729759812",
+      "type": "send",
+      "title": "Sent to 01711000000",
+      "counterparty": "01711000000",
+      "amount": -500.00,
+      "fee": 0.00,
+      "date": "2026-10-24T10:15:00.000Z",
+      "category": "Transfers",
+      "balanceAfter": 4000.00
+    }
+  ]
+}
+```
+
+- **JSON Data Backup & Restore**: Export your complete wallet history via **Account Profile → Export JSON** or import an existing backup file.
+- **Factory Reset**: Click **Reset Demo Data** to restore starter balances and fresh transactions at any time.
+
+</details>
 
 ---
 
-## 💾 Local Data & Persistence
+<div id="-local-setup"></div>
 
-Wallet data is saved in browser `localStorage` under `payoo-wallet-v2`. You can:
-- Clear transaction history using **Clear** in the Activity tab.
-- Reset the entire wallet to factory demo state via **Account Profile → Reset Demo Data**.
-- Export and download your entire wallet state as JSON via **Account Profile → Export JSON**.
+## 🚀 Run Locally
+
+No `npm install`, Node modules, or webpack builds are needed. Payoo runs natively in any modern browser:
+
+### Option 1: Live in Browser
+Open `index.html` directly in Google Chrome, Microsoft Edge, Mozilla Firefox, or Safari.
+
+### Option 2: Local Static Server
+```bash
+# Using Node.js npx serve
+npx serve .
+
+# Or using Python 3
+python -m http.server 3000
+
+# Or using PHP built-in server
+php -S localhost:3000
+```
+
+Once running, navigate to `http://localhost:3000` in your browser.
+
+---
+
+## 🛡️ Security, Privacy & Integrity
+
+- **Zero Third-Party Telemetry**: No trackers, ads, or cookies. All interactions stay in your local browser sandbox.
+- **DOM Sanitization**: User inputs (notes, names, reference numbers) are escaped to prevent cross-site scripting (XSS).
+- **Deterministic Form Validation**: Phone numbers must match the Bangladeshi 11-digit numbering plan (`01XXXXXXXXX`), and amounts are verified against minimum/maximum bounds before ledger mutation.
+- **Printable Legal Receipts**: Each transaction generates an official receipt slip formatted via `@media print` for physical paper printing or clean PDF archiving without UI clutter.
+
+---
+
+## 👨‍💻 Author & Acknowledgements
+
+Created with ❤️ by **[Shihab Atahar](https://github.com/Atahar-Shihab)**.
+
+- **Figma Design Reference**: [payoo-MFS.fig](./payoo-MFS.fig)
+- **Live Demo**: [atahar-shihab.github.io/Payooo-Mobile-Bank](https://atahar-shihab.github.io/Payooo-Mobile-Bank/)
+- **Repository**: [github.com/Atahar-Shihab/Payooo-Mobile-Bank](https://github.com/Atahar-Shihab/Payooo-Mobile-Bank)
+
+*Distributed under the MIT License. Contributions and feedback are welcome!*
