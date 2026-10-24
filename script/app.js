@@ -2,6 +2,7 @@
   const STORAGE_KEY = "payoo-wallet-v2";
   const SESSION_KEY = "payoo-session";
   const USER_MOBILE_KEY = "payoo-user-mobile";
+  const THEME_KEY = "payoo-theme";
 
   const INITIAL_STATE = {
     balance: 45000,
@@ -9,6 +10,8 @@
     goalTarget: 60000,
     redeemed: false,
     soundEnabled: true,
+    theme: "light",
+    pin: "0000",
     contacts: [
       { name: "Nusrat A.", phone: "01700000001", avatar: "avatar--violet", initials: "NA" },
       { name: "Rafi K.", phone: "01800000002", avatar: "avatar--orange", initials: "RK" },
@@ -36,8 +39,19 @@
     request: { icon: "fa-hand-holding-dollar", className: "positive", label: "Money requested" },
     bonus: { icon: "fa-gift", className: "positive", label: "Reward redeemed" },
     goal: { icon: "fa-piggy-bank", className: "negative", label: "Added to savings" },
-    "goal-withdraw": { icon: "fa-vault", className: "positive", label: "Withdrawn from savings" }
+    "goal-withdraw": { icon: "fa-vault", className: "positive", label: "Withdrawn from savings" },
+    split: { icon: "fa-users-viewfinder", className: "positive", label: "Split bill requested" }
   };
+
+  const REMITTANCE_RATES = {
+    USD: 121.50,
+    GBP: 156.80,
+    EUR: 131.20,
+    SAR: 32.40,
+    AED: 33.08,
+    MYR: 27.90
+  };
+  const INCENTIVE_PERCENT = 0.025; // 2.5% Bangladesh Govt Cash Incentive
 
   const money = (value) =>
     new Intl.NumberFormat("en-BD", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Number(value) || 0);
@@ -52,6 +66,8 @@
       return {
         ...INITIAL_STATE,
         ...stored,
+        pin: stored.pin || INITIAL_STATE.pin,
+        theme: stored.theme || INITIAL_STATE.theme,
         contacts: Array.isArray(stored.contacts) ? stored.contacts : INITIAL_STATE.contacts,
         notifications: Array.isArray(stored.notifications) ? stored.notifications : INITIAL_STATE.notifications,
         history: Array.isArray(stored.history) ? stored.history : INITIAL_STATE.history
@@ -63,7 +79,7 @@
 
   const storeState = (state) => localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 
-  const isPin = (value) => String(value).trim() === "0000";
+  const isPin = (value, expected = "0000") => String(value).trim() === String(expected).trim();
   const isPhone = (value) => {
     const val = String(value).trim();
     return /^01\d{9}$/.test(val) || val === "00000000000";
@@ -90,6 +106,28 @@
     } catch {
       return "Just now";
     }
+  };
+
+  // Smooth easing number animation for balances
+  const animateNumber = (element, start, end, duration = 650, prefix = "", suffix = "") => {
+    if (!element) return;
+    const s = Number(start) || 0;
+    const e = Number(end) || 0;
+    if (Math.abs(s - e) < 0.01) {
+      element.textContent = `${prefix}${money(e)}${suffix}`;
+      return;
+    }
+    const startTime = performance.now();
+    const step = (now) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      const val = s + (e - s) * ease;
+      element.textContent = `${prefix}${money(val)}${suffix}`;
+      if (progress < 1) requestAnimationFrame(step);
+      else element.textContent = `${prefix}${money(e)}${suffix}`;
+    };
+    requestAnimationFrame(step);
   };
 
   const playSound = (kind, enabled = true) => {
@@ -125,9 +163,18 @@
         gain.connect(ctx.destination);
         osc.start(now);
         osc.stop(now + 0.06);
+      } else if (kind === "beep") {
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(880, now);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.12);
       }
     } catch {
-      // Audio autoplay policy or device without audio
+      // Audio policy safe
     }
   };
 
@@ -141,18 +188,110 @@
     setTimeout(() => notification.remove(), 3600);
   };
 
+  // High-fidelity Client-Side SVG QR Code Generator
+  const generateQRSvg = (payload, size = 210) => {
+    const n = 25; // 25x25 matrix
+    const grid = Array.from({ length: n }, () => Array(n).fill(0));
+
+    // Place 7x7 Finder Pattern helper
+    const placeFinder = (startX, startY) => {
+      for (let r = 0; r < 7; r++) {
+        for (let c = 0; c < 7; c++) {
+          if (r === 0 || r === 6 || c === 0 || c === 6 || (r >= 2 && r <= 4 && c >= 2 && c <= 4)) {
+            grid[startY + r][startX + c] = 1;
+          }
+        }
+      }
+    };
+
+    // Top-Left, Top-Right, Bottom-Left finders
+    placeFinder(0, 0);
+    placeFinder(n - 7, 0);
+    placeFinder(0, n - 7);
+
+    // Separators (white space around finders)
+    for (let i = 0; i < 8; i++) {
+      grid[7][i] = 0;
+      grid[i][7] = 0;
+      grid[7][n - 1 - i] = 0;
+      grid[i][n - 8] = 0;
+      grid[n - 8][i] = 0;
+      grid[n - 1 - i][7] = 0;
+    }
+
+    // Timing tracks
+    for (let i = 8; i < n - 8; i++) {
+      grid[6][i] = i % 2 === 0 ? 1 : 0;
+      grid[i][6] = i % 2 === 0 ? 1 : 0;
+    }
+
+    // Alignment pattern at bottom right
+    const alignX = 18, alignY = 18;
+    for (let r = -2; r <= 2; r++) {
+      for (let c = -2; c <= 2; c++) {
+        if (Math.abs(r) === 2 || Math.abs(c) === 2 || (r === 0 && c === 0)) {
+          grid[alignY + r][alignX + c] = 1;
+        }
+      }
+    }
+
+    // Hash the payload for deterministic pseudo-data modules
+    let hash = 0;
+    for (let i = 0; i < payload.length; i++) {
+      hash = (hash << 5) - hash + payload.charCodeAt(i);
+      hash |= 0;
+    }
+
+    // Populate data modules avoiding reserved spaces
+    let bitIndex = 0;
+    for (let r = 0; r < n; r++) {
+      for (let c = 0; c < n; c++) {
+        const inTL = r < 9 && c < 9;
+        const inTR = r < 9 && c >= n - 9;
+        const inBL = r >= n - 9 && c < 9;
+        const inTiming = r === 6 || c === 6;
+        const inAlign = r >= alignY - 2 && r <= alignY + 2 && c >= alignX - 2 && c <= alignX + 2;
+
+        if (!inTL && !inTR && !inBL && !inTiming && !inAlign) {
+          const pseudoBit = ((hash >> (bitIndex % 31)) ^ (r * c)) & 1;
+          const mask = (r + c) % 2 === 0 ? 1 : 0;
+          grid[r][c] = pseudoBit ^ mask;
+          bitIndex++;
+        }
+      }
+    }
+
+    // Build SVG Rectangles
+    let rects = "";
+    for (let r = 0; r < n; r++) {
+      for (let c = 0; c < n; c++) {
+        if (grid[r][c] === 1) {
+          rects += `<rect x="${c}" y="${r}" width="1" height="1" fill="#1b1a33" />`;
+        }
+      }
+    }
+
+    return `
+      <svg viewBox="0 0 ${n} ${n}" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+        <rect width="${n}" height="${n}" fill="#ffffff" />
+        ${rects}
+        <circle cx="${n / 2}" cy="${n / 2}" r="2.2" fill="#6955f6" />
+        <circle cx="${n / 2}" cy="${n / 2}" r="1.6" fill="#ffffff" />
+        <circle cx="${n / 2}" cy="${n / 2}" r="1.1" fill="#6955f6" />
+      </svg>
+    `;
+  };
+
   function initLogin() {
     const form = document.querySelector("#login-form");
     if (!form) return;
 
-    // Check if user already has an active session
     const sessionActive = sessionStorage.getItem(SESSION_KEY) === "active";
     const sessionBanner = document.querySelector("#active-session-banner");
     if (sessionActive && sessionBanner) {
       sessionBanner.classList.remove("hidden");
     }
 
-    // Toggle PIN visibility
     document.querySelectorAll("[data-password-toggle]").forEach((button) => {
       button.addEventListener("click", () => {
         const input = document.querySelector(`#${button.dataset.passwordToggle}`);
@@ -164,7 +303,6 @@
       });
     });
 
-    // Auto-fill demo credentials on click
     const demoBadge = document.querySelector("#demo-badge");
     if (demoBadge) {
       const fillDemo = () => {
@@ -191,8 +329,11 @@
       const mobile = String(data.get("mobile") || "").trim();
       const pin = String(data.get("pin") || "").trim();
 
-      if (!isPhone(mobile) || !isPin(pin)) {
-        toast("Please enter a valid mobile number and demo PIN (0000).", "error");
+      const currentState = getState();
+      const validPin = currentState.pin || "0000";
+
+      if (!isPhone(mobile) || !isPin(pin, validPin)) {
+        toast(`Please enter a valid mobile number and PIN (${validPin}).`, "error");
         return;
       }
 
@@ -205,7 +346,6 @@
   function initDashboard() {
     if (!document.querySelector("#balance")) return;
 
-    // Protect dashboard view with active session check
     if (sessionStorage.getItem(SESSION_KEY) !== "active") {
       window.location.replace("./index.html");
       return;
@@ -215,9 +355,35 @@
     let balanceVisible = true;
     let selectedView = "overview";
     let activeFilter = "all";
+    let activePeriod = "all";
+    let previousBalance = state.balance;
 
     const userMobile = sessionStorage.getItem(USER_MOBILE_KEY) || "01700000000";
     const userInitials = userMobile === "00000000000" ? "AS" : userMobile.slice(-2);
+
+    // Apply Saved Theme
+    const applyTheme = (theme) => {
+      const root = document.documentElement;
+      root.setAttribute("data-theme", theme);
+      state.theme = theme;
+      localStorage.setItem(THEME_KEY, theme);
+      const btn = document.querySelector("#theme-toggle-btn");
+      if (btn) {
+        btn.innerHTML = `<i class="fa-solid ${theme === "dark" ? "fa-sun" : "fa-moon"}"></i>`;
+        btn.setAttribute("title", `Switch to ${theme === "dark" ? "Light" : "Dark"} Mode (Alt+T)`);
+      }
+    };
+
+    const toggleTheme = () => {
+      const current = document.documentElement.getAttribute("data-theme") || "light";
+      const next = current === "dark" ? "light" : "dark";
+      applyTheme(next);
+      save();
+      toast(`Switched to ${next} theme.`);
+    };
+
+    const savedTheme = localStorage.getItem(THEME_KEY) || state.theme || "light";
+    applyTheme(savedTheme);
 
     // Dialog elements
     const transactionModal = document.querySelector("#transaction-modal");
@@ -235,11 +401,15 @@
     const profileContent = document.querySelector("#profile-content");
 
     const contactModal = document.querySelector("#contact-modal");
+    const qrModal = document.querySelector("#qr-modal");
+    const scanQrModal = document.querySelector("#scan-qr-modal");
+    const splitBillModal = document.querySelector("#split-bill-modal");
+    const pinModal = document.querySelector("#pin-modal");
+    const commandPaletteModal = document.querySelector("#command-palette-modal");
 
     const activityPreview = document.querySelector("#activity-preview");
     const historyContainer = document.querySelector("#history-container");
 
-    // Dynamic greeting based on current time
     const getGreeting = () => {
       const hour = new Date().getHours();
       if (hour < 12) return "Good morning";
@@ -262,11 +432,18 @@
       }
     };
 
-    // Render balance
-    const renderBalance = () => {
+    // Render balance with smooth animation
+    const renderBalance = (animated = true) => {
       const balanceEl = document.querySelector("#balance");
       if (balanceEl) {
-        balanceEl.textContent = balanceVisible ? money(state.balance) : "••••••••";
+        if (!balanceVisible) {
+          balanceEl.textContent = "••••••••";
+        } else if (animated) {
+          animateNumber(balanceEl, previousBalance, state.balance, 500);
+          previousBalance = state.balance;
+        } else {
+          balanceEl.textContent = money(state.balance);
+        }
       }
       const maskEl = document.querySelector("#account-mask");
       if (maskEl) {
@@ -285,7 +462,7 @@
       const dailyAvgEl = document.querySelector("#chart-daily-avg");
       if (!chartEl) return;
 
-      const daySpends = [0, 0, 0, 0, 0, 0, 0]; // Mon to Sun
+      const daySpends = [0, 0, 0, 0, 0, 0, 0];
       const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
       const now = new Date();
@@ -295,7 +472,6 @@
         if (tx.direction < 0) {
           const txDate = new Date(tx.at);
           if (txDate >= sevenDaysAgo) {
-            // Day index: Monday is 0, Sunday is 6
             const dayOfWeek = (txDate.getDay() + 6) % 7;
             daySpends[dayOfWeek] += Number(tx.amount) || 0;
           }
@@ -392,24 +568,57 @@
       renderCategoryBreakdown();
     };
 
-    // Render Saved Contacts
+    // Render Saved Contacts with Quick Actions (Send / Request / Delete)
     const renderContacts = () => {
       const container = document.querySelector("#contacts-list");
       if (!container) return;
+
+      if (state.contacts.length === 0) {
+        container.innerHTML = '<p class="muted" style="font-size:0.75rem; text-align:center; padding:15px 0;">No saved contacts. Tap + to add one.</p>';
+        return;
+      }
+
       container.innerHTML = state.contacts
         .map(
-          (c) => `
-          <button class="contact" data-contact="${safe(c.phone)}" type="button">
-            <span class="avatar ${safe(c.avatar)}">${safe(c.initials)}</span>
-            <strong>${safe(c.name)}</strong>
-            <small>${safe(c.phone)}</small>
-          </button>
+          (c, idx) => `
+          <div class="contact-row-wrapper">
+            <button class="contact" data-contact="${safe(c.phone)}" type="button" title="Send money to ${safe(c.name)}">
+              <span class="avatar ${safe(c.avatar)}">${safe(c.initials)}</span>
+              <strong>${safe(c.name)}</strong>
+              <small>${safe(c.phone)}</small>
+            </button>
+            <div class="contact-actions">
+              <button class="contact-action-btn" type="button" data-send-to="${safe(c.phone)}" title="Send money"><i class="fa-solid fa-paper-plane"></i></button>
+              <button class="contact-action-btn" type="button" data-request-from="${safe(c.phone)}" title="Request money"><i class="fa-solid fa-hand-holding-dollar"></i></button>
+              <button class="contact-action-btn contact-action-btn--delete" type="button" data-delete-idx="${idx}" title="Remove contact"><i class="fa-regular fa-trash-can"></i></button>
+            </div>
+          </div>
         `
         )
         .join("");
 
-      container.querySelectorAll("[data-contact]").forEach((btn) => {
+      container.querySelectorAll(".contact").forEach((btn) => {
         btn.addEventListener("click", () => openTransaction("transfer", btn.dataset.contact));
+      });
+
+      container.querySelectorAll("[data-send-to]").forEach((btn) => {
+        btn.addEventListener("click", () => openTransaction("transfer", btn.dataset.sendTo));
+      });
+
+      container.querySelectorAll("[data-request-from]").forEach((btn) => {
+        btn.addEventListener("click", () => openTransaction("request", btn.dataset.requestFrom));
+      });
+
+      container.querySelectorAll("[data-delete-idx]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const idx = Number(btn.dataset.deleteIdx);
+          const contactName = state.contacts[idx]?.name || "Contact";
+          if (confirm(`Remove ${contactName} from your saved contacts?`)) {
+            state.contacts.splice(idx, 1);
+            save();
+            toast(`${contactName} removed.`);
+          }
+        });
       });
     };
 
@@ -461,7 +670,6 @@
       `;
     };
 
-    // Attach click listener on activity rows to open receipt
     const bindActivityRowEvents = (container) => {
       container.querySelectorAll(".activity-row").forEach((row) => {
         row.addEventListener("click", () => {
@@ -472,10 +680,11 @@
       });
     };
 
-    // Render Activity Feed
-    const renderActivity = (query = "", filter = activeFilter) => {
+    // Filter Activity with multi-criteria: Category + Time Period + Search Query
+    const renderActivity = (query = "", filter = activeFilter, period = activePeriod) => {
       let filtered = state.history;
 
+      // 1. Category Filter
       if (filter === "inflow") {
         filtered = filtered.filter((i) => i.direction > 0);
       } else if (filter === "outflow") {
@@ -484,13 +693,30 @@
         filtered = filtered.filter((i) => i.type === filter);
       }
 
+      // 2. Period Filter
+      if (period !== "all") {
+        const now = new Date();
+        if (period === "today") {
+          const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+          filtered = filtered.filter((i) => new Date(i.at) >= startOfToday);
+        } else if (period === "7days") {
+          const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          filtered = filtered.filter((i) => new Date(i.at) >= sevenDaysAgo);
+        } else if (period === "30days") {
+          const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+          filtered = filtered.filter((i) => new Date(i.at) >= thirtyDaysAgo);
+        }
+      }
+
+      // 3. Search Query
       if (query.trim()) {
         const q = query.toLowerCase();
         filtered = filtered.filter(
           (item) =>
             item.label.toLowerCase().includes(q) ||
             item.detail.toLowerCase().includes(q) ||
-            (item.id && item.id.toLowerCase().includes(q))
+            (item.id && item.id.toLowerCase().includes(q)) ||
+            String(item.amount).includes(q)
         );
       }
 
@@ -509,19 +735,18 @@
       }
     };
 
-    // Save state helper
     const save = () => {
       storeState(state);
-      renderBalance();
+      renderBalance(true);
       renderTotals();
       renderContacts();
       renderNotifications();
-      renderActivity(document.querySelector("#history-search")?.value || "", activeFilter);
+      renderActivity(document.querySelector("#history-search")?.value || "", activeFilter, activePeriod);
     };
 
     // Add transaction to history
-    const addTransaction = (type, amount, detail, label = TYPE_META[type].label, fee = 0) => {
-      const direction = TYPE_META[type].className === "positive" ? 1 : -1;
+    const addTransaction = (type, amount, detail, label = TYPE_META[type]?.label || "Transaction", fee = 0) => {
+      const direction = TYPE_META[type]?.className === "positive" ? 1 : -1;
       const totalDelta = amount * direction - (direction < 0 ? fee : 0);
       state.balance += totalDelta;
 
@@ -538,7 +763,6 @@
         balanceAfter: state.balance
       });
 
-      // Also generate notification
       state.notifications.unshift({
         id: `notif-${Date.now()}`,
         title: label,
@@ -551,7 +775,6 @@
       save();
     };
 
-    // Modal helpers
     const closeModal = () => {
       if (transactionModal && transactionModal.open) transactionModal.close();
     };
@@ -709,7 +932,7 @@
         description: "Ask a friend or family member for a payment or split a bill.",
         fields: `
           <label>Request from mobile number
-            <input name="recipient" maxlength="11" inputmode="numeric" placeholder="01XXXXXXXXX" required />
+            <input name="recipient" maxlength="11" inputmode="numeric" placeholder="01XXXXXXXXX" value="{{recipient}}" required />
           </label>
           <label>Amount (৳)
             <input name="amount" id="amount-input" inputmode="decimal" placeholder="Enter request amount" required />
@@ -753,6 +976,15 @@
 
     // Open transaction modal
     const openTransaction = (type, recipient = "") => {
+      if (type === "split-bill") {
+        openSplitBill();
+        return;
+      }
+      if (type === "scan-qr") {
+        openScanQR();
+        return;
+      }
+
       const template = transactionTemplates[type];
       if (!template) return;
 
@@ -765,7 +997,7 @@
           <form id="transaction-form" class="modal-form" data-type="${type}">
             ${template.fields.replace(/{{recipient}}/g, safe(recipient))}
             <label>4-digit PIN
-              <input name="pin" type="password" inputmode="numeric" maxlength="4" placeholder="Enter 0000" required />
+              <input name="pin" type="password" inputmode="numeric" maxlength="4" placeholder="Enter PIN (${state.pin || "0000"})" required />
             </label>
             <button class="button button--primary" type="submit">Confirm & Transact <i class="fa-solid fa-arrow-right"></i></button>
           </form>
@@ -773,7 +1005,7 @@
         </div>
       `;
 
-      // Bind quick amounts chips
+      // Quick amount chips
       transactionModalContent.querySelectorAll(".amount-chip").forEach((chip) => {
         chip.addEventListener("click", () => {
           const targetInput =
@@ -787,7 +1019,7 @@
         });
       });
 
-      // Cashout fee live calculation
+      // Cashout fee live preview
       const cashoutInput = transactionModalContent.querySelector("#cashout-amount-input");
       const feePreview = transactionModalContent.querySelector("#fee-preview");
       if (cashoutInput && feePreview) {
@@ -811,8 +1043,9 @@
         event.preventDefault();
         const data = Object.fromEntries(new FormData(form));
 
-        if (!isPin(data.pin)) {
-          toast("Please enter the demo PIN (0000).", "error");
+        const requiredPin = state.pin || "0000";
+        if (!isPin(data.pin, requiredPin)) {
+          toast(`Incorrect PIN. Please enter your 4-digit PIN (${requiredPin}).`, "error");
           return;
         }
 
@@ -840,7 +1073,7 @@
 
         if (type === "add-money") {
           if (!data.bank || !isAccount(data.account)) {
-            toast("Please choose a bank and enter a valid account or card number (10-18 digits).", "error");
+            toast("Please choose a bank and enter a valid account or card number (8-18 digits).", "error");
             return;
           }
           const detail = `${data.bank} · •••• ${String(data.account).slice(-4)}`;
@@ -918,7 +1151,6 @@
           }
           const noteText = data.note ? ` · ${data.note}` : "";
           const detail = `Requested from ${data.recipient}${noteText}`;
-          // Money requests do not deduct immediately; notify user
           toast(`Money request for ৳${money(amount)} sent to ${data.recipient}.`);
           state.notifications.unshift({
             id: `notif-${Date.now()}`,
@@ -979,7 +1211,7 @@
       else receiptModal.setAttribute("open", "");
     };
 
-    // Open Profile Modal
+    // Open Profile Modal with Theme, PIN change, & Backup
     const openProfile = () => {
       if (!profileModal || !profileContent) return;
       playSound("tap", state.soundEnabled);
@@ -1011,6 +1243,24 @@
               <span class="slider"></span>
             </label>
           </div>
+          <div class="setting-row">
+            <span>Interface Dark Mode</span>
+            <button id="profile-theme-btn" class="subtle-button" type="button">
+              <i class="fa-solid ${state.theme === "dark" ? "fa-sun" : "fa-moon"}"></i> ${state.theme === "dark" ? "Light Mode" : "Dark Mode"}
+            </button>
+          </div>
+          <div class="setting-row">
+            <span>Security PIN (••••)</span>
+            <button id="profile-change-pin-btn" class="subtle-button" type="button">
+              <i class="fa-solid fa-key"></i> Change PIN
+            </button>
+          </div>
+          <div class="setting-row">
+            <span>Data Statement Backup</span>
+            <button id="profile-export-json-btn" class="subtle-button" type="button">
+              <i class="fa-solid fa-file-code"></i> Export JSON
+            </button>
+          </div>
           <button id="reset-data-btn" class="danger-button" type="button">
             <i class="fa-solid fa-rotate-left"></i> Reset Demo Data to Default
           </button>
@@ -1024,6 +1274,25 @@
         state.soundEnabled = e.target.checked;
         save();
         toast(`Sound effects ${state.soundEnabled ? "enabled" : "disabled"}.`);
+      });
+
+      document.querySelector("#profile-theme-btn")?.addEventListener("click", () => {
+        toggleTheme();
+        openProfile();
+      });
+
+      document.querySelector("#profile-change-pin-btn")?.addEventListener("click", () => {
+        profileModal.close();
+        openChangePin();
+      });
+
+      document.querySelector("#profile-export-json-btn")?.addEventListener("click", () => {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+        const dlAnchor = document.createElement("a");
+        dlAnchor.setAttribute("href", dataStr);
+        dlAnchor.setAttribute("download", `payoo_wallet_backup_${Date.now()}.json`);
+        dlAnchor.click();
+        toast("Wallet JSON backup downloaded!");
       });
 
       document.querySelector("#reset-data-btn")?.addEventListener("click", () => {
@@ -1043,6 +1312,218 @@
 
       if (typeof profileModal.showModal === "function") profileModal.showModal();
       else profileModal.setAttribute("open", "");
+    };
+
+    // Open Change PIN Modal
+    const openChangePin = () => {
+      if (!pinModal) return;
+      playSound("tap", state.soundEnabled);
+      const form = document.querySelector("#change-pin-form");
+      if (form) form.reset();
+      if (typeof pinModal.showModal === "function") pinModal.showModal();
+      else pinModal.setAttribute("open", "");
+    };
+
+    // Open My Personal QR Code Modal
+    const openMyQR = () => {
+      if (!qrModal) return;
+      playSound("tap", state.soundEnabled);
+
+      const qrContainer = document.querySelector("#qr-canvas-container");
+      const nameEl = document.querySelector("#qr-name");
+      const phoneEl = document.querySelector("#qr-phone");
+      const avatarEl = document.querySelector("#qr-avatar");
+
+      if (nameEl) nameEl.textContent = "Shihab Atahar";
+      if (phoneEl) phoneEl.textContent = `+880 ${userMobile}`;
+      if (avatarEl) avatarEl.textContent = userInitials;
+
+      if (qrContainer) {
+        const qrPayload = `payoo://pay?to=${userMobile}&name=Shihab+Atahar`;
+        qrContainer.innerHTML = generateQRSvg(qrPayload, 190);
+      }
+
+      if (typeof qrModal.showModal === "function") qrModal.showModal();
+      else qrModal.setAttribute("open", "");
+    };
+
+    // Open Scan to Pay Modal
+    const openScanQR = () => {
+      if (!scanQrModal) return;
+      playSound("tap", state.soundEnabled);
+      if (typeof scanQrModal.showModal === "function") scanQrModal.showModal();
+      else scanQrModal.setAttribute("open", "");
+    };
+
+    // Open Split Bill Modal
+    const openSplitBill = () => {
+      if (!splitBillModal) return;
+      playSound("tap", state.soundEnabled);
+
+      let peopleCount = 3;
+      const countDisplay = document.querySelector("#split-count-display");
+      const minusBtn = document.querySelector("#split-minus-btn");
+      const plusBtn = document.querySelector("#split-plus-btn");
+      const totalInput = document.querySelector("#split-total-input");
+      const tipSelect = document.querySelector("#split-tip-select");
+      const perPersonEl = document.querySelector("#split-per-person");
+      const grossTotalEl = document.querySelector("#split-gross-total");
+      const contactsContainer = document.querySelector("#split-contacts-checkboxes");
+
+      const updateCalculation = () => {
+        const base = Number(totalInput?.value) || 0;
+        const tipPct = Number(tipSelect?.value) || 0;
+        const gross = base + (base * tipPct) / 100;
+        const perPerson = peopleCount > 0 ? gross / peopleCount : 0;
+
+        if (countDisplay) countDisplay.textContent = `${peopleCount} people`;
+        if (perPersonEl) perPersonEl.textContent = `৳${money(perPerson)}`;
+        if (grossTotalEl) grossTotalEl.textContent = `৳${money(gross)}`;
+      };
+
+      if (contactsContainer) {
+        contactsContainer.innerHTML = state.contacts
+          .map(
+            (c, i) => `
+            <label class="split-checkbox-item">
+              <input type="checkbox" name="splitContact" value="${safe(c.phone)}" ${i < 2 ? "checked" : ""} />
+              <span class="avatar ${safe(c.avatar)}" style="width:26px; height:26px; font-size:0.58rem;">${safe(c.initials)}</span>
+              <span>${safe(c.name)} (${safe(c.phone)})</span>
+            </label>
+          `
+          )
+          .join("");
+      }
+
+      if (minusBtn) {
+        minusBtn.onclick = () => {
+          if (peopleCount > 2) {
+            peopleCount--;
+            updateCalculation();
+          }
+        };
+      }
+      if (plusBtn) {
+        plusBtn.onclick = () => {
+          if (peopleCount < 12) {
+            peopleCount++;
+            updateCalculation();
+          }
+        };
+      }
+
+      totalInput?.addEventListener("input", updateCalculation);
+      tipSelect?.addEventListener("change", updateCalculation);
+      updateCalculation();
+
+      if (typeof splitBillModal.showModal === "function") splitBillModal.showModal();
+      else splitBillModal.setAttribute("open", "");
+    };
+
+    // Open Command Palette (Ctrl+K)
+    const openCommandPalette = () => {
+      if (!commandPaletteModal) return;
+      playSound("tap", state.soundEnabled);
+
+      const searchInput = document.querySelector("#palette-search");
+      const resultsContainer = document.querySelector("#palette-results");
+      if (searchInput) searchInput.value = "";
+
+      const actions = [
+        { id: "send", title: "Send Money (P2P)", desc: "Instant transfer without fees", icon: "fa-paper-plane", group: "Services", run: () => openTransaction("transfer") },
+        { id: "add", title: "Add Money", desc: "Top up from Bank / Card", icon: "fa-plus", group: "Services", run: () => openTransaction("add-money") },
+        { id: "cashout", title: "Cash Out (Agent)", desc: "1.49% transparent fee", icon: "fa-money-bill-transfer", group: "Services", run: () => openTransaction("cashout") },
+        { id: "recharge", title: "Mobile Airtime Recharge", desc: "GP, Robi, BL, Airtel, Teletalk", icon: "fa-mobile-screen", group: "Services", run: () => openTransaction("recharge") },
+        { id: "bill", title: "Pay Utility Bill", desc: "DESCO, WASA, DPDC, Internet", icon: "fa-file-invoice-dollar", group: "Services", run: () => openTransaction("pay-bill") },
+        { id: "request", title: "Request Money", desc: "Direct payment request", icon: "fa-hand-holding-dollar", group: "Services", run: () => openTransaction("request") },
+        { id: "split", title: "Split Group Expense", desc: "Calculate and dispatch requests", icon: "fa-users-viewfinder", group: "Services", run: () => openSplitBill() },
+        { id: "scan", title: "Scan QR Code to Pay", desc: "Viewfinder camera scan", icon: "fa-qrcode", group: "Services", run: () => openScanQR() },
+        { id: "myqr", title: "My Personal QR Code", desc: "Show to receive money", icon: "fa-qrcode", group: "Services", run: () => openMyQR() },
+        { id: "bonus", title: "Redeem Welcome Reward (৳100)", desc: "Use code PAYOO100", icon: "fa-gift", group: "Services", run: () => openTransaction("bonus") },
+        { id: "nav-overview", title: "Navigate: Overview", desc: "Wallet balance & summary", icon: "fa-grid-2", group: "Navigation", run: () => navigate("overview") },
+        { id: "nav-activity", title: "Navigate: Activity Feed", desc: "Transaction history & receipts", icon: "fa-arrow-right-arrow-left", group: "Navigation", run: () => navigate("activity") },
+        { id: "nav-insights", title: "Navigate: Insights", desc: "7-day trends & categories", icon: "fa-chart-pie", group: "Navigation", run: () => navigate("insights") },
+        { id: "nav-rewards", title: "Navigate: Rewards", desc: "Payoo Plus discounts", icon: "fa-sparkles", group: "Navigation", run: () => navigate("rewards") },
+        { id: "theme", title: "Toggle Dark / Light Theme", desc: `Currently ${state.theme}`, icon: "fa-moon", group: "Preferences", run: () => toggleTheme() },
+        { id: "pin", title: "Change Security PIN", desc: "Update 4-digit password", icon: "fa-key", group: "Preferences", run: () => openChangePin() },
+        { id: "contact", title: "Add New Contact", desc: "Save person for quick transfers", icon: "fa-user-plus", group: "Preferences", run: () => openAddContact() },
+        { id: "export", title: "Export CSV Statement", desc: "Download table of records", icon: "fa-file-csv", group: "Preferences", run: () => exportHistoryToCSV() }
+      ];
+
+      let selectedIndex = 0;
+
+      const renderResults = (query = "") => {
+        if (!resultsContainer) return;
+        const q = query.toLowerCase().trim();
+        const filtered = actions.filter((a) => a.title.toLowerCase().includes(q) || a.desc.toLowerCase().includes(q) || a.group.toLowerCase().includes(q));
+
+        if (filtered.length === 0) {
+          resultsContainer.innerHTML = '<p class="muted" style="padding: 20px; text-align: center; font-size: 0.8rem;">No actions match your search.</p>';
+          return;
+        }
+
+        selectedIndex = Math.min(selectedIndex, filtered.length - 1);
+        if (selectedIndex < 0) selectedIndex = 0;
+
+        let lastGroup = "";
+        let html = "";
+        filtered.forEach((act, idx) => {
+          if (act.group !== lastGroup) {
+            html += `<div class="palette-group-title">${safe(act.group)}</div>`;
+            lastGroup = act.group;
+          }
+          html += `
+            <button class="palette-item ${idx === selectedIndex ? "is-selected" : ""}" type="button" data-palette-idx="${idx}">
+              <i class="fa-solid ${act.icon}"></i>
+              <span>${safe(act.title)}</span>
+              <span class="palette-item__desc">${safe(act.desc)}</span>
+            </button>
+          `;
+        });
+
+        resultsContainer.innerHTML = html;
+
+        resultsContainer.querySelectorAll("[data-palette-idx]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const idx = Number(btn.dataset.paletteIdx);
+            commandPaletteModal.close();
+            filtered[idx]?.run();
+          });
+        });
+      };
+
+      if (searchInput) {
+        searchInput.oninput = (e) => {
+          selectedIndex = 0;
+          renderResults(e.target.value);
+        };
+
+        searchInput.onkeydown = (e) => {
+          const items = resultsContainer?.querySelectorAll(".palette-item");
+          if (!items || items.length === 0) return;
+
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            selectedIndex = (selectedIndex + 1) % items.length;
+            renderResults(searchInput.value);
+          } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+            renderResults(searchInput.value);
+          } else if (e.key === "Enter") {
+            e.preventDefault();
+            const selectedBtn = items[selectedIndex];
+            selectedBtn?.click();
+          }
+        };
+      }
+
+      renderResults();
+
+      if (typeof commandPaletteModal.showModal === "function") commandPaletteModal.showModal();
+      else commandPaletteModal.setAttribute("open", "");
+
+      setTimeout(() => searchInput?.focus(), 50);
     };
 
     // Open Notifications
@@ -1093,7 +1574,46 @@
       toast("Transaction history exported to CSV!");
     };
 
-    // Event Listeners setup
+    // Global Inward Remittance Calculator Setup
+    const initRemittanceCalculator = () => {
+      const amtInput = document.querySelector("#remit-amount");
+      const curSelect = document.querySelector("#remit-currency");
+      const baseEl = document.querySelector("#remit-base");
+      const incEl = document.querySelector("#remit-incentive");
+      const totalEl = document.querySelector("#remit-total");
+      const claimBtn = document.querySelector("#claim-remit-btn");
+
+      const updateRemit = () => {
+        const amt = Number(amtInput?.value) || 0;
+        const cur = curSelect?.value || "USD";
+        const rate = REMITTANCE_RATES[cur] || 121.50;
+        const base = amt * rate;
+        const incentive = base * INCENTIVE_PERCENT;
+        const total = base + incentive;
+
+        if (baseEl) baseEl.textContent = `৳${money(base)}`;
+        if (incEl) incEl.textContent = `+৳${money(incentive)}`;
+        if (totalEl) totalEl.textContent = `৳${money(total)}`;
+        return { amt, cur, base, incentive, total };
+      };
+
+      amtInput?.addEventListener("input", updateRemit);
+      curSelect?.addEventListener("change", updateRemit);
+      updateRemit();
+
+      claimBtn?.addEventListener("click", () => {
+        const { amt, cur, total } = updateRemit();
+        if (amt <= 0) {
+          toast("Please enter a valid foreign amount.", "error");
+          return;
+        }
+        const detail = `From ${cur} (${amt} ${cur}) · 2.5% Govt Incentive included`;
+        addTransaction("add-money", total, detail, "Inward Remittance");
+        toast(`৳${money(total)} credited to your wallet from overseas!`);
+      });
+    };
+
+    // Setup Event Listeners
     const todayEl = document.querySelector("#today-date");
     if (todayEl) {
       todayEl.textContent = new Date().toLocaleDateString("en-BD", {
@@ -1103,31 +1623,37 @@
       });
     }
 
-    // Navigation triggers
     document.querySelectorAll("[data-view]").forEach((button) => {
       button.addEventListener("click", () => navigate(button.dataset.view));
     });
 
-    // Quick Action cards
     document.querySelectorAll("[data-action]").forEach((button) => {
       button.addEventListener("click", () => openTransaction(button.dataset.action));
     });
 
-    // Balance visibility toggle
     document.querySelector("#balance-visibility")?.addEventListener("click", () => {
       balanceVisible = !balanceVisible;
-      renderBalance();
+      renderBalance(false);
       const btn = document.querySelector("#balance-visibility");
       if (btn) btn.innerHTML = `<i class="fa-regular fa-eye${balanceVisible ? "" : "-slash"}"></i>`;
     });
 
-    // Profile & Notification triggers
+    // Topbar Action buttons
+    document.querySelector("#search-trigger-btn")?.addEventListener("click", openCommandPalette);
+    document.querySelector("#theme-toggle-btn")?.addEventListener("click", toggleTheme);
+    document.querySelector("#my-qr-btn")?.addEventListener("click", openMyQR);
     document.querySelector("#profile-btn")?.addEventListener("click", openProfile);
     document.querySelector("#notification-btn")?.addEventListener("click", openNotifications);
 
-    document.querySelector("#profile-close")?.addEventListener("click", () => profileModal.close());
-    document.querySelector("#receipt-close")?.addEventListener("click", () => receiptModal.close());
-    document.querySelector("[data-close-notifications]")?.addEventListener("click", () => notificationModal.close());
+    // Modal Close buttons
+    document.querySelector("#profile-close")?.addEventListener("click", () => profileModal?.close());
+    document.querySelector("#receipt-close")?.addEventListener("click", () => receiptModal?.close());
+    document.querySelector("#qr-close")?.addEventListener("click", () => qrModal?.close());
+    document.querySelector("#scan-qr-close")?.addEventListener("click", () => scanQrModal?.close());
+    document.querySelector("#split-close")?.addEventListener("click", () => splitBillModal?.close());
+    document.querySelector("#pin-close")?.addEventListener("click", () => pinModal?.close());
+    document.querySelector("#palette-close")?.addEventListener("click", () => commandPaletteModal?.close());
+    document.querySelector("[data-close-notifications]")?.addEventListener("click", () => notificationModal?.close());
 
     // Mark notifications read
     document.querySelector("#mark-read-btn")?.addEventListener("click", () => {
@@ -1145,7 +1671,7 @@
 
     // Add contact form submit
     document.querySelector("#add-contact-btn")?.addEventListener("click", openAddContact);
-    document.querySelector("#contact-close")?.addEventListener("click", () => contactModal.close());
+    document.querySelector("#contact-close")?.addEventListener("click", () => contactModal?.close());
 
     const addContactForm = document.querySelector("#add-contact-form");
     if (addContactForm) {
@@ -1176,13 +1702,148 @@
         });
 
         save();
-        contactModal.close();
+        contactModal?.close();
         toast(`${name} added to your people!`);
       });
     }
 
-    // Modal click out to close
-    [transactionModal, receiptModal, notificationModal, profileModal, contactModal].forEach((diag) => {
+    // Change PIN form submit
+    const changePinForm = document.querySelector("#change-pin-form");
+    if (changePinForm) {
+      changePinForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const data = new FormData(changePinForm);
+        const currentPin = String(data.get("currentPin") || "").trim();
+        const newPin = String(data.get("newPin") || "").trim();
+        const confirmPin = String(data.get("confirmPin") || "").trim();
+
+        const expected = state.pin || "0000";
+        if (!isPin(currentPin, expected)) {
+          toast("Current PIN is incorrect.", "error");
+          return;
+        }
+
+        if (!/^\d{4}$/.test(newPin)) {
+          toast("New PIN must be exactly 4 digits.", "error");
+          return;
+        }
+
+        if (newPin !== confirmPin) {
+          toast("New PIN and confirmation do not match.", "error");
+          return;
+        }
+
+        state.pin = newPin;
+        save();
+        pinModal?.close();
+        toast("Security PIN updated successfully!");
+      });
+    }
+
+    // Split Bill form submit
+    const splitBillForm = document.querySelector("#split-bill-form");
+    if (splitBillForm) {
+      splitBillForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const checkedContacts = Array.from(splitBillForm.querySelectorAll("input[name='splitContact']:checked")).map(
+          (cb) => cb.value
+        );
+
+        const totalInput = document.querySelector("#split-total-input");
+        const tipSelect = document.querySelector("#split-tip-select");
+        const countDisplay = document.querySelector("#split-count-display");
+
+        const base = Number(totalInput?.value) || 0;
+        const tipPct = Number(tipSelect?.value) || 0;
+        const peopleCount = parseInt(countDisplay?.textContent || "3", 10) || 3;
+        const gross = base + (base * tipPct) / 100;
+        const perPerson = gross / peopleCount;
+
+        if (checkedContacts.length === 0) {
+          toast("Select at least one contact to send requests.", "error");
+          return;
+        }
+
+        checkedContacts.forEach((phone) => {
+          state.notifications.unshift({
+            id: `notif-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+            title: "Split Bill Request Sent",
+            detail: `Requested ৳${money(perPerson)} share from ${phone}`,
+            at: new Date().toISOString(),
+            read: false
+          });
+        });
+
+        playSound("success", state.soundEnabled);
+        save();
+        splitBillModal?.close();
+        toast(`Split requests for ৳${money(perPerson)} dispatched to ${checkedContacts.length} contacts!`);
+      });
+    }
+
+    // QR Code actions (Copy ID and Download QR Image)
+    document.querySelector("#copy-qr-link-btn")?.addEventListener("click", () => {
+      navigator.clipboard?.writeText(userMobile);
+      toast("Payoo ID copied to clipboard!");
+    });
+
+    document.querySelector("#download-qr-btn")?.addEventListener("click", () => {
+      const svg = document.querySelector("#qr-canvas-container svg");
+      if (!svg) return;
+      const svgData = new XMLSerializer().serializeToString(svg);
+      const canvas = document.createElement("canvas");
+      canvas.width = 400;
+      canvas.height = 400;
+      const ctx = canvas.getContext("2d");
+      const img = new Image();
+      img.onload = () => {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 20, 20, 360, 360);
+        const a = document.createElement("a");
+        a.download = `payoo_qr_${userMobile}.png`;
+        a.href = canvas.toDataURL("image/png");
+        a.click();
+        toast("QR code image downloaded!");
+      };
+      img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
+    });
+
+    // Scanner Torch & Merchant Quick Simulate
+    const torchBtn = document.querySelector("#scanner-torch-btn");
+    if (torchBtn) {
+      torchBtn.addEventListener("click", () => {
+        torchBtn.classList.toggle("is-active");
+        toast(`Flashlight ${torchBtn.classList.contains("is-active") ? "on" : "off"}.`);
+      });
+    }
+
+    document.querySelectorAll(".merchant-pill").forEach((pill) => {
+      pill.addEventListener("click", () => {
+        const merchant = pill.dataset.merchant;
+        const phone = pill.dataset.phone;
+        playSound("beep", state.soundEnabled);
+        toast(`Scanned merchant: ${merchant}`);
+        scanQrModal?.close();
+        setTimeout(() => {
+          openTransaction("transfer", phone);
+        }, 200);
+      });
+    });
+
+    // Global Keyboard Shortcut: Ctrl+K / Cmd+K / Alt+T
+    window.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        openCommandPalette();
+      } else if (e.altKey && e.key.toLowerCase() === "t") {
+        e.preventDefault();
+        toggleTheme();
+      }
+    });
+
+    // Dialog backdrop click to close
+    [transactionModal, receiptModal, notificationModal, profileModal, contactModal, qrModal, scanQrModal, splitBillModal, pinModal, commandPaletteModal].forEach((diag) => {
       if (!diag) return;
       diag.addEventListener("click", (e) => {
         if (e.target === diag) diag.close();
@@ -1196,20 +1857,31 @@
       document.querySelector(".sidebar")?.classList.toggle("is-open");
     });
 
-    // History search & filters
+    // History search
     const searchInput = document.querySelector("#history-search");
     if (searchInput) {
       searchInput.addEventListener("input", (e) => {
-        renderActivity(e.target.value, activeFilter);
+        renderActivity(e.target.value, activeFilter, activePeriod);
       });
     }
 
+    // Category filter pills
     document.querySelectorAll("#activity-filters .filter-pill").forEach((pill) => {
       pill.addEventListener("click", () => {
         document.querySelectorAll("#activity-filters .filter-pill").forEach((p) => p.classList.remove("is-active"));
         pill.classList.add("is-active");
         activeFilter = pill.dataset.filter;
-        renderActivity(searchInput?.value || "", activeFilter);
+        renderActivity(searchInput?.value || "", activeFilter, activePeriod);
+      });
+    });
+
+    // Period timeframe filter pills
+    document.querySelectorAll("#period-filters .filter-pill").forEach((pill) => {
+      pill.addEventListener("click", () => {
+        document.querySelectorAll("#period-filters .filter-pill").forEach((p) => p.classList.remove("is-active"));
+        pill.classList.add("is-active");
+        activePeriod = pill.dataset.period;
+        renderActivity(searchInput?.value || "", activeFilter, activePeriod);
       });
     });
 
@@ -1270,8 +1942,11 @@
       window.location.assign("./index.html");
     });
 
+    // Initialize Remittance Calculator
+    initRemittanceCalculator();
+
     // Initial render
-    renderBalance();
+    renderBalance(false);
     renderTotals();
     renderContacts();
     renderNotifications();

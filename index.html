@@ -4,8 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#17162f" />
+    <meta name="description" content="Payoo — Next-Gen Bangladeshi Digital Wallet in Cinematic Motion. Instant P2P transfers, mobile airtime, QR payments, bill splitting, and dynamic financial flow analytics." />
+    <meta property="og:title" content="Payoo — Next-Gen Digital Wallet in Cinematic Motion" />
+    <meta property="og:description" content="Experience 3D holographic cards, zero-fee peer transfers, utility bill payments, and dynamic financial analytics in Bangladesh's premier fintech digital wallet demo." />
+    <meta property="og:image" content="./assets/logo.png" />
+    <meta property="og:type" content="website" />
     <title>Payoo — Next-Gen Digital Wallet in Cinematic Motion</title>
     <link rel="icon" href="./assets/logo.png" type="image/png" />
+    <link rel="manifest" href="./manifest.json" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -51,7 +57,7 @@
             <span class="gradient-text">in cinematic motion.</span>
           </h1>
           <p class="hero-desc">
-            Experience effortless peer-to-peer transfers with zero fees, instant mobile airtime recharge across 5 networks, utility bill payments, and dynamic financial flow analytics in Bangladesh's premier fintech digital wallet.
+            Experience effortless peer-to-peer transfers with zero fees, instant mobile airtime recharge across 5 networks, QR payments, bill splitting, and dynamic financial flow analytics in Bangladesh's premier fintech digital wallet.
           </p>
 
           <div class="hero-actions">
@@ -190,6 +196,22 @@
             <h3>Savings Goals & DPS</h3>
             <p>Build your dream travel fund with dedicated savings targets. Add ৳500 or ৳1,000 deposits, and withdraw funds back into your active wallet anytime.</p>
           </article>
+
+          <article class="feature-card--glass">
+            <div class="feature-icon-box feature-icon-box--violet" style="background: rgba(228, 66, 141, 0.22); color: #f472b6;">
+              <i class="fa-solid fa-users-viewfinder"></i>
+            </div>
+            <h3>Split Bill & QR Payments</h3>
+            <p>Calculate shared group expenses with tip controls, dispatch payment requests to contacts, and scan simulated merchant QR codes for instant checkout.</p>
+          </article>
+
+          <article class="feature-card--glass">
+            <div class="feature-icon-box feature-icon-box--mint" style="background: rgba(16, 185, 129, 0.22); color: #34d399;">
+              <i class="fa-solid fa-coins"></i>
+            </div>
+            <h3>Global Inward Remittance</h3>
+            <p>Calculate foreign exchange rates from USD, GBP, EUR, SAR, AED, and MYR with Bangladesh Government's 2.5% Cash Incentive deposited into your wallet.</p>
+          </article>
         </div>
       </section>
 
@@ -202,11 +224,11 @@
               A calm, trustworthy wallet interface.
             </h2>
             <p style="color: rgba(255, 255, 255, 0.72); font-size: 0.95rem; line-height: 1.65; margin: 0 0 24px;">
-              Designed with purposeful hierarchy: glanceable balance privacy controls, transparent 1.49% agent fee calculators for cash outs, and an active notification center.
+              Designed with purposeful hierarchy: glanceable balance privacy controls, dark/light theme switching, command palette launcher (Ctrl+K), and active notification center.
             </p>
             <ul style="display: grid; gap: 12px; padding: 0; list-style: none; margin: 0 0 30px; font-size: 0.88rem; color: rgba(255, 255, 255, 0.85);">
-              <li><i class="fa-solid fa-circle-check" style="color: #29dfb2; margin-right: 8px;"></i> Desktop sidebar with quick navigation</li>
-              <li><i class="fa-solid fa-circle-check" style="color: #29dfb2; margin-right: 8px;"></i> Mobile bottom navigation bar with floating action button</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #29dfb2; margin-right: 8px;"></i> Dark & Light mode toggle with persistent state</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #29dfb2; margin-right: 8px;"></i> Omnibox Command Palette (Ctrl+K) for instant action access</li>
               <li><i class="fa-solid fa-circle-check" style="color: #29dfb2; margin-right: 8px;"></i> Zero-dependency synthesized audio feedback for payments</li>
             </ul>
             <a href="#signin-portal" class="button button--primary button--lg">
@@ -287,13 +309,18 @@
           </details>
 
           <details class="faq-item">
+            <summary>How do I change the theme or switch to dark mode?</summary>
+            <p>Click the <strong>Moon/Sun icon</strong> in the topbar or press <strong>Alt + T</strong> on your keyboard, or use the Command Palette (<strong>Ctrl + K</strong>).</p>
+          </details>
+
+          <details class="faq-item">
             <summary>How do I reset my demo balance and history?</summary>
             <p>Inside the wallet dashboard, open the Account Profile modal (top right avatar) and click <strong>Reset Demo Data</strong>, or use the <strong>Clear</strong> button in the transaction activity feed.</p>
           </details>
 
           <details class="faq-item">
-            <summary>Does the application work on mobile devices?</summary>
-            <p>Yes. The entire application is fully responsive with an adaptive mobile bottom navigation bar, touch-friendly sheets, and mobile gyroscope 3D tilt support.</p>
+            <summary>Does the application work on mobile devices and offline?</summary>
+            <p>Yes. The application is a progressive web app (PWA) with offline caching support, mobile bottom navigation, and full responsive touch design.</p>
           </details>
         </div>
       </section>
@@ -323,5 +350,12 @@
     <script src="./script/landing-3d.js"></script>
     <!-- Core Application Logic Script -->
     <script src="./script/app.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js').catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>

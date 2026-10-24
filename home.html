@@ -1,11 +1,17 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#17162f" />
+    <meta name="description" content="Payoo Mobile Bank — Next-Gen Digital Wallet with zero fees, instant P2P transfers, mobile recharge, utility bills, dynamic financial analytics, and QR payments." />
+    <meta property="og:title" content="Payoo — Next-Gen Digital Wallet" />
+    <meta property="og:description" content="Fast, seamless digital banking in Bangladesh. Send money, recharge airtime, split bills, and track your cash flow in cinematic clarity." />
+    <meta property="og:image" content="./assets/logo.png" />
+    <meta property="og:type" content="website" />
     <title>Payoo — Your money, in motion</title>
     <link rel="icon" href="./assets/logo.png" type="image/png" />
+    <link rel="manifest" href="./manifest.json" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -37,6 +43,9 @@
           <button class="mobile-menu" id="mobile-menu" aria-label="Open navigation"><i class="fa-solid fa-bars"></i></button>
           <div class="page-title"><p id="today-date"></p><h1 id="page-heading">Good morning, Shihab <span>✦</span></h1></div>
           <div class="topbar-actions">
+            <button id="search-trigger-btn" class="round-button" aria-label="Open command palette" title="Search or Quick Actions (Ctrl+K)"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button id="theme-toggle-btn" class="round-button" aria-label="Toggle dark/light theme" title="Toggle Theme (Alt+T)"><i class="fa-solid fa-moon"></i></button>
+            <button id="my-qr-btn" class="round-button" aria-label="My QR Code" title="Show my Payoo QR Code"><i class="fa-solid fa-qrcode"></i></button>
             <button id="notification-btn" class="round-button notification-button" aria-label="Open notifications"><i class="fa-regular fa-bell"></i><b id="notif-badge"></b></button>
             <button id="profile-btn" class="profile-button" aria-label="Open profile"><span id="user-initials">AS</span><i class="fa-solid fa-chevron-down"></i></button>
           </div>
@@ -64,7 +73,9 @@
                 <button class="service-card" data-action="cashout"><span class="service-icon service-icon--orange"><i class="fa-solid fa-money-bill-transfer"></i></span><strong>Cash out</strong><small>From nearby agent with fee preview</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
                 <button class="service-card" data-action="recharge"><span class="service-icon service-icon--teal"><i class="fa-solid fa-mobile-screen-button"></i></span><strong>Mobile recharge</strong><small>GP, Robi, Banglalink & more</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
                 <button class="service-card" data-action="pay-bill"><span class="service-icon service-icon--purple"><i class="fa-regular fa-file-lines"></i></span><strong>Pay bill</strong><small>DESCO, DPDC, WASA & Internet</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
-                <button class="service-card" data-action="request"><span class="service-icon service-icon--indigo"><i class="fa-solid fa-hand-holding-dollar"></i></span><strong>Request money</strong><small>Split bill or request payment</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
+                <button class="service-card" data-action="request"><span class="service-icon service-icon--indigo"><i class="fa-solid fa-hand-holding-dollar"></i></span><strong>Request money</strong><small>Direct peer payment request</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
+                <button class="service-card" data-action="split-bill"><span class="service-icon service-icon--pink"><i class="fa-solid fa-users-viewfinder"></i></span><strong>Split bill</strong><small>Calculate & split with group</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
+                <button class="service-card" data-action="scan-qr"><span class="service-icon service-icon--emerald"><i class="fa-solid fa-qrcode"></i></span><strong>Scan to pay</strong><small>Scan merchant or peer QR</small><i class="service-arrow fa-solid fa-arrow-up-right-from-square"></i></button>
               </div>
             </section>
 
@@ -78,6 +89,47 @@
                 <div id="activity-preview" class="activity-list"></div>
               </article>
             </section>
+
+            <!-- Global Inward Remittance Section -->
+            <section class="remittance-section">
+              <div class="surface-card remittance-card">
+                <div class="remittance-card__info">
+                  <span class="badge-pill"><i class="fa-solid fa-coins"></i> GLOBAL INWARD REMITTANCE</span>
+                  <h2>Receive money from abroad with 2.5% Government Cash Incentive.</h2>
+                  <p>Senders from USA, UK, UAE, Saudi Arabia, Europe & Malaysia transfer straight to your verified Payoo wallet with 0% fee.</p>
+                  <div class="currency-rates-ticker" id="currency-rates-ticker">
+                    <span class="rate-tag"><strong>USD</strong> ৳121.50</span>
+                    <span class="rate-tag"><strong>GBP</strong> ৳156.80</span>
+                    <span class="rate-tag"><strong>EUR</strong> ৳131.20</span>
+                    <span class="rate-tag"><strong>SAR</strong> ৳32.40</span>
+                    <span class="rate-tag"><strong>AED</strong> ৳33.08</span>
+                    <span class="rate-tag"><strong>MYR</strong> ৳27.90</span>
+                  </div>
+                </div>
+                <div class="remittance-calc">
+                  <p class="calc-label"><i class="fa-solid fa-calculator"></i> Remittance Calculator</p>
+                  <div class="calc-inputs">
+                    <div class="calc-row">
+                      <input id="remit-amount" type="number" value="100" min="1" step="any" placeholder="Amount" aria-label="Remittance foreign amount" />
+                      <select id="remit-currency" aria-label="Foreign currency">
+                        <option value="USD">USD ($)</option>
+                        <option value="GBP">GBP (£)</option>
+                        <option value="EUR">EUR (€)</option>
+                        <option value="SAR">SAR (﷼)</option>
+                        <option value="AED">AED (د.إ)</option>
+                        <option value="MYR">MYR (RM)</option>
+                      </select>
+                    </div>
+                    <div class="calc-results">
+                      <div><span>Base equivalent:</span> <strong id="remit-base">৳12,150.00</strong></div>
+                      <div><span>Govt 2.5% Incentive:</span> <strong id="remit-incentive" class="positive">+৳303.75</strong></div>
+                      <div class="calc-total"><span>Total in BDT:</span> <strong id="remit-total">৳12,453.75</strong></div>
+                    </div>
+                    <button id="claim-remit-btn" class="button button--primary button--sm" type="button"><i class="fa-solid fa-download"></i> Simulate Inward Remittance</button>
+                  </div>
+                </div>
+              </div>
+            </section>
           </section>
 
           <!-- Activity / Transactions View -->
@@ -85,7 +137,7 @@
             <div class="view-banner"><div><p class="eyebrow">YOUR MONEY STORY</p><h2>Transaction activity</h2><p>Every wallet movement in one clear, searchable and exportable feed.</p></div><button class="button button--dark" data-action="transfer"><i class="fa-solid fa-paper-plane"></i> Send money</button></div>
             <div class="surface-card table-card">
               <div class="activity-toolbar">
-                <div class="search-field"><i class="fa-solid fa-magnifying-glass"></i><input id="history-search" type="search" placeholder="Search transactions..." /></div>
+                <div class="search-field"><i class="fa-solid fa-magnifying-glass"></i><input id="history-search" type="search" placeholder="Search transactions, txid, amounts..." /></div>
                 <div class="activity-toolbar-actions">
                   <button id="export-csv" class="subtle-button" type="button" title="Download transactions as CSV"><i class="fa-solid fa-file-arrow-down"></i> Export CSV</button>
                   <button id="clear-history" class="subtle-button" type="button"><i class="fa-regular fa-trash-can"></i> Clear</button>
@@ -99,6 +151,13 @@
                 <button class="filter-pill" data-filter="pay-bill">Bills</button>
                 <button class="filter-pill" data-filter="recharge">Recharge</button>
                 <button class="filter-pill" data-filter="cashout">Cash out</button>
+              </div>
+              <div id="period-filters" class="activity-filters period-filters">
+                <span class="period-label"><i class="fa-regular fa-clock"></i> Timeframe:</span>
+                <button class="filter-pill filter-pill--sm is-active" data-period="all">All Time</button>
+                <button class="filter-pill filter-pill--sm" data-period="today">Today</button>
+                <button class="filter-pill filter-pill--sm" data-period="7days">Past 7 Days</button>
+                <button class="filter-pill filter-pill--sm" data-period="30days">Past 30 Days</button>
               </div>
               <div id="history-container" class="full-history"></div>
             </div>
@@ -244,7 +303,173 @@
       </div>
     </dialog>
 
+    <!-- Command Palette Modal (Ctrl+K) -->
+    <dialog id="command-palette-modal" class="command-palette-modal">
+      <div class="palette-header">
+        <i class="fa-solid fa-magnifying-glass palette-icon"></i>
+        <input id="palette-search" type="search" placeholder="Type an action, service, or search (e.g. 'send', 'theme', 'qr', 'bill')..." autocomplete="off" />
+        <kbd class="palette-kbd">ESC</kbd>
+        <button id="palette-close" class="round-button small-round" type="button" aria-label="Close command palette"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="palette-results" class="palette-results"></div>
+      <div class="palette-footer">
+        <span><kbd>↑</kbd> <kbd>↓</kbd> to navigate</span>
+        <span><kbd>↵</kbd> to select</span>
+        <span><kbd>esc</kbd> to close</span>
+      </div>
+    </dialog>
+
+    <!-- My Personal QR Code Modal -->
+    <dialog id="qr-modal" class="transaction-modal">
+      <div class="modal-top">
+        <p>MY PERSONAL QR CODE</p>
+        <button id="qr-close" class="round-button small-round" type="button" aria-label="Close QR modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content qr-modal-content">
+        <h2>Receive Money Instantly</h2>
+        <p>Show this scannable QR code to receive funds with zero fees directly into your Payoo wallet.</p>
+        <div class="qr-card">
+          <div class="qr-card__user">
+            <span class="avatar avatar--violet" id="qr-avatar">AS</span>
+            <div>
+              <strong id="qr-name">Shihab Atahar</strong>
+              <small id="qr-phone">+880 00000000000</small>
+            </div>
+            <span class="qr-badge-verified"><i class="fa-solid fa-shield-check"></i> Verified</span>
+          </div>
+          <div class="qr-canvas-wrapper" id="qr-canvas-container"></div>
+          <div class="qr-badge-strip">
+            <span><i class="fa-solid fa-bolt"></i> Instant Settlement</span>
+            <span><i class="fa-solid fa-shield-halved"></i> 100% Encrypted</span>
+          </div>
+        </div>
+        <div class="qr-actions">
+          <button id="copy-qr-link-btn" class="button button--soft" type="button"><i class="fa-regular fa-copy"></i> Copy Payoo ID</button>
+          <button id="download-qr-btn" class="button button--dark" type="button"><i class="fa-solid fa-download"></i> Save QR Image</button>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Scan to Pay Modal -->
+    <dialog id="scan-qr-modal" class="transaction-modal">
+      <div class="modal-top">
+        <p>PAYOO QR SCANNER</p>
+        <button id="scan-qr-close" class="round-button small-round" type="button" aria-label="Close scanner"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content">
+        <h2>Scan to Pay</h2>
+        <p>Align the merchant or recipient QR code inside the viewfinder for instant payment.</p>
+        <div class="scanner-viewport">
+          <div class="scanner-laser"></div>
+          <div class="scanner-corners">
+            <span class="corner tl"></span>
+            <span class="corner tr"></span>
+            <span class="corner bl"></span>
+            <span class="corner br"></span>
+          </div>
+          <div class="scanner-instruction">
+            <i class="fa-solid fa-expand"></i> Positioning QR in frame...
+          </div>
+          <button id="scanner-torch-btn" class="scanner-torch" type="button" aria-label="Toggle flashlight"><i class="fa-solid fa-bolt"></i></button>
+        </div>
+        <div class="scanner-merchants">
+          <p class="eyebrow" style="margin-top:14px; font-size: 0.65rem;">TAP TO SIMULATE INSTANT MERCHANT DETECTION:</p>
+          <div class="merchant-quick-list">
+            <button class="merchant-pill" type="button" data-merchant="Aarong Flagship Store" data-phone="01711000111" data-cat="Shopping">
+              <i class="fa-solid fa-bag-shopping"></i> Aarong Store
+            </button>
+            <button class="merchant-pill" type="button" data-merchant="Shwapno Supermarket" data-phone="01811000222" data-cat="Groceries">
+              <i class="fa-solid fa-cart-shopping"></i> Shwapno
+            </button>
+            <button class="merchant-pill" type="button" data-merchant="North End Coffee" data-phone="01911000333" data-cat="Dining">
+              <i class="fa-solid fa-mug-hot"></i> North End Coffee
+            </button>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Split Bill Modal -->
+    <dialog id="split-bill-modal" class="transaction-modal">
+      <div class="modal-top">
+        <p>GROUP EXPENSE SPLITTER</p>
+        <button id="split-close" class="round-button small-round" type="button" aria-label="Close bill splitter"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content">
+        <h2>Split an Expense</h2>
+        <p>Calculate fair shares with tip and dispatch instant payment requests to your contacts.</p>
+        <form id="split-bill-form" class="modal-form">
+          <label>Total bill amount (৳)
+            <input id="split-total-input" type="number" min="1" step="any" placeholder="e.g. 2400" value="2400" required />
+          </label>
+          <div class="split-controls-row">
+            <label>Split between
+              <div class="stepper">
+                <button type="button" id="split-minus-btn" class="stepper-btn">−</button>
+                <span id="split-count-display">3 people</span>
+                <button type="button" id="split-plus-btn" class="stepper-btn">+</button>
+              </div>
+            </label>
+            <label>Service / Tip
+              <select id="split-tip-select">
+                <option value="0">No tip (0%)</option>
+                <option value="5">Standard (5%)</option>
+                <option value="10" selected>Generous (10%)</option>
+                <option value="15">Celebration (15%)</option>
+              </select>
+            </label>
+          </div>
+          <div class="split-breakdown-card">
+            <div class="split-summary-row">
+              <span>Individual share:</span>
+              <strong id="split-per-person">৳880.00</strong>
+            </div>
+            <div class="split-summary-row subtle">
+              <span>Total with service:</span>
+              <strong id="split-gross-total">৳2,640.00</strong>
+            </div>
+          </div>
+          <div class="split-contacts-select">
+            <p class="eyebrow" style="margin-top: 10px;">SELECT CONTACTS TO SEND SPLIT REQUEST:</p>
+            <div id="split-contacts-checkboxes" class="split-checkboxes"></div>
+          </div>
+          <button class="button button--primary" type="submit"><i class="fa-solid fa-paper-plane"></i> Send Split Requests</button>
+        </form>
+      </div>
+    </dialog>
+
+    <!-- Change PIN Modal -->
+    <dialog id="pin-modal" class="transaction-modal">
+      <div class="modal-top">
+        <p>WALLET SECURITY</p>
+        <button id="pin-close" class="round-button small-round" type="button" aria-label="Close PIN modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content">
+        <h2>Change Security PIN</h2>
+        <p>Update your 4-digit authorization PIN for transfers and withdrawals.</p>
+        <form id="change-pin-form" class="modal-form">
+          <label>Current PIN
+            <input name="currentPin" type="password" inputmode="numeric" maxlength="4" placeholder="Enter current PIN" required />
+          </label>
+          <label>New 4-digit PIN
+            <input name="newPin" type="password" inputmode="numeric" maxlength="4" placeholder="Enter new 4 digits" required />
+          </label>
+          <label>Confirm new PIN
+            <input name="confirmPin" type="password" inputmode="numeric" maxlength="4" placeholder="Repeat new 4 digits" required />
+          </label>
+          <button class="button button--primary" type="submit">Update PIN <i class="fa-solid fa-shield-check"></i></button>
+        </form>
+      </div>
+    </dialog>
+
     <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
     <script src="./script/app.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js').catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>
