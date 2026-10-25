@@ -148,6 +148,169 @@ Try the complete wallet immediately without manual registration using the pre-co
 
 </details>
 
+<details>
+<summary><strong>✨ Motion Graphics &amp; Interactive Physics Engine</strong> (Click to expand)</summary>
+
+<br/>
+
+Payoo incorporates responsive, hardware-accelerated motion graphics to bring calm, high-tech tactile delight to every financial movement:
+- **3D Mouse Parallax Tilt &amp; Specular Glare**: Dashboard balance cards and virtual cards dynamically tilt in 3D perspective based on pointer position with a real-time laminated reflection glare highlight.
+- **Financial Heartbeat ECG Waveform**: A dynamic, glowing neon SVG pulse wave continuously undulates below the balance display to represent 24/7 network liquidity.
+- **Top-Bar Soundwave Equalizer**: Interactive 4-bar audio visualizer dancing in real time during monetary transactions, with 1-click sound effect muting.
+- **Holographic QR Viewfinder Radar**: Expanding concentric sonar ping rings and neon corner brackets in the QR scanner simulate precision optical detection.
+- **Spring-Animated Weekly Flow Chart**: Navigating to Insights triggers a smooth staggered spring animation across the 7-day spending bars with interactive floating glass tooltips.
+- **Ambient Floating Currency Mesh**: Drifting currency tokens (`৳`, `<div align="center">
+
+  <!-- Animated Hero Banner with Live Neon Laser Light Border & Holographic Card -->
+  <a href="https://atahar-shihab.github.io/Payooo-Mobile-Bank/">
+    <img src="./assets/readme-hero.svg" alt="Payoo Mobile Bank — Next-Gen Fintech Super App" width="100%"/>
+  </a>
+
+  <br/><br/>
+
+  <!-- Live Status & Technology Badges -->
+  <p align="center">
+    <a href="https://atahar-shihab.github.io/Payooo-Mobile-Bank/">
+      <img src="https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-29dfb2?style=for-the-badge&logo=githubpages&logoColor=080716" alt="Live Demo"/>
+    </a>
+    <a href="https://github.com/Atahar-Shihab/Payooo-Mobile-Bank/actions/workflows/deploy-pages.yml">
+      <img src="https://img.shields.io/badge/CI%2FCD-Automated%20Deploy-6955f6?style=for-the-badge&logo=githubactions&logoColor=white" alt="CI/CD"/>
+    </a>
+    <img src="https://img.shields.io/badge/3D%20Engine-Three.js%20WebGL-ff5e7e?style=for-the-badge&logo=three.js&logoColor=white" alt="Three.js"/>
+    <img src="https://img.shields.io/badge/PWA-Installable%20Offline-38bdf8?style=for-the-badge&logo=pwa&logoColor=white" alt="PWA"/>
+    <img src="https://img.shields.io/badge/License-MIT-ffd066?style=for-the-badge" alt="License"/>
+  </p>
+
+  <!-- Interactive Quick Navigation Pills -->
+  <p align="center">
+    <a href="#-quick-sandbox-access"><code>🔑 Sandbox Login</code></a> •
+    <a href="#-core-fintech-matrix"><code>💳 Feature Matrix</code></a> •
+    <a href="#-interactive-terminal-telemetry"><code>💻 Live Terminal</code></a> •
+    <a href="#-keyboard-shortcuts"><code>⚡ Omnibox Shortcuts</code></a> •
+    <a href="#-architecture--persistence"><code>📁 Architecture</code></a> •
+    <a href="#-local-setup"><code>🚀 Run Locally</code></a>
+  </p>
+
+  <br/>
+
+  <!-- 4 Glowing Glassmorphic Metric Stat Cards with Glint Animations -->
+  <a href="https://atahar-shihab.github.io/Payooo-Mobile-Bank/home.html">
+    <img src="./assets/readme-stats.svg" alt="Payoo Live Ecosystem Metrics" width="100%"/>
+  </a>
+
+</div>
+
+<br/>
+
+---
+
+## 💡 Overview
+
+**Payoo Mobile Bank** is a portfolio-grade, institutional frontend digital wallet and fintech super-app designed for Bangladesh’s dynamic mobile financial ecosystem. Inspired by Stripe, Revolut, and bKash, Payoo delivers an ultra-responsive, zero-latency transaction sandbox running entirely client-side.
+
+Every monetary interaction—from peer-to-peer transfers and multi-operator recharges to real-time remittance incentives and QR payments—is accompanied by reactive DOM updates, dynamic 7-day flow analytics, downloadable official receipt slips, and synthesized Web Audio feedback.
+
+> [!NOTE]
+> **Educational Sandbox**: This is a production-grade frontend demonstration application. All transactions, cryptographic simulations, and bank balance states persist client-side via browser `localStorage`. No actual monetary transactions or external banking rails are contacted.
+
+---
+
+<div id="-quick-sandbox-access"></div>
+
+## 🔑 Quick Sandbox Access
+
+Try the complete wallet immediately without manual registration using the pre-configured credentials:
+
+<div align="center">
+
+| Parameter | Sandbox Value | One-Click Action |
+| :--- | :--- | :--- |
+| **Mobile Number** | `00000000000` *(or any 11-digit `01XXXXXXXXX`)* | Click **Auto-fill** on Sign-in Page |
+| **Security PIN** | `0000` | Pre-loaded in demo sandbox |
+| **Welcome Bonus Code** | `PAYOO100` | Claims **৳100.00** bonus on Rewards page |
+| **Starter Balance** | `৳4,500.00` | Automatically initialized in LocalStorage |
+
+</div>
+
+<details open>
+<summary><strong>🎯 How to Launch the Demo</strong> (Click to collapse)</summary>
+
+1. Navigate to the live demo: **[atahar-shihab.github.io/Payooo-Mobile-Bank](https://atahar-shihab.github.io/Payooo-Mobile-Bank/)**
+2. In the credentials card, click the **Auto-fill** chip to instantly fill in `00000000000` and `0000`.
+3. Click **Sign In to Payoo** to launch the Super-App Dashboard with 3D card tilt and real-time ledger.
+4. Press `Ctrl + K` (or `Cmd + K` on macOS) anywhere inside the dashboard to search actions, switch themes, or trigger services via the Omnibox.
+
+</details>
+
+<details>
+<summary><strong>💳 Virtual 3D Platinum Card &amp; Card Security Engine</strong> (Click to expand)</summary>
+
+<br/>
+
+- **3D Card Flip**: Inspect front and back faces with hardware-accelerated CSS 3D perspective transforms.
+- **15-Second CVV Security Timer**: 1-click reveal shows the CVV code with an animated countdown ring before auto-masking back to `•••` for shoulder-surfing protection.
+- **Instant Freeze / Unfreeze**: Pauses all card transactions with an animated frosted ice overlay.
+- **Granular Toggles**: Online e-commerce switch, international roaming switch, and real-time monthly spending limit slider.
+- **Dynamic Re-issuance**: 1-click generation of new card numbers and CVV codes with sound feedback and confetti.
+
+</details>
+
+<details>
+<summary><strong>🏦 Multi-Goal Savings Vaults &amp; Monthly Spend Budgeting</strong> (Click to expand)</summary>
+
+<br/>
+
+- **Multi-Pocket Vaults**: Create and fund multiple dedicated savings goals (e.g. *Dream Getaway*, *Emergency Fund*, *Tech &amp; Gadgets*, *Eid Shopping*).
+- **Compounding Sandbox**: Move money in and out of vaults with instant ledger records and celebratory animations.
+- **Monthly Budget Telemetry**: Real-time spending progress bar with health pills (*On Track*, *Watch Out*, *Over Budget*) and dynamic daily remaining spend allowance.
+
+</details>
+
+<details>
+<summary><strong>🪙 Payoo 24K Digital Gold (Shariah-Compliant Micro-Investments)</strong> (Click to expand)</summary>
+
+<br/>
+
+- **Fractional 24K Gold**: Buy and sell pure physical-backed gold starting from ৳100.
+- **Live Market Price Ticker**: Real-time simulated market price updates (e.g. ৳11,850.00 / gram) with live performance indicators (+6.8% Gain).
+- **Instant Liquidation**: Sell fractional grams back to your wallet balance anytime with zero lockup period.
+
+</details>
+
+<details>
+<summary><strong>🤖 Payoo Intelligence AI Money Coach</strong> (Click to expand)</summary>
+
+<br/>
+
+- **Conversational Financial Mentor**: Real-time analysis of actual transaction history, balance health, and spending distribution.
+- **Quick Query Chips**: 1-click prompts for *Spending Summary*, *Biggest Expense*, *Budget Tips*, and *Gold Outlook*.
+- **Synthesized Audio**: Voice and sound effects accompany AI responses.
+
+</details>
+
+<details>
+<summary><strong>📄 Official Bank Statement &amp; Printable PDF Generator</strong> (Click to expand)</summary>
+
+<br/>
+
+- **Institutional Letterhead**: Features Payoo MFS licensing credentials, account metadata, opening balance, credits, debits, and closing balance.
+- **Running Balance Ledger**: Full chronological transaction table displaying exact balance after every movement.
+- **Verification Seal &amp; QR**: Official digital settlement seal and printable stylesheet (`@media print`) for 1-click PDF exporting.
+
+</details>
+
+<details>
+<summary><strong>🔒 Biometric &amp; PIN Screen Lock ("Lock Wallet")</strong> (Click to expand)</summary>
+
+<br/>
+
+- **Full-Screen Privacy Shield**: Lock the wallet screen at any time using the padlock button or shortcut.
+- **Interactive Keypad**: Real-time clock, animated 4-digit PIN indicator dots, haptic audio clicks, error shake on invalid PIN, and 1-tap Touch ID / Face ID simulation.
+
+, `€`, `£`, `✦`) gently float across the dark glass background with organic physics.
+
+</details>
+
 ---
 
 <div id="-core-fintech-matrix"></div>

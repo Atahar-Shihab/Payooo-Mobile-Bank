@@ -19,6 +19,15 @@
     <link rel="stylesheet" href="./assets/css/app.css" />
   </head>
   <body class="app-page">
+    <!-- Ambient Floating Currency Motion Mesh -->
+    <div class="ambient-currency-mesh" aria-hidden="true">
+      <span class="floating-glyph" style="top: 15%; left: 6%; font-size: 3.5rem;">৳</span>
+      <span class="floating-glyph" style="top: 45%; left: 88%; font-size: 4rem; animation-delay: -3s;">$</span>
+      <span class="floating-glyph" style="top: 75%; left: 10%; font-size: 3rem; animation-delay: -6s;">€</span>
+      <span class="floating-glyph" style="top: 85%; left: 78%; font-size: 3.8rem; animation-delay: -9s;">৳</span>
+      <span class="floating-glyph" style="top: 25%; left: 62%; font-size: 2.5rem; animation-delay: -4s;">£</span>
+    </div>
+
     <div class="app-layout">
       <aside class="sidebar" aria-label="Primary navigation">
         <a class="brand brand--sidebar" href="./home.html" aria-label="Payoo home">
@@ -46,6 +55,15 @@
           <div class="page-title"><p id="today-date"></p><h1 id="page-heading">Good morning, Shihab <span>✦</span></h1></div>
           <div class="topbar-actions">
             <button id="search-trigger-btn" class="round-button" aria-label="Open command palette" title="Search or Quick Actions (Ctrl+K)"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button id="soundwave-toggle-btn" class="audio-visualizer-btn" aria-label="Audio Visualizer & Sound Effects Toggle" title="Audio Effects: Active">
+              <div class="soundwave-bars">
+                <span class="soundwave-bar"></span>
+                <span class="soundwave-bar"></span>
+                <span class="soundwave-bar"></span>
+                <span class="soundwave-bar"></span>
+              </div>
+              <span id="soundwave-label" style="font-size: 0.68rem; margin-left: 2px;">FX</span>
+            </button>
             <button id="ai-coach-btn" class="round-button" aria-label="Payoo Intelligence AI" title="Payoo AI Money Coach"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
             <button id="theme-toggle-btn" class="round-button" aria-label="Toggle dark/light theme" title="Toggle Theme (Alt+T)"><i class="fa-solid fa-moon"></i></button>
             <button id="lock-wallet-btn" class="round-button" aria-label="Lock wallet" title="Lock Wallet Screen"><i class="fa-solid fa-lock"></i></button>
@@ -60,13 +78,24 @@
           <section id="overview-view" class="app-view">
             <div class="intro-row"><div><p class="eyebrow">YOUR WALLET</p><h2>Money that moves with you.</h2></div><button class="text-cta" data-view="activity">View all activity <i class="fa-solid fa-arrow-right"></i></button></div>
             <section class="wallet-grid" aria-label="Wallet overview">
-              <article class="balance-card">
+              <article class="balance-card tilt-card">
                 <div class="card-glow"></div>
                 <div class="balance-top"><div><p>Available balance</p><h2><span>৳</span> <strong id="balance">45,000.00</strong></h2></div><button id="balance-visibility" class="balance-visibility" type="button" aria-label="Hide balance"><i class="fa-regular fa-eye"></i></button></div>
-                <div class="balance-footer"><span><i class="fa-solid fa-circle-check"></i> Verified wallet</span><span id="account-mask">•••• 9184</span></div>
+                <div class="balance-footer"><span><i class="fa-solid fa-circle-check"></i> Verified wallet</span><span id="account-mask">•••• 9184</span>
+                <div class="balance-pulse-track">
+                  <div class="live-pulse-badge">
+                    <span class="radar-dot"></span> LIVE 24/7 NETWORK
+                  </div>
+                  <div class="pulse-svg-wrapper">
+                    <svg viewBox="0 0 140 28" width="100%" height="100%">
+                      <path class="pulse-svg-line" d="M 0 14 L 35 14 L 45 4 L 55 24 L 65 6 L 75 22 L 85 14 L 140 14"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
               </article>
-              <article class="income-card stat-card"><span class="stat-icon stat-icon--mint"><i class="fa-solid fa-arrow-down"></i></span><div><p>Money in</p><strong id="income-total">৳0.00</strong><small class="positive"><i class="fa-solid fa-arrow-trend-up"></i> Lifetime inflow</small></div></article>
-              <article class="spend-card stat-card"><span class="stat-icon stat-icon--coral"><i class="fa-solid fa-arrow-up"></i></span><div><p>Money out</p><strong id="spend-total">৳0.00</strong><small>Across all activity</small></div></article>
+              <article class="income-card stat-card tilt-card"><span class="stat-icon stat-icon--mint"><i class="fa-solid fa-arrow-down"></i></span><div><p>Money in</p><strong id="income-total">৳0.00</strong><small class="positive"><i class="fa-solid fa-arrow-trend-up"></i> Lifetime inflow</small></div></article>
+              <article class="spend-card stat-card tilt-card"><span class="stat-icon stat-icon--coral"><i class="fa-solid fa-arrow-up"></i></span><div><p>Money out</p><strong id="spend-total">৳0.00</strong><small>Across all activity</small></div></article>
             </section>
 
             <section class="service-section">
@@ -636,6 +665,8 @@
         <h2>Scan to Pay</h2>
         <p>Align the merchant or recipient QR code inside the viewfinder for instant payment.</p>
         <div class="scanner-viewport">
+                    <div class="scanner-radar-ripple"></div>
+          <div class="scanner-radar-ripple"></div>
           <div class="scanner-laser"></div>
           <div class="scanner-corners">
             <span class="corner tl"></span>

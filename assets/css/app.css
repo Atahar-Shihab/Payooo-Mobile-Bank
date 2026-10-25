@@ -1908,3 +1908,284 @@ input:checked + .switch-slider:before {
     display: none !important;
   }
 }
+
+/* -------------------------------------------------------------
+   MOTION GRAPHICS & INTERACTIVE VISUAL POLISH SYSTEM
+------------------------------------------------------------- */
+
+/* 1. 3D Mouse Parallax Tilt & Specular Glare Physics */
+.tilt-card {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out, box-shadow 0.2s ease-out;
+  will-change: transform;
+}
+.tilt-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle 200px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.24), transparent 75%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+  mix-blend-mode: overlay;
+}
+.tilt-card:hover::before {
+  opacity: 1;
+}
+
+/* 2. Live Neon Pulse Waveform (Financial Heartbeat) */
+.balance-pulse-track {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+.pulse-svg-wrapper {
+  width: 140px;
+  height: 28px;
+  overflow: visible;
+}
+.pulse-svg-line {
+  stroke: #29dfb2;
+  stroke-width: 2.2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 6px #29dfb2);
+  stroke-dasharray: 240;
+  stroke-dashoffset: 480;
+  animation: pulse-line-flow 2.8s linear infinite;
+}
+@keyframes pulse-line-flow {
+  0% { stroke-dashoffset: 480; }
+  100% { stroke-dashoffset: 0; }
+}
+.live-pulse-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #29dfb2;
+  background: rgba(41, 223, 178, 0.14);
+  border: 1px solid rgba(41, 223, 178, 0.3);
+  padding: 3px 9px;
+  border-radius: 12px;
+}
+.radar-dot {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  background: #29dfb2;
+  border-radius: 50%;
+}
+.radar-dot::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1.5px solid #29dfb2;
+  animation: radar-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes radar-ping {
+  0% { transform: scale(0.6); opacity: 1; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* 3. Audio Equalizer Visualizer Pill in Topbar */
+.audio-visualizer-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 19px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.audio-visualizer-btn:hover {
+  border-color: var(--violet);
+  background: var(--violet-pale);
+}
+.soundwave-bars {
+  display: flex;
+  align-items: center;
+  gap: 2.5px;
+  height: 16px;
+}
+.soundwave-bar {
+  width: 2.8px;
+  height: 14px;
+  border-radius: 2px;
+  background: var(--violet);
+  transition: height 0.15s ease;
+  animation: wave-bar-dance 1.2s ease-in-out infinite alternate;
+}
+.soundwave-bar:nth-child(1) { animation-delay: 0.1s; height: 8px; }
+.soundwave-bar:nth-child(2) { animation-delay: 0.3s; height: 16px; }
+.soundwave-bar:nth-child(3) { animation-delay: 0.2s; height: 12px; }
+.soundwave-bar:nth-child(4) { animation-delay: 0.4s; height: 6px; }
+@keyframes wave-bar-dance {
+  0% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1.3); }
+  100% { transform: scaleY(0.6); }
+}
+.audio-visualizer-btn.is-muted .soundwave-bar {
+  animation: none;
+  height: 3px;
+  background: var(--muted);
+  transform: none;
+}
+
+/* 4. Ambient Floating Currency Mesh */
+.ambient-currency-mesh {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.floating-glyph {
+  position: absolute;
+  font-family: Manrope, sans-serif;
+  font-weight: 800;
+  color: rgba(105, 85, 246, 0.06);
+  user-select: none;
+  animation: float-drift 14s ease-in-out infinite alternate;
+}
+[data-theme="dark"] .floating-glyph {
+  color: rgba(139, 124, 255, 0.05);
+}
+@keyframes float-drift {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(18px, -28px) rotate(8deg); }
+  100% { transform: translate(-12px, 18px) rotate(-6deg); }
+}
+
+/* 5. Shimmer Sweeps & Gold Pulsing Glow */
+.balance-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent 0%,
+    transparent 45%,
+    rgba(255, 255, 255, 0.14) 50%,
+    transparent 55%,
+    transparent 100%
+  );
+  transform: rotate(25deg);
+  animation: card-light-sweep 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+@keyframes card-light-sweep {
+  0%, 65% { transform: translateX(-120%) rotate(25deg); }
+  100% { transform: translateX(120%) rotate(25deg); }
+}
+
+.gold-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 21px;
+  background: linear-gradient(90deg, #ffd066, #f5a049, #ffd066);
+  opacity: 0.3;
+  filter: blur(4px);
+  z-index: -1;
+  animation: gold-glow-pulse 4s ease-in-out infinite alternate;
+}
+@keyframes gold-glow-pulse {
+  0% { opacity: 0.2; transform: scale(0.995); }
+  100% { opacity: 0.45; transform: scale(1.005); }
+}
+
+/* 6. QR Viewfinder Holographic Radar Rings */
+.scanner-radar-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120px;
+  height: 120px;
+  margin-left: -60px;
+  margin-top: -60px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(41, 223, 178, 0.6);
+  pointer-events: none;
+  animation: scanner-ripple-expand 2.2s cubic-bezier(0.1, 0.6, 0.3, 1) infinite;
+}
+.scanner-radar-ripple:nth-child(2) {
+  animation-delay: 0.7s;
+}
+@keyframes scanner-ripple-expand {
+  0% { transform: scale(0.3); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* 7. Animated Chart Tooltips & Springs */
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 160px;
+  padding: 10px 0;
+  gap: 12px;
+}
+.chart-col {
+  flex: 1;
+  border-radius: 8px 8px 3px 3px;
+  background: linear-gradient(180deg, var(--violet), #846eff);
+  transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s;
+  position: relative;
+  min-height: 8px;
+  cursor: pointer;
+}
+.chart-col:hover {
+  filter: brightness(1.2) drop-shadow(0 0 10px var(--violet));
+}
+.chart-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: #14112c;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: 0.2s cubic-bezier(0.2, 0, 0, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+.chart-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -4px;
+  border-width: 4px;
+  border-style: solid;
+  border-color: #14112c transparent transparent transparent;
+}
+.chart-col:hover .chart-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
