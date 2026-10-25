@@ -81,6 +81,73 @@ Try the complete wallet immediately without manual registration using the pre-co
 
 </details>
 
+<details>
+<summary><strong>💳 Virtual 3D Platinum Card &amp; Card Security Engine</strong> (Click to expand)</summary>
+
+<br/>
+
+- **3D Card Flip**: Inspect front and back faces with hardware-accelerated CSS 3D perspective transforms.
+- **15-Second CVV Security Timer**: 1-click reveal shows the CVV code with an animated countdown ring before auto-masking back to `•••` for shoulder-surfing protection.
+- **Instant Freeze / Unfreeze**: Pauses all card transactions with an animated frosted ice overlay.
+- **Granular Toggles**: Online e-commerce switch, international roaming switch, and real-time monthly spending limit slider.
+- **Dynamic Re-issuance**: 1-click generation of new card numbers and CVV codes with sound feedback and confetti.
+
+</details>
+
+<details>
+<summary><strong>🏦 Multi-Goal Savings Vaults &amp; Monthly Spend Budgeting</strong> (Click to expand)</summary>
+
+<br/>
+
+- **Multi-Pocket Vaults**: Create and fund multiple dedicated savings goals (e.g. *Dream Getaway*, *Emergency Fund*, *Tech &amp; Gadgets*, *Eid Shopping*).
+- **Compounding Sandbox**: Move money in and out of vaults with instant ledger records and celebratory animations.
+- **Monthly Budget Telemetry**: Real-time spending progress bar with health pills (*On Track*, *Watch Out*, *Over Budget*) and dynamic daily remaining spend allowance.
+
+</details>
+
+<details>
+<summary><strong>🪙 Payoo 24K Digital Gold (Shariah-Compliant Micro-Investments)</strong> (Click to expand)</summary>
+
+<br/>
+
+- **Fractional 24K Gold**: Buy and sell pure physical-backed gold starting from ৳100.
+- **Live Market Price Ticker**: Real-time simulated market price updates (e.g. ৳11,850.00 / gram) with live performance indicators (+6.8% Gain).
+- **Instant Liquidation**: Sell fractional grams back to your wallet balance anytime with zero lockup period.
+
+</details>
+
+<details>
+<summary><strong>🤖 Payoo Intelligence AI Money Coach</strong> (Click to expand)</summary>
+
+<br/>
+
+- **Conversational Financial Mentor**: Real-time analysis of actual transaction history, balance health, and spending distribution.
+- **Quick Query Chips**: 1-click prompts for *Spending Summary*, *Biggest Expense*, *Budget Tips*, and *Gold Outlook*.
+- **Synthesized Audio**: Voice and sound effects accompany AI responses.
+
+</details>
+
+<details>
+<summary><strong>📄 Official Bank Statement &amp; Printable PDF Generator</strong> (Click to expand)</summary>
+
+<br/>
+
+- **Institutional Letterhead**: Features Payoo MFS licensing credentials, account metadata, opening balance, credits, debits, and closing balance.
+- **Running Balance Ledger**: Full chronological transaction table displaying exact balance after every movement.
+- **Verification Seal &amp; QR**: Official digital settlement seal and printable stylesheet (`@media print`) for 1-click PDF exporting.
+
+</details>
+
+<details>
+<summary><strong>🔒 Biometric &amp; PIN Screen Lock ("Lock Wallet")</strong> (Click to expand)</summary>
+
+<br/>
+
+- **Full-Screen Privacy Shield**: Lock the wallet screen at any time using the padlock button or shortcut.
+- **Interactive Keypad**: Real-time clock, animated 4-digit PIN indicator dots, haptic audio clicks, error shake on invalid PIN, and 1-tap Touch ID / Face ID simulation.
+
+</details>
+
 ---
 
 <div id="-core-fintech-matrix"></div>

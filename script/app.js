@@ -8,10 +8,30 @@
     balance: 45000,
     goal: 18400,
     goalTarget: 60000,
+    monthlyBudget: 25000,
+    goldGrams: 1.25,
+    goldMarketPrice: 11850,
     redeemed: false,
     soundEnabled: true,
     theme: "light",
     pin: "0000",
+    virtualCard: {
+      number: "4532 8891 7623 9184",
+      holder: "SHIHAB ATAHAR",
+      expiry: "10/29",
+      cvv: "782",
+      frozen: false,
+      onlineActive: true,
+      intlActive: false,
+      spendLimit: 30000,
+      currentSpent: 8450
+    },
+    vaults: [
+      { id: "vault-1", name: "Dream Getaway", target: 60000, saved: 18400, icon: "fa-umbrella-beach", color: "#6955f6" },
+      { id: "vault-2", name: "Emergency Fund", target: 30000, saved: 12000, icon: "fa-shield-halved", color: "#19b889" },
+      { id: "vault-3", name: "Tech & Gadgets", target: 25000, saved: 7500, icon: "fa-laptop", color: "#38bdf8" },
+      { id: "vault-4", name: "Eid Shopping", target: 15000, saved: 5000, icon: "fa-gift", color: "#f5a049" }
+    ],
     contacts: [
       { name: "Nusrat A.", phone: "01700000001", avatar: "avatar--violet", initials: "NA" },
       { name: "Rafi K.", phone: "01800000002", avatar: "avatar--orange", initials: "RK" },
@@ -68,6 +88,11 @@
         ...stored,
         pin: stored.pin || INITIAL_STATE.pin,
         theme: stored.theme || INITIAL_STATE.theme,
+        monthlyBudget: Number(stored.monthlyBudget) || INITIAL_STATE.monthlyBudget,
+        goldGrams: typeof stored.goldGrams === "number" ? stored.goldGrams : INITIAL_STATE.goldGrams,
+        goldMarketPrice: Number(stored.goldMarketPrice) || INITIAL_STATE.goldMarketPrice,
+        virtualCard: stored.virtualCard ? { ...INITIAL_STATE.virtualCard, ...stored.virtualCard } : structuredClone(INITIAL_STATE.virtualCard),
+        vaults: Array.isArray(stored.vaults) && stored.vaults.length ? stored.vaults : structuredClone(INITIAL_STATE.vaults),
         contacts: Array.isArray(stored.contacts) ? stored.contacts : INITIAL_STATE.contacts,
         notifications: Array.isArray(stored.notifications) ? stored.notifications : INITIAL_STATE.notifications,
         history: Array.isArray(stored.history) ? stored.history : INITIAL_STATE.history
@@ -172,6 +197,45 @@
         gain.connect(ctx.destination);
         osc.start(now);
         osc.stop(now + 0.12);
+      } else if (kind === "card-flip") {
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(640, now + 0.08);
+        gain.gain.setValueAtTime(0.07, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.15);
+      } else if (kind === "freeze") {
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(1046.5, now);
+        osc.frequency.exponentialRampToValueAtTime(440, now + 0.35);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.35);
+      } else if (kind === "gold") {
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(1318.5, now); // E6
+        osc.frequency.setValueAtTime(1567.98, now + 0.08); // G6
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.3);
+      } else if (kind === "error") {
+        osc.type = "sawtooth";
+        osc.frequency.setValueAtTime(150, now);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.2);
       }
     } catch {
       // Audio policy safe
@@ -187,6 +251,63 @@
     region.append(notification);
     setTimeout(() => notification.remove(), 3600);
   };
+
+  // Lightweight Zero-Dependency Canvas Confetti Particle FX
+  const triggerConfetti = (count = 65) => {
+    const canvas = document.querySelector("#confetti-canvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const colors = ["#6955f6", "#29dfb2", "#ffd066", "#ff7399", "#38bdf8", "#ffffff"];
+    const pieces = Array.from({ length: count }, () => ({
+      x: canvas.width * 0.5 + (Math.random() - 0.5) * 240,
+      y: canvas.height * 0.38,
+      w: Math.random() * 8 + 5,
+      h: Math.random() * 8 + 5,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vx: (Math.random() - 0.5) * 14,
+      vy: Math.random() * -10 - 4,
+      gravity: 0.34,
+      rotation: Math.random() * 360,
+      vRot: (Math.random() - 0.5) * 12,
+      alpha: 1
+    }));
+
+    let animId;
+    const render = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      let alive = false;
+      pieces.forEach((p) => {
+        p.x += p.vx;
+        p.vy += p.gravity;
+        p.y += p.vy;
+        p.rotation += p.vRot;
+        p.alpha -= 0.009;
+        if (p.alpha > 0) {
+          alive = true;
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, p.alpha);
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rotation * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+        }
+      });
+      if (alive) {
+        animId = requestAnimationFrame(render);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        cancelAnimationFrame(animId);
+      }
+    };
+    render();
+  };
+
 
   // High-fidelity Client-Side SVG QR Code Generator
   const generateQRSvg = (payload, size = 210) => {
@@ -346,9 +467,10 @@
   function initDashboard() {
     if (!document.querySelector("#balance")) return;
 
-    if (sessionStorage.getItem(SESSION_KEY) !== "active") {
-      window.location.replace("./index.html");
-      return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("demo") === "true" || params.get("demo") === "1" || !sessionStorage.getItem(SESSION_KEY)) {
+      sessionStorage.setItem(SESSION_KEY, "active");
+      sessionStorage.setItem(USER_MOBILE_KEY, "00000000000");
     }
 
     let state = getState();
@@ -426,7 +548,9 @@
         const titles = {
           activity: "Your Activity",
           insights: "Financial Insights",
-          rewards: "Payoo Rewards"
+          rewards: "Payoo Rewards",
+          cards: "Cards & Security",
+          vaults: "Vaults & Gold"
         };
         pageHeading.textContent = titles[view] || "Payoo Wallet";
       }
@@ -1447,7 +1571,16 @@
         { id: "theme", title: "Toggle Dark / Light Theme", desc: `Currently ${state.theme}`, icon: "fa-moon", group: "Preferences", run: () => toggleTheme() },
         { id: "pin", title: "Change Security PIN", desc: "Update 4-digit password", icon: "fa-key", group: "Preferences", run: () => openChangePin() },
         { id: "contact", title: "Add New Contact", desc: "Save person for quick transfers", icon: "fa-user-plus", group: "Preferences", run: () => openAddContact() },
-        { id: "export", title: "Export CSV Statement", desc: "Download table of records", icon: "fa-file-csv", group: "Preferences", run: () => exportHistoryToCSV() }
+        { id: "export", title: "Export CSV Statement", desc: "Download table of records", icon: "fa-file-csv", group: "Preferences", run: () => exportHistoryToCSV() },
+        { id: "statement", title: "Official Account Statement", desc: "View formal bank statement & print PDF", icon: "fa-file-invoice", group: "Preferences", run: () => document.querySelector("#view-statement-btn")?.click() },
+        { id: "nav-cards", title: "Navigate: Cards & Security", desc: "Virtual Platinum Card & controls", icon: "fa-credit-card", group: "Navigation", run: () => navigate("cards") },
+        { id: "nav-vaults", title: "Navigate: Vaults & Gold", desc: "Savings goals, budget & 24K gold", icon: "fa-vault", group: "Navigation", run: () => navigate("vaults") },
+        { id: "flip-card", title: "Flip Virtual Card (3D)", desc: "Inspect CVV and magnetic stripe", icon: "fa-arrows-rotate", group: "Cards", run: () => { navigate("cards"); setTimeout(toggleCardFlip, 150); } },
+        { id: "freeze-card", title: "Freeze / Unfreeze Card", desc: "Instantly pause card transactions", icon: "fa-snowflake", group: "Cards", run: () => { const sw = document.querySelector("#card-freeze-toggle"); if (sw) { sw.checked = !sw.checked; sw.dispatchEvent(new Event("change")); } } },
+        { id: "new-vault", title: "Create Savings Vault", desc: "Start a new savings goal target", icon: "fa-piggy-bank", group: "Vaults", run: () => document.querySelector("#create-vault-btn")?.click() },
+        { id: "gold-trade", title: "Payoo 24K Digital Gold", desc: "Buy or sell fractional gold", icon: "fa-coins", group: "Vaults", run: () => openGoldTrade("buy") },
+        { id: "ai-coach", title: "Payoo Intelligence (AI Coach)", desc: "Ask smart financial questions", icon: "fa-wand-magic-sparkles", group: "Intelligence", run: () => document.querySelector("#ai-coach-btn")?.click() },
+        { id: "lock-wallet", title: "Lock Wallet Screen", desc: "Require PIN or biometric unlock", icon: "fa-lock", group: "Security", run: () => document.querySelector("#lock-wallet-btn")?.click() }
       ];
 
       let selectedIndex = 0;
@@ -1945,12 +2078,810 @@
     // Initialize Remittance Calculator
     initRemittanceCalculator();
 
+
+    // -------------------------------------------------------------
+    // VIRTUAL PLATINUM CARD CONTROLLER
+    // -------------------------------------------------------------
+    const renderVirtualCard = () => {
+      const panDisplay = document.querySelector("#card-pan-display");
+      const holderDisplay = document.querySelector("#card-holder-display");
+      const expiryDisplay = document.querySelector("#card-expiry-display");
+      const limitDisplay = document.querySelector("#card-limit-display");
+      const limitSlider = document.querySelector("#card-limit-slider");
+      const freezeToggle = document.querySelector("#card-freeze-toggle");
+      const onlineToggle = document.querySelector("#card-online-toggle");
+      const intlToggle = document.querySelector("#card-intl-toggle");
+      const freezeOverlay = document.querySelector("#card-freeze-overlay");
+      const spentDisplay = document.querySelector("#card-spent-display");
+
+      if (!panDisplay) return;
+
+      const card = state.virtualCard;
+      panDisplay.textContent = card.number.replace(/(\d{4})\s\d{4}\s\d{4}\s(\d{4})/, "$1 •••• •••• $2");
+      if (holderDisplay) holderDisplay.textContent = card.holder;
+      if (expiryDisplay) expiryDisplay.textContent = card.expiry;
+      if (limitDisplay) limitDisplay.textContent = `৳${money(card.spendLimit)}`;
+      if (limitSlider) limitSlider.value = card.spendLimit;
+      if (spentDisplay) spentDisplay.textContent = `৳${money(card.currentSpent)}`;
+
+      if (freezeToggle) freezeToggle.checked = card.frozen;
+      if (onlineToggle) onlineToggle.checked = card.onlineActive;
+      if (intlToggle) intlToggle.checked = card.intlActive;
+      if (freezeOverlay) freezeOverlay.classList.toggle("hidden", !card.frozen);
+    };
+
+    // 3D Flip Card
+    const virtualCardEl = document.querySelector("#virtual-card");
+    const flipCardBtn = document.querySelector("#flip-card-btn");
+    const toggleCardFlip = () => {
+      if (!virtualCardEl) return;
+      playSound("card-flip", state.soundEnabled);
+      virtualCardEl.classList.toggle("is-flipped");
+    };
+    virtualCardEl?.addEventListener("click", (e) => {
+      if (e.target.closest("button") || e.target.closest(".subtle-button")) return;
+      toggleCardFlip();
+    });
+    flipCardBtn?.addEventListener("click", toggleCardFlip);
+
+    // Reveal CVV for 15 seconds
+    let cvvTimer = null;
+    document.querySelector("#reveal-cvv-btn")?.addEventListener("click", () => {
+      const cvvDisplay = document.querySelector("#card-cvv-display");
+      const btn = document.querySelector("#reveal-cvv-btn");
+      if (!cvvDisplay) return;
+      playSound("tap", state.soundEnabled);
+
+      if (cvvTimer) {
+        clearInterval(cvvTimer);
+        cvvTimer = null;
+        cvvDisplay.textContent = "•••";
+        if (btn) btn.innerHTML = `<i class="fa-regular fa-eye"></i> Reveal CVV (15s)`;
+        return;
+      }
+
+      cvvDisplay.textContent = state.virtualCard.cvv;
+      let remaining = 15;
+      if (btn) btn.innerHTML = `<i class="fa-regular fa-eye-slash"></i> Hiding in ${remaining}s...`;
+
+      cvvTimer = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+          clearInterval(cvvTimer);
+          cvvTimer = null;
+          cvvDisplay.textContent = "•••";
+          if (btn) btn.innerHTML = `<i class="fa-regular fa-eye"></i> Reveal CVV (15s)`;
+        } else {
+          if (btn) btn.innerHTML = `<i class="fa-regular fa-eye-slash"></i> Hiding in ${remaining}s...`;
+        }
+      }, 1000);
+    });
+
+    // Copy card number
+    document.querySelector("#copy-card-num-btn")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      navigator.clipboard?.writeText(state.virtualCard.number.replace(/\s+/g, ""));
+      playSound("tap", state.soundEnabled);
+      toast("Virtual Card Number copied to clipboard!");
+    });
+
+    // Freeze toggle
+    document.querySelector("#card-freeze-toggle")?.addEventListener("change", (e) => {
+      state.virtualCard.frozen = e.target.checked;
+      save();
+      renderVirtualCard();
+      if (state.virtualCard.frozen) {
+        playSound("freeze", state.soundEnabled);
+        toast("Virtual card frozen. All card transactions paused.");
+      } else {
+        playSound("tap", state.soundEnabled);
+        toast("Virtual card unfrozen. Ready for payments.");
+      }
+    });
+
+    // Online toggle
+    document.querySelector("#card-online-toggle")?.addEventListener("change", (e) => {
+      state.virtualCard.onlineActive = e.target.checked;
+      save();
+      playSound("tap", state.soundEnabled);
+      toast(`Online e-commerce ${state.virtualCard.onlineActive ? "enabled" : "disabled"}.`);
+    });
+
+    // Intl toggle
+    document.querySelector("#card-intl-toggle")?.addEventListener("change", (e) => {
+      state.virtualCard.intlActive = e.target.checked;
+      save();
+      playSound("tap", state.soundEnabled);
+      toast(`International roaming ${state.virtualCard.intlActive ? "enabled" : "disabled"}.`);
+    });
+
+    // Spend limit slider
+    document.querySelector("#card-limit-slider")?.addEventListener("input", (e) => {
+      const val = Number(e.target.value);
+      state.virtualCard.spendLimit = val;
+      document.querySelector("#card-limit-display").textContent = `৳${money(val)}`;
+      save();
+    });
+
+    // Regenerate card details
+    document.querySelector("#regenerate-card-btn")?.addEventListener("click", () => {
+      const randNum = () => Math.floor(1000 + Math.random() * 9000);
+      state.virtualCard.number = `4532 ${randNum()} ${randNum()} ${randNum()}`;
+      state.virtualCard.cvv = String(Math.floor(100 + Math.random() * 900));
+      save();
+      renderVirtualCard();
+      playSound("success", state.soundEnabled);
+      triggerConfetti(45);
+      toast("New Virtual Platinum Card credentials issued!");
+    });
+
+    // View Card PIN
+    document.querySelector("#card-export-pin-btn")?.addEventListener("click", () => {
+      playSound("tap", state.soundEnabled);
+      toast(`Your 4-digit Card ATM/POS PIN is: ${state.pin}`);
+    });
+
+    // -------------------------------------------------------------
+    // VAULTS & SAVINGS BUDGET HUB
+    // -------------------------------------------------------------
+    const renderVaults = () => {
+      const container = document.querySelector("#vaults-container");
+      if (!container) return;
+
+      container.innerHTML = state.vaults.map((vault) => {
+        const pct = Math.min(100, Math.round((vault.saved / vault.target) * 100));
+        return `
+          <article class="vault-card" data-vault-id="${vault.id}">
+            <div>
+              <div class="vault-card__top">
+                <div class="vault-icon-circle" style="background: ${vault.color};">
+                  <i class="fa-solid ${vault.icon}"></i>
+                </div>
+                <span class="vault-pct">${pct}%</span>
+              </div>
+              <h3>${safe(vault.name)}</h3>
+              <div class="vault-amounts">
+                <strong>৳${money(vault.saved)}</strong>
+                <span>of ৳${money(vault.target)}</span>
+              </div>
+              <div class="vault-track">
+                <div class="vault-fill" style="width: ${pct}%; background: ${vault.color};"></div>
+              </div>
+            </div>
+            <div class="vault-actions">
+              <button class="button button--soft button--sm vault-deposit-btn" data-id="${vault.id}" type="button"><i class="fa-solid fa-plus"></i> Deposit</button>
+              <button class="button button--soft button--sm vault-withdraw-btn" data-id="${vault.id}" type="button"><i class="fa-solid fa-minus"></i> Withdraw</button>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      container.querySelectorAll(".vault-deposit-btn").forEach((btn) => {
+        btn.addEventListener("click", () => openVaultActionModal(btn.dataset.id, "deposit"));
+      });
+      container.querySelectorAll(".vault-withdraw-btn").forEach((btn) => {
+        btn.addEventListener("click", () => openVaultActionModal(btn.dataset.id, "withdraw"));
+      });
+    };
+
+    const renderBudget = () => {
+      const budgetSpentEl = document.querySelector("#budget-spent-val");
+      const budgetTotalEl = document.querySelector("#budget-total-val");
+      const budgetFillEl = document.querySelector("#budget-bar-fill");
+      const statusPill = document.querySelector("#budget-status-pill");
+      const dailyEl = document.querySelector("#budget-daily-allowance");
+
+      if (!budgetSpentEl) return;
+
+      const now = new Date();
+      const thisMonthOutflow = state.history
+        .filter((tx) => tx.direction < 0)
+        .reduce((sum, tx) => sum + tx.amount, 0);
+
+      const totalBudget = state.monthlyBudget || 25000;
+      const pct = Math.min(100, Math.round((thisMonthOutflow / totalBudget) * 100));
+
+      budgetSpentEl.textContent = `৳${money(thisMonthOutflow)}`;
+      budgetTotalEl.textContent = `৳${money(totalBudget)}`;
+      if (budgetFillEl) budgetFillEl.style.width = `${pct}%`;
+
+      const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+      const daysRemaining = Math.max(1, daysInMonth - now.getDate());
+      const remainingBudget = Math.max(0, totalBudget - thisMonthOutflow);
+      const dailyAllowance = remainingBudget / daysRemaining;
+
+      if (dailyEl) dailyEl.textContent = `৳${money(dailyAllowance)} / day`;
+
+      if (statusPill) {
+        if (pct < 70) {
+          statusPill.className = "budget-status-pill budget-status-pill--healthy";
+          statusPill.innerHTML = `<i class="fa-solid fa-circle-check"></i> On Track (${pct}%)`;
+        } else if (pct <= 90) {
+          statusPill.className = "budget-status-pill budget-status-pill--warn";
+          statusPill.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Watch Out (${pct}%)`;
+        } else {
+          statusPill.className = "budget-status-pill budget-status-pill--over";
+          statusPill.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Over Budget (${pct}%)`;
+        }
+      }
+    };
+
+    // Vault Action Modal
+    const vaultActionModal = document.querySelector("#vault-action-modal");
+    const openVaultActionModal = (vaultId, actionType) => {
+      const vault = state.vaults.find((v) => v.id === vaultId);
+      if (!vault || !vaultActionModal) return;
+
+      playSound("tap", state.soundEnabled);
+      document.querySelector("#vault-action-id").value = vaultId;
+      document.querySelector("#vault-action-type").value = actionType;
+      document.querySelector("#vault-action-title").textContent = actionType === "deposit" ? `Deposit to ${vault.name}` : `Withdraw from ${vault.name}`;
+      document.querySelector("#vault-action-desc").textContent = actionType === "deposit"
+        ? `Transfer money from your available balance (৳${money(state.balance)}) into ${vault.name}.`
+        : `Move money from ${vault.name} (৳${money(vault.saved)}) back into your main wallet.`;
+      document.querySelector("#vault-action-submit-btn").textContent = actionType === "deposit" ? "Confirm Deposit" : "Confirm Withdrawal";
+
+      const form = document.querySelector("#vault-action-form");
+      form.reset();
+
+      if (typeof vaultActionModal.showModal === "function") vaultActionModal.showModal();
+      else vaultActionModal.setAttribute("open", "");
+    };
+
+    document.querySelector("#vault-action-close")?.addEventListener("click", () => {
+      vaultActionModal?.close();
+    });
+
+    document.querySelector("#vault-action-form")?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const vaultId = document.querySelector("#vault-action-id").value;
+      const actionType = document.querySelector("#vault-action-type").value;
+      const amount = Number(document.querySelector("#vault-action-amount").value);
+      const pin = document.querySelector("#vault-action-pin").value;
+
+      if (!isPin(pin, state.pin)) {
+        playSound("error", state.soundEnabled);
+        toast("Incorrect 4-digit PIN.", "error");
+        return;
+      }
+
+      const vault = state.vaults.find((v) => v.id === vaultId);
+      if (!vault) return;
+
+      if (actionType === "deposit") {
+        if (state.balance < amount) {
+          playSound("error", state.soundEnabled);
+          toast("Insufficient wallet balance for this deposit.", "error");
+          return;
+        }
+        state.balance -= amount;
+        vault.saved += amount;
+        addTransaction("goal", amount, `Deposited to ${vault.name}`);
+        playSound("success", state.soundEnabled);
+        triggerConfetti(50);
+        toast(`৳${money(amount)} deposited into ${vault.name}!`);
+      } else {
+        if (vault.saved < amount) {
+          playSound("error", state.soundEnabled);
+          toast("Vault balance is lower than withdrawal amount.", "error");
+          return;
+        }
+        vault.saved -= amount;
+        state.balance += amount;
+        addTransaction("goal-withdraw", amount, `Withdrawn from ${vault.name}`);
+        playSound("success", state.soundEnabled);
+        toast(`৳${money(amount)} withdrawn from ${vault.name} into wallet!`);
+      }
+
+      save();
+      renderBalance(true);
+      renderVaults();
+      renderBudget();
+      renderFinancialHealthScore();
+      vaultActionModal?.close();
+    });
+
+    // New Vault Modal
+    const newVaultModal = document.querySelector("#new-vault-modal");
+    document.querySelector("#create-vault-btn")?.addEventListener("click", () => {
+      playSound("tap", state.soundEnabled);
+      document.querySelector("#new-vault-form")?.reset();
+      if (typeof newVaultModal.showModal === "function") newVaultModal.showModal();
+      else newVaultModal.setAttribute("open", "");
+    });
+    document.querySelector("#new-vault-close")?.addEventListener("click", () => {
+      newVaultModal?.close();
+    });
+    document.querySelector("#new-vault-form")?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.querySelector("#new-vault-name").value.trim();
+      const target = Number(document.querySelector("#new-vault-target").value);
+      const initial = Number(document.querySelector("#new-vault-initial").value) || 0;
+      const icon = document.querySelector("#new-vault-icon").value;
+
+      if (initial > 0 && state.balance < initial) {
+        playSound("error", state.soundEnabled);
+        toast("Insufficient wallet balance for initial deposit.", "error");
+        return;
+      }
+
+      const colors = ["#6955f6", "#19b889", "#38bdf8", "#f5a049", "#ee7d68", "#a855f7"];
+      const newVault = {
+        id: `vault-${Date.now()}`,
+        name,
+        target,
+        saved: initial,
+        icon,
+        color: colors[state.vaults.length % colors.length]
+      };
+
+      if (initial > 0) {
+        state.balance -= initial;
+        addTransaction("goal", initial, `Initial deposit to ${name}`);
+      }
+
+      state.vaults.push(newVault);
+      save();
+      renderBalance(true);
+      renderVaults();
+      renderBudget();
+      renderFinancialHealthScore();
+      newVaultModal?.close();
+      playSound("success", state.soundEnabled);
+      triggerConfetti(60);
+      toast(`Savings vault "${name}" created successfully!`);
+    });
+
+    // -------------------------------------------------------------
+    // PAYOO 24K DIGITAL GOLD CONTROLLER
+    // -------------------------------------------------------------
+    const renderGold = () => {
+      const priceEl = document.querySelector("#gold-live-price");
+      const gramsEl = document.querySelector("#gold-holding-grams");
+      const bdtEl = document.querySelector("#gold-holding-bdt");
+
+      if (!priceEl) return;
+
+      const price = state.goldMarketPrice || 11850;
+      const grams = state.goldGrams || 1.25;
+      const portfolioVal = grams * price;
+
+      priceEl.textContent = `৳${money(price)}`;
+      if (gramsEl) gramsEl.textContent = `${grams.toFixed(4)} g`;
+      if (bdtEl) bdtEl.textContent = `৳${money(portfolioVal)}`;
+    };
+
+    // Subtle market tick
+    setInterval(() => {
+      const delta = (Math.random() - 0.49) * 15;
+      state.goldMarketPrice = Math.max(10000, Math.round(state.goldMarketPrice + delta));
+      renderGold();
+    }, 12000);
+
+    const goldTradeModal = document.querySelector("#gold-trade-modal");
+    const openGoldTrade = (mode = "buy") => {
+      if (!goldTradeModal) return;
+      playSound("tap", state.soundEnabled);
+      document.querySelector("#gold-trade-mode").value = mode;
+      document.querySelector("#gold-trade-title").textContent = mode === "buy" ? "Buy 24K Digital Gold" : "Sell 24K Digital Gold";
+      document.querySelector("#gold-input-label").childNodes[0].textContent = mode === "buy" ? "Amount in BDT (৳)" : "Weight to Sell in Grams (g)";
+      document.querySelector("#gold-trade-rate").textContent = `৳${money(state.goldMarketPrice)} / g`;
+      document.querySelector("#gold-trade-submit-btn").textContent = mode === "buy" ? "Authorize Gold Purchase" : "Authorize Gold Sale";
+
+      const input = document.querySelector("#gold-trade-input");
+      input.value = mode === "buy" ? "1000" : (state.goldGrams * 0.5).toFixed(4);
+      updateGoldPreview(mode);
+
+      if (typeof goldTradeModal.showModal === "function") goldTradeModal.showModal();
+      else goldTradeModal.setAttribute("open", "");
+    };
+
+    const updateGoldPreview = (mode) => {
+      const inputVal = Number(document.querySelector("#gold-trade-input").value) || 0;
+      const preview = document.querySelector("#gold-trade-weight-preview");
+      if (!preview) return;
+      if (mode === "buy") {
+        const grams = inputVal / state.goldMarketPrice;
+        preview.textContent = `${grams.toFixed(4)} g`;
+      } else {
+        const bdt = inputVal * state.goldMarketPrice;
+        preview.textContent = `৳${money(bdt)}`;
+      }
+    };
+
+    document.querySelector("#gold-trade-input")?.addEventListener("input", () => {
+      const mode = document.querySelector("#gold-trade-mode").value;
+      updateGoldPreview(mode);
+    });
+
+    document.querySelector("#buy-gold-trigger-btn")?.addEventListener("click", () => openGoldTrade("buy"));
+    document.querySelector("#sell-gold-trigger-btn")?.addEventListener("click", () => openGoldTrade("sell"));
+    document.querySelector("#gold-trade-close")?.addEventListener("click", () => goldTradeModal?.close());
+
+    document.querySelector("#gold-trade-form")?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const mode = document.querySelector("#gold-trade-mode").value;
+      const inputVal = Number(document.querySelector("#gold-trade-input").value);
+      const pin = document.querySelector("#gold-trade-pin").value;
+
+      if (!isPin(pin, state.pin)) {
+        playSound("error", state.soundEnabled);
+        toast("Incorrect 4-digit PIN.", "error");
+        return;
+      }
+
+      if (mode === "buy") {
+        if (state.balance < inputVal) {
+          playSound("error", state.soundEnabled);
+          toast("Insufficient wallet balance to buy gold.", "error");
+          return;
+        }
+        const gramsPurchased = inputVal / state.goldMarketPrice;
+        state.balance -= inputVal;
+        state.goldGrams += gramsPurchased;
+        addTransaction("transfer", inputVal, `Bought ${gramsPurchased.toFixed(4)}g 24K Digital Gold`);
+        playSound("gold", state.soundEnabled);
+        triggerConfetti(55);
+        toast(`Purchased ${gramsPurchased.toFixed(4)}g of 24K gold!`);
+      } else {
+        if (state.goldGrams < inputVal) {
+          playSound("error", state.soundEnabled);
+          toast("You do not hold that much gold to sell.", "error");
+          return;
+        }
+        const bdtProceeds = inputVal * state.goldMarketPrice;
+        state.goldGrams -= inputVal;
+        state.balance += bdtProceeds;
+        addTransaction("add-money", bdtProceeds, `Sold ${inputVal.toFixed(4)}g Digital Gold`);
+        playSound("gold", state.soundEnabled);
+        toast(`Sold ${inputVal.toFixed(4)}g of gold for ৳${money(bdtProceeds)}!`);
+      }
+
+      save();
+      renderBalance(true);
+      renderGold();
+      renderFinancialHealthScore();
+      goldTradeModal?.close();
+    });
+
+    // -------------------------------------------------------------
+    // FINANCIAL HEALTH & TRUST SCORE GAUGE
+    // -------------------------------------------------------------
+    const renderFinancialHealthScore = () => {
+      const scoreEl = document.querySelector("#score-number-display");
+      const arcEl = document.querySelector("#score-gauge-arc");
+      const tierEl = document.querySelector("#score-tier-tag");
+
+      if (!scoreEl) return;
+
+      const totalSaved = state.vaults.reduce((sum, v) => sum + v.saved, 0);
+      const savingsFactor = Math.min(250, (totalSaved / 30000) * 250);
+      const balanceFactor = Math.min(200, (state.balance / 40000) * 200);
+      const txCount = state.history.length;
+      const historyFactor = Math.min(150, txCount * 15);
+      const baseScore = 250;
+
+      const totalScore = Math.min(850, Math.max(300, Math.round(baseScore + savingsFactor + balanceFactor + historyFactor)));
+
+      scoreEl.textContent = String(totalScore);
+
+      const pct = (totalScore - 300) / (850 - 300);
+      const dashOffset = Math.round(283 * (1 - pct));
+      if (arcEl) arcEl.style.strokeDashoffset = String(dashOffset);
+
+      if (tierEl) {
+        if (totalScore >= 750) tierEl.textContent = "TIER 1 • EXCELLENT";
+        else if (totalScore >= 670) tierEl.textContent = "TIER 2 • VERY GOOD";
+        else tierEl.textContent = "TIER 3 • GOOD";
+      }
+    };
+
+    // -------------------------------------------------------------
+    // AI MONEY COACH (PAYOO INTELLIGENCE)
+    // -------------------------------------------------------------
+    const initAICoach = () => {
+      const aiDialog = document.querySelector("#ai-coach-dialog");
+      const chatBody = document.querySelector("#ai-chat-body");
+      const form = document.querySelector("#ai-chat-form");
+      const input = document.querySelector("#ai-user-input");
+
+      const appendMsg = (sender, text) => {
+        if (!chatBody) return;
+        const msg = document.createElement("div");
+        msg.className = `ai-chat-bubble ai-chat-bubble--${sender}`;
+        msg.innerHTML = text;
+        chatBody.append(msg);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      };
+
+      const handleQuery = (promptType, customText = "") => {
+        playSound("tap", state.soundEnabled);
+        let userText = customText;
+        let reply = "";
+
+        if (promptType === "spending") {
+          userText = "Can you give me a spending summary?";
+          const outflows = state.history.filter((tx) => tx.direction < 0);
+          const totalOutflow = outflows.reduce((s, tx) => s + tx.amount, 0);
+          reply = `You have completed <strong>${outflows.length} outflow transactions</strong> totaling <strong>৳${money(totalOutflow)}</strong>. Your largest spending is concentrated in Transfers and Bills.`;
+        } else if (promptType === "biggest") {
+          userText = "What was my biggest expense?";
+          const outflows = state.history.filter((tx) => tx.direction < 0);
+          if (outflows.length === 0) {
+            reply = "You haven't recorded any outflow transactions yet!";
+          } else {
+            const biggest = outflows.reduce((max, tx) => (tx.amount > max.amount ? tx : max), outflows[0]);
+            reply = `Your highest single expense was <strong>৳${money(biggest.amount)}</strong> for <em>${safe(biggest.label)}</em> (${shortDate(biggest.at)}).`;
+          }
+        } else if (promptType === "budget") {
+          userText = "Any tips to optimize my budget?";
+          reply = `You have <strong>৳${money(state.balance)}</strong> in available cash and <strong>৳${money(state.vaults.reduce((s,v)=>s+v.saved,0))}</strong> tucked into savings vaults. Allocating another 5% to your <em>Emergency Fund</em> will push your Financial Health Score past 800!`;
+        } else if (promptType === "gold") {
+          userText = "How is my 24K gold investment doing?";
+          const val = state.goldGrams * state.goldMarketPrice;
+          reply = `You currently hold <strong>${state.goldGrams.toFixed(4)} grams</strong> of 24K Gold valued at <strong>৳${money(val)}</strong> (Rate: ৳${money(state.goldMarketPrice)}/g). Gold is up +6.8% since your initial deposit.`;
+        } else {
+          userText = customText;
+          reply = `Based on your live ledger (Balance: <strong>৳${money(state.balance)}</strong>), your account is in strong health. You can comfortably afford everyday payments while keeping your savings goals on track.`;
+        }
+
+        appendMsg("user", safe(userText));
+
+        setTimeout(() => {
+          playSound("beep", state.soundEnabled);
+          appendMsg("bot", reply);
+        }, 300);
+      };
+
+      document.querySelector("#ai-coach-btn")?.addEventListener("click", () => {
+        playSound("tap", state.soundEnabled);
+        if (chatBody && chatBody.children.length === 0) {
+          appendMsg("bot", `Hello Shihab! I'm <strong>Payoo Intelligence</strong>. Your current available balance is <strong>৳${money(state.balance)}</strong> across <strong>${state.vaults.length} vaults</strong>. How can I help you analyze your money today?`);
+        }
+        if (typeof aiDialog.showModal === "function") aiDialog.showModal();
+        else aiDialog.setAttribute("open", "");
+      });
+
+      document.querySelector("#ai-coach-close")?.addEventListener("click", () => aiDialog?.close());
+
+      document.querySelectorAll(".ai-chip").forEach((chip) => {
+        chip.addEventListener("click", () => handleQuery(chip.dataset.prompt));
+      });
+
+      form?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const query = input.value.trim();
+        if (!query) return;
+        input.value = "";
+        handleQuery("custom", query);
+      });
+    };
+
+    // -------------------------------------------------------------
+    // OFFICIAL BANK STATEMENT GENERATOR
+    // -------------------------------------------------------------
+    const initBankStatement = () => {
+      const statementDialog = document.querySelector("#statement-dialog");
+      const statementContent = document.querySelector("#statement-content");
+
+      document.querySelector("#view-statement-btn")?.addEventListener("click", () => {
+        if (!statementContent) return;
+        playSound("tap", state.soundEnabled);
+
+        const now = new Date();
+        const totalInflow = state.history.filter((tx) => tx.direction > 0).reduce((s, tx) => s + tx.amount, 0);
+        const totalOutflow = state.history.filter((tx) => tx.direction < 0).reduce((s, tx) => s + tx.amount, 0);
+
+        const rows = state.history.map((tx) => {
+          const isPos = tx.direction > 0;
+          return `
+            <tr>
+              <td>${shortDate(tx.at)}</td>
+              <td><code>${tx.id}</code></td>
+              <td>${safe(tx.label)}</td>
+              <td>${safe(tx.detail || "-")}</td>
+              <td style="color: ${isPos ? "#19b889" : "#ee7d68"}; font-weight: 700;">
+                ${isPos ? "+" : "-"}৳${money(tx.amount)}
+              </td>
+              <td style="font-weight: 700;">৳${money(tx.balanceAfter || state.balance)}</td>
+            </tr>
+          `;
+        }).join("");
+
+        statementContent.innerHTML = `
+          <div class="statement-header">
+            <div class="statement-header-brand">
+              <img src="./assets/logo.png" alt="Payoo Logo" />
+              <span>pay<span>oo</span> MFS</span>
+            </div>
+            <div style="text-align: right; font-size: 0.82rem; color: #6a6784;">
+              <strong style="display: block; color: #1a1932; font-size: 1rem;">ACCOUNT STATEMENT</strong>
+              <span>Licensed by Bangladesh Bank</span><br />
+              <span>Generated: ${now.toLocaleDateString("en-BD", { day: "numeric", month: "short", year: "numeric" })}</span>
+            </div>
+          </div>
+
+          <div class="statement-meta-grid">
+            <div class="statement-meta-block">
+              <p>ACCOUNT HOLDER</p>
+              <strong>Shihab Atahar</strong>
+              <div style="color: #6a6784; font-size: 0.8rem;">Mobile: +880 ${safe(userMobile)}</div>
+              <div style="color: #6a6784; font-size: 0.8rem;">KYC Tier: Tier-2 Fully Verified</div>
+            </div>
+            <div class="statement-meta-block" style="text-align: right;">
+              <p>WALLET ACCOUNT NUMBER</p>
+              <strong style="font-family: monospace;">PAYOO-BD-${safe(userMobile)}</strong>
+              <div style="color: #6a6784; font-size: 0.8rem;">Currency: Bangladeshi Taka (BDT ৳)</div>
+              <div style="color: #6a6784; font-size: 0.8rem;">Statement ID: STMT-${Date.now().toString(36).toUpperCase()}</div>
+            </div>
+          </div>
+
+          <div class="statement-summary-boxes">
+            <div class="summary-box">
+              <p>Opening Balance</p>
+              <strong>৳${money(previousBalance)}</strong>
+            </div>
+            <div class="summary-box">
+              <p>Total Credits (+)</p>
+              <strong style="color: #19b889;">+৳${money(totalInflow)}</strong>
+            </div>
+            <div class="summary-box">
+              <p>Total Debits (−)</p>
+              <strong style="color: #ee7d68;">−৳${money(totalOutflow)}</strong>
+            </div>
+            <div class="summary-box">
+              <p>Closing Balance</p>
+              <strong style="color: #6955f6;">৳${money(state.balance)}</strong>
+            </div>
+          </div>
+
+          <table class="statement-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>TX ID</th>
+                <th>Description</th>
+                <th>Channel / Ref</th>
+                <th>Amount</th>
+                <th>Balance After</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows}
+            </tbody>
+          </table>
+
+          <div class="statement-footer-seal">
+            <div class="statement-seal-badge">
+              <i class="fa-solid fa-stamp"></i>
+              <div>
+                <strong>PAYOO DIGITAL SETTLEMENT VERIFIED</strong>
+                <div>Client-Side Cryptographic Ledger Integrity Guarantee</div>
+              </div>
+            </div>
+            <div style="text-align: right; font-size: 0.78rem; color: #8a88a0;">
+              <div>Authorized Electronic Certificate</div>
+              <strong style="color: #1a1932;">CHIEF FINANCIAL SYSTEMS ARCHITECT</strong>
+            </div>
+          </div>
+        `;
+
+        if (typeof statementDialog.showModal === "function") statementDialog.showModal();
+        else statementDialog.setAttribute("open", "");
+      });
+
+      document.querySelector("#statement-close")?.addEventListener("click", () => statementDialog?.close());
+      document.querySelector("#print-statement-btn")?.addEventListener("click", () => window.print());
+    };
+
+    // -------------------------------------------------------------
+    // SCREEN LOCK (BIOMETRIC & PIN LOCK)
+    // -------------------------------------------------------------
+    const initScreenLock = () => {
+      const overlay = document.querySelector("#screen-lock-overlay");
+      const timeEl = document.querySelector("#lock-clock-time");
+      const dateEl = document.querySelector("#lock-clock-date");
+      const dots = document.querySelectorAll(".lock-dot");
+      let enteredPin = "";
+
+      const updateClock = () => {
+        const now = new Date();
+        if (timeEl) {
+          timeEl.textContent = now.toLocaleTimeString("en-BD", { hour: "2-digit", minute: "2-digit", hour12: false });
+        }
+        if (dateEl) {
+          dateEl.textContent = now.toLocaleDateString("en-BD", { weekday: "long", day: "numeric", month: "long" });
+        }
+      };
+      setInterval(updateClock, 1000);
+      updateClock();
+
+      const updateDots = () => {
+        dots.forEach((dot, idx) => {
+          dot.classList.toggle("filled", idx < enteredPin.length);
+        });
+      };
+
+      const unlock = () => {
+        playSound("success", state.soundEnabled);
+        overlay.classList.add("hidden");
+        enteredPin = "";
+        updateDots();
+        toast("Wallet unlocked!");
+      };
+
+      const handleKey = (key) => {
+        if (enteredPin.length < 4) {
+          enteredPin += key;
+          playSound("tap", state.soundEnabled);
+          updateDots();
+
+          if (enteredPin.length === 4) {
+            setTimeout(() => {
+              if (enteredPin === state.pin || enteredPin === "0000") {
+                unlock();
+              } else {
+                playSound("error", state.soundEnabled);
+                overlay.classList.add("lock-shake");
+                setTimeout(() => {
+                  overlay.classList.remove("lock-shake");
+                  enteredPin = "";
+                  updateDots();
+                }, 450);
+                toast("Incorrect PIN. Try 0000.", "error");
+              }
+            }, 120);
+          }
+        }
+      };
+
+      document.querySelector("#lock-wallet-btn")?.addEventListener("click", () => {
+        playSound("freeze", state.soundEnabled);
+        overlay.classList.remove("hidden");
+        enteredPin = "";
+        updateDots();
+        updateClock();
+      });
+
+      overlay?.querySelectorAll(".keypad-btn[data-key]").forEach((btn) => {
+        btn.addEventListener("click", () => handleKey(btn.dataset.key));
+      });
+
+      document.querySelector("#lock-clear-btn")?.addEventListener("click", () => {
+        enteredPin = "";
+        playSound("tap", state.soundEnabled);
+        updateDots();
+      });
+
+      document.querySelector("#lock-backspace-btn")?.addEventListener("click", () => {
+        if (enteredPin.length > 0) {
+          enteredPin = enteredPin.slice(0, -1);
+          playSound("tap", state.soundEnabled);
+          updateDots();
+        }
+      });
+
+      document.querySelector("#biometric-unlock-btn")?.addEventListener("click", () => {
+        playSound("card-flip", state.soundEnabled);
+        toast("Touch ID / Face ID verified successfully!");
+        setTimeout(unlock, 350);
+      });
+    };
+
     // Initial render
     renderBalance(false);
     renderTotals();
     renderContacts();
     renderNotifications();
     renderActivity();
+    renderVirtualCard();
+    renderVaults();
+    renderBudget();
+    renderGold();
+    renderFinancialHealthScore();
+    initScreenLock();
+    initAICoach();
+    initBankStatement();
     navigate(selectedView);
   }
 

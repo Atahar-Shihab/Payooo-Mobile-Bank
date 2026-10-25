@@ -28,9 +28,11 @@
         <p class="sidebar-label">MENU</p>
         <nav class="sidebar-nav">
           <button class="nav-link is-active" data-view="overview"><i class="fa-solid fa-grid-2"></i><span>Overview</span></button>
+          <button class="nav-link" data-view="cards"><i class="fa-solid fa-credit-card"></i><span>Cards</span></button>
+          <button class="nav-link" data-view="vaults"><i class="fa-solid fa-vault"></i><span>Vaults & Gold</span><em>new</em></button>
           <button class="nav-link" data-view="activity"><i class="fa-solid fa-arrow-right-arrow-left"></i><span>Transactions</span></button>
           <button class="nav-link" data-view="insights"><i class="fa-solid fa-chart-pie"></i><span>Insights</span></button>
-          <button class="nav-link" data-view="rewards"><i class="fa-solid fa-sparkles"></i><span>Rewards</span><em>new</em></button>
+          <button class="nav-link" data-view="rewards"><i class="fa-solid fa-sparkles"></i><span>Rewards</span></button>
         </nav>
         <div class="sidebar-bottom">
           <div class="mini-wallet"><span class="mini-wallet__icon"><i class="fa-solid fa-shield-heart"></i></span><div><small>Payoo protection</small><strong>Wallet secured</strong></div></div>
@@ -44,7 +46,9 @@
           <div class="page-title"><p id="today-date"></p><h1 id="page-heading">Good morning, Shihab <span>✦</span></h1></div>
           <div class="topbar-actions">
             <button id="search-trigger-btn" class="round-button" aria-label="Open command palette" title="Search or Quick Actions (Ctrl+K)"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button id="ai-coach-btn" class="round-button" aria-label="Payoo Intelligence AI" title="Payoo AI Money Coach"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
             <button id="theme-toggle-btn" class="round-button" aria-label="Toggle dark/light theme" title="Toggle Theme (Alt+T)"><i class="fa-solid fa-moon"></i></button>
+            <button id="lock-wallet-btn" class="round-button" aria-label="Lock wallet" title="Lock Wallet Screen"><i class="fa-solid fa-lock"></i></button>
             <button id="my-qr-btn" class="round-button" aria-label="My QR Code" title="Show my Payoo QR Code"><i class="fa-solid fa-qrcode"></i></button>
             <button id="notification-btn" class="round-button notification-button" aria-label="Open notifications"><i class="fa-regular fa-bell"></i><b id="notif-badge"></b></button>
             <button id="profile-btn" class="profile-button" aria-label="Open profile"><span id="user-initials">AS</span><i class="fa-solid fa-chevron-down"></i></button>
@@ -133,12 +137,226 @@
           </section>
 
           <!-- Activity / Transactions View -->
+          
+          <!-- Cards & Security View -->
+          <section id="cards-view" class="app-view hidden">
+            <div class="view-banner">
+              <div>
+                <p class="eyebrow">DIGITAL PLATINUM</p>
+                <h2>Virtual Card &amp; Security</h2>
+                <p>Manage your contactless virtual card, freeze controls, e-commerce switches, and spending limits.</p>
+              </div>
+              <button id="flip-card-btn" class="button button--dark" type="button"><i class="fa-solid fa-arrows-rotate"></i> Flip Card (3D)</button>
+            </div>
+
+            <div class="card-showcase-grid">
+              <!-- Left: 3D Interactive Flipping Card -->
+              <div class="virtual-card-wrapper">
+                <div class="virtual-card" id="virtual-card" title="Click to flip card">
+                  <!-- Front Face -->
+                  <div class="virtual-card__face virtual-card__face--front">
+                    <div class="card-top-row">
+                      <div class="card-brand-label">pay<span>oo</span></div>
+                      <span class="card-tier-tag">PLATINUM DIGITAL</span>
+                    </div>
+                    <div class="card-chip-nfc-row">
+                      <div class="card-emv-chip"></div>
+                      <i class="fa-solid fa-wifi card-contactless-wave"></i>
+                    </div>
+                    <div class="card-pan-row">
+                      <span id="card-pan-display">4532 •••• •••• 9184</span>
+                      <button id="copy-card-num-btn" class="round-button small-round" type="button" title="Copy card number" style="background: rgba(255,255,255,0.15); color: #fff; width: 30px; height: 30px;"><i class="fa-regular fa-copy"></i></button>
+                    </div>
+                    <div class="card-meta-bottom">
+                      <div class="card-meta-col">
+                        <p>CARDHOLDER</p>
+                        <strong id="card-holder-display">SHIHAB ATAHAR</strong>
+                      </div>
+                      <div class="card-meta-col">
+                        <p>EXPIRES</p>
+                        <strong id="card-expiry-display">10/29</strong>
+                      </div>
+                      <i class="fa-brands fa-cc-visa card-network-logo"></i>
+                    </div>
+
+                    <!-- Frozen Overlay -->
+                    <div id="card-freeze-overlay" class="card-freeze-overlay hidden">
+                      <i class="fa-solid fa-snowflake"></i>
+                      <span>CARD FROZEN</span>
+                      <small style="font-size: 0.68rem; opacity: 0.9;">Transactions are currently blocked</small>
+                    </div>
+                  </div>
+
+                  <!-- Back Face -->
+                  <div class="virtual-card__face virtual-card__face--back">
+                    <div class="card-mag-stripe"></div>
+                    <div class="card-back-content">
+                      <div class="card-sig-cvv-row">
+                        <span class="card-signature-mesh">Shihab Atahar</span>
+                        <div class="card-cvv-box">
+                          <span id="card-cvv-display">•••</span>
+                        </div>
+                      </div>
+                      <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <button id="reveal-cvv-btn" class="subtle-button" type="button" style="color: #ffd066; font-size: 0.72rem; padding: 4px 8px;"><i class="fa-regular fa-eye"></i> Reveal CVV (15s)</button>
+                        <div class="card-hologram"></div>
+                      </div>
+                      <p class="card-back-disclaimer">
+                        Authorized signature required. Issued by Payoo MFS Ltd under license from Bangladesh Bank.
+                        For 24/7 customer support dial 16216.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <small style="color: var(--muted); font-size: 0.75rem;"><i class="fa-solid fa-hand-pointer"></i> Tap card or click 'Flip Card' to inspect CVV &amp; signature</small>
+              </div>
+
+              <!-- Right: Card Security Controls -->
+              <div class="card-controls-panel">
+                <div class="control-tile">
+                  <div class="control-tile-info">
+                    <span class="control-icon control-icon--blue"><i class="fa-solid fa-snowflake"></i></span>
+                    <div>
+                      <h4>Freeze Card</h4>
+                      <p>Instantly pause all card payments &amp; transfers</p>
+                    </div>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="card-freeze-toggle" />
+                    <span class="switch-slider"></span>
+                  </label>
+                </div>
+
+                <div class="control-tile">
+                  <div class="control-tile-info">
+                    <span class="control-icon control-icon--purple"><i class="fa-solid fa-globe"></i></span>
+                    <div>
+                      <h4>Online E-Commerce</h4>
+                      <p>Enable shopping on Daraz, Chaldal, Foodpanda &amp; Web</p>
+                    </div>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="card-online-toggle" checked />
+                    <span class="switch-slider"></span>
+                  </label>
+                </div>
+
+                <div class="control-tile">
+                  <div class="control-tile-info">
+                    <span class="control-icon control-icon--gold"><i class="fa-solid fa-plane-departure"></i></span>
+                    <div>
+                      <h4>International Roaming</h4>
+                      <p>Allow foreign currency checkout (USD/EUR/GBP)</p>
+                    </div>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="card-intl-toggle" />
+                    <span class="switch-slider"></span>
+                  </label>
+                </div>
+
+                <div class="limit-slider-card">
+                  <div class="limit-slider-header">
+                    <div>
+                      <h4 style="margin: 0; font-size: 0.92rem;">Monthly Spending Limit</h4>
+                      <p style="margin: 2px 0 0; font-size: 0.77rem; color: var(--muted);">Auto-caps card expenditures</p>
+                    </div>
+                    <strong id="card-limit-display">৳30,000</strong>
+                  </div>
+                  <input type="range" id="card-limit-slider" class="limit-range-input" min="5000" max="100000" step="5000" value="30000" />
+                  <div class="limit-bar-meter">
+                    <span>Spent this month: <strong id="card-spent-display" style="color: var(--ink);">৳8,450.00</strong></span>
+                    <span>Max: ৳100,000</span>
+                  </div>
+                </div>
+
+                <div style="display: flex; gap: 12px;">
+                  <button id="regenerate-card-btn" class="button button--soft button--sm" type="button" style="flex: 1;"><i class="fa-solid fa-arrows-rotate"></i> Regenerate Card Details</button>
+                  <button id="card-export-pin-btn" class="button button--soft button--sm" type="button" style="flex: 1;"><i class="fa-solid fa-key"></i> View Card PIN</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Vaults & Gold View -->
+          <section id="vaults-view" class="app-view hidden">
+            <div class="view-banner">
+              <div>
+                <p class="eyebrow">WEALTH &amp; BUDGETING</p>
+                <h2>Vaults &amp; Digital Gold</h2>
+                <p>Plan multi-goal savings, track your monthly budget, and hold fractional 24K digital gold.</p>
+              </div>
+              <button id="create-vault-btn" class="button button--dark" type="button"><i class="fa-solid fa-plus"></i> Create New Vault</button>
+            </div>
+
+            <!-- Monthly Budget Tracker Banner -->
+            <div class="budget-hero-card">
+              <div class="budget-hero-header">
+                <div>
+                  <p class="eyebrow" style="margin-bottom: 2px;">MONTHLY SPEND TRACKER</p>
+                  <h3 style="margin: 0; font-size: 1.25rem;">October Budget Progress</h3>
+                </div>
+                <span id="budget-status-pill" class="budget-status-pill budget-status-pill--healthy"><i class="fa-solid fa-circle-check"></i> On Track</span>
+              </div>
+              <div class="budget-bar-track">
+                <div id="budget-bar-fill" class="budget-bar-fill" style="width: 38%;"></div>
+              </div>
+              <div class="budget-meta-row">
+                <span>Spent: <strong id="budget-spent-val">৳9,850.00</strong> of <strong id="budget-total-val">৳25,000.00</strong></span>
+                <span>Daily allowance remaining: <strong id="budget-daily-allowance" style="color: var(--mint);">৳1,262.50 / day</strong></span>
+              </div>
+            </div>
+
+            <!-- Payoo 24K Digital Gold Card -->
+            <div class="gold-card">
+              <div>
+                <span class="gold-badge"><i class="fa-solid fa-coins"></i> SHARIAH-COMPLIANT ASSET</span>
+                <h2>Payoo 24K Digital Gold</h2>
+                <p>Buy, hold, or liquidate 99.9% pure fractional 24 Karat gold backed by institutional vaults with zero storage fees.</p>
+                <div class="gold-metrics-row">
+                  <div class="gold-metric-item">
+                    <small>Live Market Price / Gram</small>
+                    <strong id="gold-live-price">৳11,850.00</strong>
+                  </div>
+                  <div class="gold-metric-item">
+                    <small>Your Gold Holdings</small>
+                    <strong id="gold-holding-grams">1.2500 g</strong>
+                  </div>
+                  <div class="gold-metric-item">
+                    <small>Portfolio Value</small>
+                    <strong id="gold-holding-bdt">৳14,812.50</strong>
+                  </div>
+                  <div class="gold-metric-item">
+                    <small>Performance</small>
+                    <strong style="color: #29dfb2;">+6.8%</strong>
+                  </div>
+                </div>
+              </div>
+              <div class="gold-card-actions">
+                <button id="buy-gold-trigger-btn" class="button button--gold" type="button"><i class="fa-solid fa-cart-shopping"></i> Buy Gold</button>
+                <button id="sell-gold-trigger-btn" class="button button--gold-soft" type="button"><i class="fa-solid fa-hand-holding-dollar"></i> Sell Gold</button>
+              </div>
+            </div>
+
+            <!-- Multiple Savings Vaults Grid -->
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">MULTI-GOAL SAVINGS</p>
+                <h2>Your Savings Vaults</h2>
+              </div>
+              <span class="shortcut-hint"><i class="fa-solid fa-piggy-bank"></i> Auto-compounding sandbox</span>
+            </div>
+            <div id="vaults-container" class="vaults-grid"></div>
+          </section>
+
           <section id="activity-view" class="app-view hidden">
             <div class="view-banner"><div><p class="eyebrow">YOUR MONEY STORY</p><h2>Transaction activity</h2><p>Every wallet movement in one clear, searchable and exportable feed.</p></div><button class="button button--dark" data-action="transfer"><i class="fa-solid fa-paper-plane"></i> Send money</button></div>
             <div class="surface-card table-card">
               <div class="activity-toolbar">
                 <div class="search-field"><i class="fa-solid fa-magnifying-glass"></i><input id="history-search" type="search" placeholder="Search transactions, txid, amounts..." /></div>
                 <div class="activity-toolbar-actions">
+                  <button id="view-statement-btn" class="subtle-button" type="button" title="View official bank statement with running balances"><i class="fa-solid fa-file-invoice"></i> Statement</button>
                   <button id="export-csv" class="subtle-button" type="button" title="Download transactions as CSV"><i class="fa-solid fa-file-arrow-down"></i> Export CSV</button>
                   <button id="clear-history" class="subtle-button" type="button"><i class="fa-regular fa-trash-can"></i> Clear</button>
                 </div>
@@ -193,6 +411,64 @@
             <article id="category-card" class="surface-card category-card">
               <div class="section-header"><div><p class="eyebrow">SPENDING DISTRIBUTION</p><h2>Category breakdown</h2></div></div>
               <div id="category-list" class="category-list"></div>
+            </article>
+          
+            <!-- Financial Health & Trust Score -->
+            <article class="surface-card score-card">
+              <div class="score-gauge-box">
+                <svg class="gauge-svg" viewBox="0 0 240 130">
+                  <!-- Background Track Arc -->
+                  <path d="M 30 115 A 90 90 0 0 1 210 115" fill="none" stroke="var(--line)" stroke-width="16" stroke-linecap="round"/>
+                  <!-- Animated Score Arc -->
+                  <path id="score-gauge-arc" d="M 30 115 A 90 90 0 0 1 210 115" fill="none" stroke="url(#scoreGrad)" stroke-width="16" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="60" style="transition: stroke-dashoffset 1s ease;"/>
+                  <defs>
+                    <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#ee7d68"/>
+                      <stop offset="50%" stop-color="#ffd066"/>
+                      <stop offset="100%" stop-color="#29dfb2"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div class="score-value-overlay">
+                  <strong id="score-number-display">785</strong>
+                  <span id="score-tier-tag">TIER 1 • EXCELLENT</span>
+                </div>
+              </div>
+              <div>
+                <p class="eyebrow" style="margin-bottom: 2px;">CREDIT &amp; RELIABILITY</p>
+                <h3 style="margin: 0 0 6px; font-size: 1.25rem;">Payoo Financial Health Score</h3>
+                <p style="margin: 0 0 16px; font-size: 0.85rem; color: var(--muted);">Dynamic reliability index based on savings ratio, bill settlement punctuality, and sandbox liquidity buffer.</p>
+                <div class="score-pillars-grid">
+                  <div class="score-pillar-item">
+                    <div class="pillar-header">
+                      <span>Savings Habit</span>
+                      <strong>Grade A+</strong>
+                    </div>
+                    <div class="pillar-bar-track"><div class="pillar-bar-fill" style="width: 95%;"></div></div>
+                  </div>
+                  <div class="score-pillar-item">
+                    <div class="pillar-header">
+                      <span>Outflow Control</span>
+                      <strong>Grade A</strong>
+                    </div>
+                    <div class="pillar-bar-track"><div class="pillar-bar-fill" style="width: 88%;"></div></div>
+                  </div>
+                  <div class="score-pillar-item">
+                    <div class="pillar-header">
+                      <span>Utility Regularity</span>
+                      <strong>Grade A+</strong>
+                    </div>
+                    <div class="pillar-bar-track"><div class="pillar-bar-fill" style="width: 92%;"></div></div>
+                  </div>
+                  <div class="score-pillar-item">
+                    <div class="pillar-header">
+                      <span>KYC &amp; PIN Security</span>
+                      <strong>Verified</strong>
+                    </div>
+                    <div class="pillar-bar-track"><div class="pillar-bar-fill" style="width: 100%;"></div></div>
+                  </div>
+                </div>
+              </div>
             </article>
           </section>
 
@@ -461,6 +737,169 @@
         </form>
       </div>
     </dialog>
+
+    
+    <!-- AI Money Coach Dialog -->
+    <dialog id="ai-coach-dialog" class="ai-coach-dialog">
+      <div class="ai-coach-header">
+        <div class="ai-coach-title">
+          <div class="ai-coach-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+          <div>
+            <h3 style="margin: 0; font-size: 1rem;">Payoo Intelligence</h3>
+            <small style="color: var(--mint); font-weight: 700;">● Active Money Coach</small>
+          </div>
+        </div>
+        <button id="ai-coach-close" class="round-button small-round" type="button" aria-label="Close AI coach"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="ai-chat-body" class="ai-chat-body"></div>
+      <div class="ai-quick-chips">
+        <button class="ai-chip" type="button" data-prompt="spending">📊 Spending summary</button>
+        <button class="ai-chip" type="button" data-prompt="biggest">🔍 Biggest expense?</button>
+        <button class="ai-chip" type="button" data-prompt="budget">💡 Budget tips</button>
+        <button class="ai-chip" type="button" data-prompt="gold">🪙 Gold outlook</button>
+      </div>
+      <form id="ai-chat-form" class="ai-input-wrap">
+        <input id="ai-user-input" placeholder="Ask Payoo Intelligence about your money..." autocomplete="off" />
+        <button class="button button--primary button--sm" type="submit"><i class="fa-solid fa-arrow-up"></i></button>
+      </form>
+    </dialog>
+
+    <!-- Official Bank Statement Modal -->
+    <dialog id="statement-dialog" class="statement-dialog">
+      <div class="modal-top" style="padding: 16px 24px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center;">
+        <span class="eyebrow" style="margin: 0;"><i class="fa-solid fa-certificate"></i> OFFICIAL ACCOUNT STATEMENT</span>
+        <div style="display: flex; gap: 8px;">
+          <button id="print-statement-btn" class="button button--primary button--sm" type="button"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+          <button id="statement-close" class="round-button small-round" type="button" aria-label="Close statement"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+      <div id="statement-content" class="statement-content-sheet"></div>
+    </dialog>
+
+    <!-- Vault Action Modal (Deposit / Withdraw) -->
+    <dialog id="vault-action-modal" class="transaction-modal">
+      <div class="modal-top">
+        <p id="vault-action-step">SAVINGS VAULT</p>
+        <button id="vault-action-close" class="round-button small-round" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content">
+        <h2 id="vault-action-title">Vault Movement</h2>
+        <p id="vault-action-desc">Transfer funds securely between your main wallet and savings vault.</p>
+        <form id="vault-action-form" class="modal-form">
+          <input type="hidden" id="vault-action-id" />
+          <input type="hidden" id="vault-action-type" />
+          <label>Amount (৳)
+            <input id="vault-action-amount" type="number" min="10" step="any" placeholder="e.g. 1000" required />
+          </label>
+          <label>4-digit Security PIN
+            <input id="vault-action-pin" type="password" inputmode="numeric" maxlength="4" placeholder="••••" required />
+          </label>
+          <button id="vault-action-submit-btn" class="button button--primary" type="submit">Confirm Transfer</button>
+        </form>
+      </div>
+    </dialog>
+
+    <!-- Create New Vault Modal -->
+    <dialog id="new-vault-modal" class="transaction-modal">
+      <div class="modal-top">
+        <p>NEW SAVINGS VAULT</p>
+        <button id="new-vault-close" class="round-button small-round" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content">
+        <h2>Create a Savings Goal</h2>
+        <p>Set a dedicated target to separate your savings from everyday spending.</p>
+        <form id="new-vault-form" class="modal-form">
+          <label>Goal name
+            <input id="new-vault-name" placeholder="e.g. New Laptop, Eid Shopping" required />
+          </label>
+          <label>Target amount (৳)
+            <input id="new-vault-target" type="number" min="500" step="100" placeholder="e.g. 35000" required />
+          </label>
+          <label>Initial deposit (optional)
+            <input id="new-vault-initial" type="number" min="0" step="any" placeholder="e.g. 1000 (from balance)" value="500" />
+          </label>
+          <label>Icon Theme
+            <select id="new-vault-icon">
+              <option value="fa-umbrella-beach">🏖️ Vacation / Travel</option>
+              <option value="fa-laptop">💻 Tech &amp; Gadgets</option>
+              <option value="fa-gift">🎁 Shopping &amp; Gifts</option>
+              <option value="fa-heart-pulse">🏥 Medical &amp; Safety</option>
+              <option value="fa-graduation-cap">🎓 Education / Tuition</option>
+              <option value="fa-car">🚗 Vehicle / Commute</option>
+            </select>
+          </label>
+          <button class="button button--primary" type="submit">Create Vault <i class="fa-solid fa-check"></i></button>
+        </form>
+      </div>
+    </dialog>
+
+    <!-- Digital Gold Trade Modal -->
+    <dialog id="gold-trade-modal" class="transaction-modal">
+      <div class="modal-top">
+        <p id="gold-trade-step">PAYOO 24K DIGITAL GOLD</p>
+        <button id="gold-trade-close" class="round-button small-round" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content">
+        <h2 id="gold-trade-title">Buy 24K Digital Gold</h2>
+        <p>Trade fractional institutional gold with instant settlement into your portfolio.</p>
+        <form id="gold-trade-form" class="modal-form">
+          <input type="hidden" id="gold-trade-mode" value="buy" />
+          <div style="background: rgba(255,208,102,0.12); border: 1px solid rgba(255,208,102,0.3); border-radius: 12px; padding: 12px; margin-bottom: 14px; font-size: 0.85rem;">
+            <span>Current rate: <strong id="gold-trade-rate">৳11,850.00 / g</strong></span>
+          </div>
+          <label id="gold-input-label">Amount in BDT (৳)
+            <input id="gold-trade-input" type="number" min="100" step="any" placeholder="e.g. 1000" value="1000" required />
+          </label>
+          <div style="display: flex; justify-content: space-between; font-size: 0.84rem; margin-bottom: 12px; color: var(--muted);">
+            <span>Estimated Weight:</span>
+            <strong id="gold-trade-weight-preview" style="color: var(--ink);">0.0844 g</strong>
+          </div>
+          <label>4-digit Security PIN
+            <input id="gold-trade-pin" type="password" inputmode="numeric" maxlength="4" placeholder="••••" required />
+          </label>
+          <button id="gold-trade-submit-btn" class="button button--primary" type="submit">Authorize Purchase</button>
+        </form>
+      </div>
+    </dialog>
+
+    <!-- Screen Lock Overlay (Biometric / PIN) -->
+    <div id="screen-lock-overlay" class="screen-lock-overlay hidden" aria-modal="true" role="dialog">
+      <div id="lock-clock-time" class="lock-time-display">00:00</div>
+      <div id="lock-clock-date" class="lock-date-display">Sunday, 26 October</div>
+      
+      <div class="lock-avatar-wrap">AS</div>
+      <div class="lock-user-name">Shihab Atahar</div>
+      <div class="lock-instruction">Enter 4-digit PIN to unlock Payoo</div>
+
+      <div class="lock-pin-dots" id="lock-pin-dots">
+        <div class="lock-dot"></div>
+        <div class="lock-dot"></div>
+        <div class="lock-dot"></div>
+        <div class="lock-dot"></div>
+      </div>
+
+      <div class="lock-keypad">
+        <button class="keypad-btn" type="button" data-key="1">1</button>
+        <button class="keypad-btn" type="button" data-key="2">2</button>
+        <button class="keypad-btn" type="button" data-key="3">3</button>
+        <button class="keypad-btn" type="button" data-key="4">4</button>
+        <button class="keypad-btn" type="button" data-key="5">5</button>
+        <button class="keypad-btn" type="button" data-key="6">6</button>
+        <button class="keypad-btn" type="button" data-key="7">7</button>
+        <button class="keypad-btn" type="button" data-key="8">8</button>
+        <button class="keypad-btn" type="button" data-key="9">9</button>
+        <button class="keypad-btn keypad-btn--action" type="button" id="lock-clear-btn">CLR</button>
+        <button class="keypad-btn" type="button" data-key="0">0</button>
+        <button class="keypad-btn keypad-btn--action" type="button" id="lock-backspace-btn"><i class="fa-solid fa-delete-left"></i></button>
+      </div>
+
+      <button id="biometric-unlock-btn" class="biometric-unlock-btn" type="button">
+        <i class="fa-solid fa-fingerprint"></i> Quick Biometric Unlock (Touch ID)
+      </button>
+    </div>
+
+    <!-- Particle Confetti Canvas -->
+    <canvas id="confetti-canvas"></canvas>
 
     <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
     <script src="./script/app.js"></script>
