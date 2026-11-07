@@ -2189,3 +2189,597 @@ input:checked + .switch-slider:before {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+/* -------------------------------------------------------------
+   CINEMATIC VIDEO BACKGROUND & ATMOSPHERE MODES
+------------------------------------------------------------- */
+.cinematic-bg-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #0a081a;
+}
+
+.cinematic-bg-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  opacity: 0.42;
+  filter: contrast(1.18) saturate(1.2) hue-rotate(225deg) brightness(0.85);
+  transition: opacity 0.8s ease, filter 0.8s ease;
+}
+
+.cinematic-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 65% 35%, rgba(105, 85, 246, 0.18) 0%, rgba(10, 8, 26, 0.75) 55%, #080614 100%),
+              repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 2px, transparent 4px);
+  pointer-events: none;
+}
+
+/* Atmosphere Toggle Pill */
+.atmosphere-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px;
+  padding: 6px 14px;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.atmosphere-pill-btn:hover {
+  background: rgba(105, 85, 246, 0.25);
+  border-color: rgba(139, 124, 255, 0.45);
+  transform: translateY(-1px);
+}
+.atmosphere-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #29dfb2;
+  box-shadow: 0 0 10px #29dfb2;
+}
+
+/* Dashboard Background Video Overlay */
+.dashboard-bg-video-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.dashboard-bg-video-container.is-active {
+  opacity: 0.22;
+}
+[data-theme="dark"] .dashboard-bg-video-container.is-active {
+  opacity: 0.35;
+}
+.dashboard-bg-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  filter: contrast(1.1) hue-rotate(220deg) brightness(0.7);
+}
+
+/* -------------------------------------------------------------
+   AI ARTISAN CAFÉ & DRINKS CARDS SYSTEM
+------------------------------------------------------------- */
+.cafe-hero-banner {
+  background: radial-gradient(circle at 85% 20%, rgba(16, 185, 129, 0.2) 0%, transparent 55%),
+              radial-gradient(circle at 15% 85%, rgba(105, 85, 246, 0.22) 0%, transparent 60%),
+              linear-gradient(135deg, #1b1638 0%, #0e0b24 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 24px;
+  padding: 32px 36px;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(10, 8, 28, 0.35);
+}
+@media (max-width: 768px) {
+  .cafe-hero-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px 20px;
+  }
+}
+.cafe-hero-copy h2 {
+  font-family: Manrope, sans-serif;
+  font-size: 1.75rem;
+  margin: 8px 0;
+  color: #fff;
+}
+.cafe-hero-copy p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.88rem;
+  margin: 0;
+  max-width: 520px;
+}
+.cafe-hero-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 200px;
+}
+.points-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 208, 102, 0.16);
+  border: 1px solid rgba(255, 208, 102, 0.35);
+  color: #ffd066;
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+/* Category Filter Tabs */
+.drink-category-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+.drink-tab-btn {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.drink-tab-btn:hover {
+  border-color: var(--violet);
+  color: var(--violet);
+}
+.drink-tab-btn.is-active {
+  background: linear-gradient(135deg, var(--violet), #846eff);
+  border-color: var(--violet);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(105, 85, 246, 0.3);
+}
+
+/* Drink Cards Grid */
+.drink-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 22px;
+  margin-bottom: 34px;
+}
+
+/* Individual Drink Card */
+.drink-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s, border-color 0.2s;
+}
+.drink-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(105, 85, 246, 0.4);
+  box-shadow: 0 16px 36px rgba(105, 85, 246, 0.12);
+}
+
+/* Liquid Orb Motion Graphic Header */
+.drink-card__visual {
+  position: relative;
+  height: 90px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.liquid-wave {
+  position: absolute;
+  bottom: -40%;
+  left: -20%;
+  width: 140%;
+  height: 140%;
+  border-radius: 40%;
+  opacity: 0.25;
+  background: #ffffff;
+  animation: liquid-rotate 7s linear infinite;
+  pointer-events: none;
+}
+@keyframes liquid-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.drink-emoji-orb {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  animation: float-orb 3.5s ease-in-out infinite alternate;
+}
+@keyframes float-orb {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-4px); }
+}
+
+.drink-tag-pill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #ffffff;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1;
+}
+
+.drink-card h3 {
+  font-family: Manrope, sans-serif;
+  font-size: 1.12rem;
+  font-weight: 800;
+  margin: 0 0 6px;
+  color: var(--ink);
+}
+.drink-card p {
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  margin: 0 0 12px;
+  min-height: 38px;
+}
+
+/* Flavor Notes Badges */
+.drink-notes-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.drink-note-chip {
+  font-size: 0.66rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: var(--canvas);
+  color: var(--muted);
+}
+
+/* Price & Ordering Row */
+.drink-card__price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 0;
+  border-top: 1px dashed var(--line);
+  margin-bottom: 12px;
+}
+.drink-card__price-row strong {
+  font-size: 1.25rem;
+  font-family: Manrope, sans-serif;
+  color: var(--violet);
+}
+.drink-card__price-row span {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.drink-card__actions {
+  display: flex;
+  gap: 8px;
+}
+.drink-card__actions .button {
+  flex: 1;
+}
+
+/* -------------------------------------------------------------
+   AI DRINK CRAFTER STUDIO MODAL
+------------------------------------------------------------- */
+.ai-crafter-dialog {
+  width: min(580px, 95vw);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 0;
+  box-shadow: 0 30px 90px rgba(10, 8, 30, 0.45);
+  overflow: hidden;
+}
+.crafter-header {
+  padding: 22px 28px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: radial-gradient(circle at 10% 50%, rgba(105, 85, 246, 0.12) 0%, transparent 60%);
+}
+.crafter-body {
+  padding: 24px 28px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+.crafter-section-title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--violet);
+  margin: 0 0 10px;
+  text-transform: uppercase;
+}
+.crafter-options-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+@media (max-width: 500px) {
+  .crafter-options-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.crafter-tile {
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.crafter-tile:hover {
+  border-color: var(--violet);
+  background: var(--violet-pale);
+}
+.crafter-tile.is-selected {
+  background: linear-gradient(135deg, rgba(105, 85, 246, 0.12), rgba(41, 223, 178, 0.15));
+  border-color: var(--violet);
+  box-shadow: 0 0 0 2px var(--violet);
+}
+.crafter-tile span {
+  display: block;
+  font-size: 1.4rem;
+  margin-bottom: 4px;
+}
+.crafter-tile strong {
+  display: block;
+  font-size: 0.76rem;
+  color: var(--ink);
+}
+
+/* Synthesis Animation Container */
+.synthesis-overlay {
+  text-align: center;
+  padding: 30px 20px;
+}
+.synthesis-rings {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 20px;
+}
+.ring-spin {
+  position: absolute;
+  inset: 0;
+  border: 3px dashed var(--violet);
+  border-radius: 50%;
+  animation: spin-clockwise 3s linear infinite;
+}
+.ring-spin--reverse {
+  inset: 12px;
+  border-color: #29dfb2;
+  animation: spin-counter 2s linear infinite;
+}
+@keyframes spin-clockwise {
+  100% { transform: rotate(360deg); }
+}
+@keyframes spin-counter {
+  100% { transform: rotate(-360deg); }
+}
+.synthesis-status-text {
+  font-family: Manrope, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.synthesis-subtext {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* -------------------------------------------------------------
+   DRINK ORDER & PICKUP VOUCHER MODAL
+------------------------------------------------------------- */
+.drink-voucher-dialog {
+  width: min(480px, 94vw);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 0;
+  box-shadow: 0 30px 90px rgba(10, 8, 30, 0.45);
+}
+.voucher-content-sheet {
+  padding: 26px 28px;
+  text-align: center;
+}
+.voucher-brand-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-family: Manrope, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+.voucher-qr-box {
+  width: 170px;
+  height: 170px;
+  margin: 16px auto;
+  padding: 10px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border: 1px solid #e2e0f2;
+}
+.voucher-order-id {
+  font-family: monospace;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--violet);
+  margin: 6px 0;
+}
+.voucher-prep-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 16px;
+  background: var(--mint-pale);
+  color: var(--mint);
+  margin-bottom: 14px;
+}
+
+/* -------------------------------------------------------------
+   LIFESTYLE & CAFÉ MEMBER CARDS DECK (IN #cards-view)
+------------------------------------------------------------- */
+.member-pass-card {
+  background: radial-gradient(circle at 90% 15%, rgba(255, 208, 102, 0.3) 0%, transparent 60%),
+              linear-gradient(135deg, #1f1a0e 0%, #0d0b06 100%);
+  border: 1px solid rgba(255, 208, 102, 0.4);
+  border-radius: 20px;
+  padding: 24px 26px;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 24px 0 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+.member-pass-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(60deg, transparent 40%, rgba(255, 208, 102, 0.25) 50%, transparent 60%);
+  animation: card-light-sweep 8s linear infinite;
+  pointer-events: none;
+}
+.member-pass-info h3 {
+  font-family: Manrope, sans-serif;
+  font-size: 1.35rem;
+  margin: 4px 0;
+  color: #ffd066;
+}
+.member-pass-info p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  margin: 0;
+}
+.member-pass-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  padding: 3px 10px;
+  border-radius: 10px;
+  background: rgba(255, 208, 102, 0.2);
+  color: #ffd066;
+  border: 1px solid rgba(255, 208, 102, 0.4);
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] .drink-card {
+  background: #14112c;
+  border-color: #28234e;
+  color: #f1efff;
+}
+[data-theme="dark"] .drink-card h3 {
+  color: #ffffff;
+}
+[data-theme="dark"] .drink-note-chip {
+  background: #1d1840;
+  color: #a7a2c8;
+}
+[data-theme="dark"] .drink-tab-btn {
+  background: #14112c;
+  border-color: #28234e;
+  color: #a7a2c8;
+}
+[data-theme="dark"] .ai-crafter-dialog,
+[data-theme="dark"] .drink-voucher-dialog {
+  background: #14112c;
+  border-color: #28234e;
+  color: #f1efff;
+}
+[data-theme="dark"] .crafter-tile {
+  background: #1c183d;
+  border-color: #2b255c;
+}
+[data-theme="dark"] .crafter-tile strong {
+  color: #ffffff;
+}
+[data-theme="dark"] .synthesis-status-text {
+  color: #ffffff;
+}

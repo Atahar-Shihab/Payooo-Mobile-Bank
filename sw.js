@@ -1,5 +1,5 @@
 // Payoo Service Worker for offline asset caching
-const CACHE_NAME = "payoo-v3.0";
+const CACHE_NAME = "payoo-v3.2";
 const ASSETS_TO_CACHE = [
   "./",
   "./index.html",
@@ -7,6 +7,7 @@ const ASSETS_TO_CACHE = [
   "./assets/css/app.css",
   "./script/app.js",
   "./script/landing-3d.js",
+  "./assets/video/bg-cinematic.mp4",
   "./assets/logo.png",
   "./assets/Logo-full.png",
   "./manifest.json"

@@ -6,6 +6,121 @@
 
   const INITIAL_STATE = {
     balance: 45000,
+    rewardPoints: 150,
+    drinks: [
+      {
+        id: "cyber-matcha",
+        name: "Cyber Matcha Cloud",
+        category: "matcha",
+        price: 280,
+        points: 60,
+        rating: "4.95",
+        orders: 1420,
+        icon: "🍵",
+        tag: "Bestseller",
+        vibe: "Electric Kyoto Vibe",
+        notes: "Ceremonial Grade Uji Matcha, Oat Milk Foam, Madagascar Vanilla Caviar, Blue Spirulina Cloud",
+        color: "linear-gradient(135deg, #10b981 0%, #059669 100%)"
+      },
+      {
+        id: "neon-nitro",
+        name: "Neon Nitro Cold Brew",
+        category: "coffee",
+        price: 260,
+        points: 55,
+        rating: "4.92",
+        orders: 1890,
+        icon: "☕",
+        tag: "High Caffeine",
+        vibe: "Cyberpunk Midnight",
+        notes: "18-hr Single-Origin Ethiopian Cold Brew, Nitrogen Infusion, Caramelized Orange Peel, Cacao Dust",
+        color: "linear-gradient(135deg, #f59e0b 0%, #b45309 100%)"
+      },
+      {
+        id: "electric-pitaya",
+        name: "Electric Velvet Pitaya",
+        category: "sparkler",
+        price: 290,
+        points: 65,
+        rating: "4.98",
+        orders: 1150,
+        icon: "🌺",
+        tag: "AI Masterpiece",
+        vibe: "Neon Tropic Aurora",
+        notes: "Cold-Pressed Dragonfruit, Lychee Infusion, Coconut Nectar, Sparkling Tonic, Edible 24k Gold Flakes",
+        color: "linear-gradient(135deg, #ec4899 0%, #a855f7 100%)"
+      },
+      {
+        id: "nebula-macchiato",
+        name: "Nebula Salted Macchiato",
+        category: "coffee",
+        price: 310,
+        points: 70,
+        rating: "4.89",
+        orders: 980,
+        icon: "🪐",
+        tag: "Signature",
+        vibe: "Galactic Dream",
+        notes: "Double Ristretto Espresso, Smoked Himalayan Sea Salt, Steamed Velvet Milk, Lavender Infused Foam",
+        color: "linear-gradient(135deg, #6366f1 0%, #4338ca 100%)"
+      },
+      {
+        id: "solar-citrus",
+        name: "Solar Citrus Cold Drip",
+        category: "sparkler",
+        price: 240,
+        points: 50,
+        rating: "4.88",
+        orders: 820,
+        icon: "🍊",
+        tag: "Hydration Peak",
+        vibe: "Sunburst Radiance",
+        notes: "Yuzu Citrus Extract, Blood Orange Reduction, Cascara Coffee Cherry Tea, Sparkling Glacier Water",
+        color: "linear-gradient(135deg, #f97316 0%, #ea580c 100%)"
+      },
+      {
+        id: "ruby-hibiscus",
+        name: "Ruby Hibiscus Botanical",
+        category: "sparkler",
+        price: 220,
+        points: 45,
+        rating: "4.85",
+        orders: 730,
+        icon: "🍷",
+        tag: "Antioxidant",
+        vibe: "Zen Botanical Garden",
+        notes: "Wild Egyptian Hibiscus, Rosehip Syrup, Lemongrass Mist, Clarified Apple Essence, Pomegranate Pearls",
+        color: "linear-gradient(135deg, #e11d48 0%, #9f1239 100%)"
+      },
+      {
+        id: "obsidian-mocha",
+        name: "Obsidian Belgian Mocha",
+        category: "coffee",
+        price: 320,
+        points: 75,
+        rating: "4.96",
+        orders: 1640,
+        icon: "🍫",
+        tag: "Decadent",
+        vibe: "Dark Velvet Luxury",
+        notes: "85% Single-Estate Belgian Dark Chocolate, Espresso Roast, Almond Velouté, Torched Marshmallow Cream",
+        color: "linear-gradient(135deg, #475569 0%, #1e293b 100%)"
+      },
+      {
+        id: "zen-pistachio",
+        name: "Zen Cardamom Pistachio",
+        category: "matcha",
+        price: 340,
+        points: 80,
+        rating: "4.97",
+        orders: 1290,
+        icon: "✨",
+        tag: "Artisan Craft",
+        vibe: "Spice Route Serenity",
+        notes: "Stone-Ground Sicilian Pistachio Cream, Green Cardamom Infused Milk, Micro-foamed Espresso, Saffron Threads",
+        color: "linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)"
+      }
+    ],
     goal: 18400,
     goalTarget: 60000,
     monthlyBudget: 25000,
@@ -60,7 +175,8 @@
     bonus: { icon: "fa-gift", className: "positive", label: "Reward redeemed" },
     goal: { icon: "fa-piggy-bank", className: "negative", label: "Added to savings" },
     "goal-withdraw": { icon: "fa-vault", className: "positive", label: "Withdrawn from savings" },
-    split: { icon: "fa-users-viewfinder", className: "positive", label: "Split bill requested" }
+    split: { icon: "fa-users-viewfinder", className: "positive", label: "Split bill requested" },
+    "drink-order": { icon: "fa-mug-hot", className: "negative", label: "Payoo Café Drink Order" }
   };
 
   const REMITTANCE_RATES = {
@@ -94,6 +210,8 @@
         virtualCard: stored.virtualCard ? { ...INITIAL_STATE.virtualCard, ...stored.virtualCard } : structuredClone(INITIAL_STATE.virtualCard),
         vaults: Array.isArray(stored.vaults) && stored.vaults.length ? stored.vaults : structuredClone(INITIAL_STATE.vaults),
         contacts: Array.isArray(stored.contacts) ? stored.contacts : INITIAL_STATE.contacts,
+        rewardPoints: typeof stored.rewardPoints === "number" ? stored.rewardPoints : INITIAL_STATE.rewardPoints,
+        drinks: Array.isArray(stored.drinks) && stored.drinks.length ? stored.drinks : structuredClone(INITIAL_STATE.drinks),
         notifications: Array.isArray(stored.notifications) ? stored.notifications : INITIAL_STATE.notifications,
         history: Array.isArray(stored.history) ? stored.history : INITIAL_STATE.history
       };
@@ -406,6 +524,81 @@
   function initLogin() {
     const form = document.querySelector("#login-form");
     if (!form) return;
+
+
+    // Landing Atmosphere Switcher (Cinematic Video / 3D Cyber Mesh / Obsidian Dark)
+    const atmosphereBtn = document.querySelector("#atmosphere-toggle-btn");
+    const atmosphereLabel = document.querySelector("#atmosphere-label");
+    const videoContainer = document.querySelector("#cinematic-bg-container");
+    const cinematicCanvas = document.querySelector("#cinematic-canvas") || document.querySelector("#cinematic-canvas-container");
+
+    if (atmosphereBtn) {
+      const ATMOSPHERES = [
+        { id: "video", label: "Cinematic Video" },
+        { id: "mesh", label: "3D Cyber Mesh" },
+        { id: "obsidian", label: "Obsidian Dark" }
+      ];
+
+      const applyAtmosphere = (mode, notify = false) => {
+        if (mode === "video") {
+          if (videoContainer) {
+            videoContainer.style.display = "block";
+            videoContainer.style.opacity = "1";
+          }
+          if (cinematicCanvas) {
+            cinematicCanvas.style.display = "block";
+            cinematicCanvas.style.opacity = "0.35";
+          }
+        } else if (mode === "mesh") {
+          if (videoContainer) {
+            videoContainer.style.opacity = "0";
+            setTimeout(() => {
+              if (localStorage.getItem("payoo_landing_atmosphere") === "mesh" && videoContainer) {
+                videoContainer.style.display = "none";
+              }
+            }, 350);
+          }
+          if (cinematicCanvas) {
+            cinematicCanvas.style.display = "block";
+            cinematicCanvas.style.opacity = "1";
+          }
+        } else {
+          // obsidian minimal dark
+          if (videoContainer) {
+            videoContainer.style.opacity = "0";
+            setTimeout(() => {
+              if (localStorage.getItem("payoo_landing_atmosphere") === "obsidian" && videoContainer) {
+                videoContainer.style.display = "none";
+              }
+            }, 350);
+          }
+          if (cinematicCanvas) {
+            cinematicCanvas.style.opacity = "0";
+          }
+        }
+
+        if (atmosphereLabel) {
+          const match = ATMOSPHERES.find((a) => a.id === mode) || ATMOSPHERES[0];
+          atmosphereLabel.textContent = match.label;
+        }
+
+        localStorage.setItem("payoo_landing_atmosphere", mode);
+        if (notify) {
+          const match = ATMOSPHERES.find((a) => a.id === mode) || ATMOSPHERES[0];
+          toast(`Atmosphere switched to: ${match.label}`);
+        }
+      };
+
+      const savedAtmosphere = localStorage.getItem("payoo_landing_atmosphere") || "video";
+      applyAtmosphere(savedAtmosphere, false);
+
+      atmosphereBtn.addEventListener("click", () => {
+        const current = localStorage.getItem("payoo_landing_atmosphere") || "video";
+        const curIdx = ATMOSPHERES.findIndex((a) => a.id === current);
+        const nextIdx = (curIdx + 1) % ATMOSPHERES.length;
+        applyAtmosphere(ATMOSPHERES[nextIdx].id, true);
+      });
+    }
 
     const sessionActive = sessionStorage.getItem(SESSION_KEY) === "active";
     const sessionBanner = document.querySelector("#active-session-banner");
@@ -874,6 +1067,7 @@
       renderContacts();
       renderNotifications();
       renderActivity(document.querySelector("#history-search")?.value || "", activeFilter, activePeriod);
+      if (typeof renderRewardsPoints === "function") renderRewardsPoints();
     };
 
     // Add transaction to history
@@ -927,6 +1121,7 @@
       });
       updateHeading(view);
       if (view === "insights") renderWeeklyChart();
+      if (view === "rewards" || view === "cards") { if (typeof renderDrinkCards === "function") renderDrinkCards(); }
       window.scrollTo({ top: 0, behavior: "smooth" });
       document.querySelector(".sidebar")?.classList.remove("is-open");
     };
@@ -1573,6 +1768,11 @@
         { id: "scan", title: "Scan QR Code to Pay", desc: "Viewfinder camera scan", icon: "fa-qrcode", group: "Services", run: () => openScanQR() },
         { id: "myqr", title: "My Personal QR Code", desc: "Show to receive money", icon: "fa-qrcode", group: "Services", run: () => openMyQR() },
         { id: "bonus", title: "Redeem Welcome Reward (৳100)", desc: "Use code PAYOO100", icon: "fa-gift", group: "Services", run: () => openTransaction("bonus") },
+        { id: "cafe", title: "Payoo Café Lounge & Drinks", desc: "AI artisan coffee & member drinks", icon: "fa-mug-hot", group: "Lifestyle", run: () => navigate("rewards") },
+        { id: "craft-drink", title: "AI Barista Studio", desc: "Synthesize molecular custom drinks", icon: "fa-wand-magic-sparkles", group: "Lifestyle", run: () => openAiCrafterStudio() },
+        { id: "order-matcha", title: "1-Tap Order: Cyber Matcha Cloud", desc: "৳280 · Ceremonial Uji Matcha & Oat Foam", icon: "fa-leaf", group: "Lifestyle", run: () => handleOrderDrink("cyber-matcha") },
+        { id: "order-nitro", title: "1-Tap Order: Neon Nitro Cold Brew", desc: "৳260 · 18-hr Single-Origin Nitrogen Brew", icon: "fa-coffee", group: "Lifestyle", run: () => handleOrderDrink("neon-nitro") },
+        { id: "video-bg", title: "Toggle Cinematic Video Background", desc: "Ambient motion visuals", icon: "fa-film", group: "Preferences", run: () => toggleDashboardVideo() },
         { id: "nav-overview", title: "Navigate: Overview", desc: "Wallet balance & summary", icon: "fa-grid-2", group: "Navigation", run: () => navigate("overview") },
         { id: "nav-activity", title: "Navigate: Activity Feed", desc: "Transaction history & receipts", icon: "fa-arrow-right-arrow-left", group: "Navigation", run: () => navigate("activity") },
         { id: "nav-insights", title: "Navigate: Insights", desc: "7-day trends & categories", icon: "fa-chart-pie", group: "Navigation", run: () => navigate("insights") },
@@ -2941,6 +3141,374 @@
       });
     };
 
+
+    // -------------------------------------------------------------
+    // PAYOO CAFÉ × AI ARTISAN DRINKS & CINEMATIC AMBIANCE
+    // -------------------------------------------------------------
+    let renderDrinkCards = () => {};
+    let renderRewardsPoints = () => {};
+    let handleOrderDrink = () => {};
+    let openAiCrafterStudio = () => {};
+    let toggleDashboardVideo = () => {};
+
+    const initAiDrinksAndAmbiance = () => {
+      // 1. Dashboard Background Video Overlay Toggle
+      const dashboardVideoContainer = document.querySelector("#dashboard-bg-video-container");
+      const dashboardVideoToggleBtn = document.querySelector("#dashboard-video-toggle-btn");
+
+      const applyDashboardVideo = (active) => {
+        if (!dashboardVideoContainer) return;
+        dashboardVideoContainer.classList.toggle("is-active", active);
+        if (dashboardVideoToggleBtn) {
+          dashboardVideoToggleBtn.classList.toggle("is-active", active);
+          dashboardVideoToggleBtn.setAttribute(
+            "title",
+            active ? "Cinematic Video Ambiance: Active (Click to disable)" : "Cinematic Video Ambiance: Off (Click to enable)"
+          );
+        }
+        localStorage.setItem("payoo_dashboard_video", active ? "true" : "false");
+      };
+
+      toggleDashboardVideo = () => {
+        const isCurrentlyActive = dashboardVideoContainer?.classList.contains("is-active") || false;
+        const nextState = !isCurrentlyActive;
+        applyDashboardVideo(nextState);
+        playSound("tap", state.soundEnabled);
+        toast(nextState ? "Cinematic background video ambiance activated." : "Cinematic background video disabled.");
+      };
+
+      if (dashboardVideoToggleBtn) {
+        dashboardVideoToggleBtn.addEventListener("click", toggleDashboardVideo);
+      }
+      if (localStorage.getItem("payoo_dashboard_video") === "true") {
+        applyDashboardVideo(true);
+      }
+
+      // 2. Rewards Points Display Sync
+      renderRewardsPoints = () => {
+        const ptsDisplay = document.querySelector("#rewards-pts-display");
+        if (ptsDisplay) {
+          ptsDisplay.textContent = `${state.rewardPoints ?? 150} pts`;
+        }
+      };
+
+      // 3. Modals & Elements
+      const aiDrinkModal = document.querySelector("#ai-drink-modal");
+      const aiDrinkForm = document.querySelector("#ai-drink-form");
+      const aiDrinkClose = document.querySelector("#ai-drink-close");
+      const drinkOrderModal = document.querySelector("#drink-order-modal");
+      const drinkOrderClose = document.querySelector("#drink-order-close");
+      const doneVoucherBtn = document.querySelector("#done-voucher-btn");
+      const printVoucherBtn = document.querySelector("#print-voucher-btn");
+      const launchAiCrafterBtn = document.querySelector("#launch-ai-crafter-btn");
+      const openCrafterFromCardsBtn = document.querySelector("#open-crafter-from-cards-btn");
+      const viewAllDrinksCta = document.querySelector("#view-all-drinks-cta");
+
+      if (viewAllDrinksCta) {
+        viewAllDrinksCta.addEventListener("click", () => navigate("rewards"));
+      }
+
+      let activeDrinkCategory = "all";
+
+      const createDrinkCardHTML = (drink) => {
+        return `
+          <article class="drink-card ${drink.isCustom ? "is-custom-synthesis" : ""}" data-drink-card-id="${safe(drink.id)}">
+            <div class="drink-header" style="background: ${drink.color};">
+              <div class="liquid-wave"></div>
+              <div class="liquid-wave liquid-wave--two"></div>
+              <span class="drink-tag-pill">${safe(drink.tag)}</span>
+              <div class="drink-visual" aria-hidden="true">${drink.icon}</div>
+            </div>
+            <div class="drink-body">
+              <div class="drink-meta">
+                <span class="drink-rating"><i class="fa-solid fa-star"></i> ${safe(drink.rating)}</span>
+                <span><i class="fa-solid fa-fire-flame-curved"></i> ${Number(drink.orders || 1).toLocaleString()} orders</span>
+                <span class="drink-vibe">${safe(drink.vibe)}</span>
+              </div>
+              <h3 class="drink-title">${safe(drink.name)}</h3>
+              <p class="drink-notes">${safe(drink.notes)}</p>
+              <div class="drink-footer">
+                <div>
+                  <span class="drink-price-label">Price / Redeem</span>
+                  <div class="drink-price-val">৳${money(drink.price)} <small style="font-size: 0.72rem; color: var(--violet); font-weight: 700;">/ ${drink.points} pts</small></div>
+                </div>
+                <div class="drink-actions">
+                  <button class="button button--primary button--sm drink-order-btn" type="button" data-drink-id="${safe(drink.id)}" title="Order with Payoo Balance">
+                    <i class="fa-solid fa-bolt"></i> Order
+                  </button>
+                  <button class="button button--soft button--sm drink-redeem-btn" type="button" data-drink-id="${safe(drink.id)}" title="Redeem with ${drink.points} points">
+                    <i class="fa-solid fa-sparkles"></i> Redeem
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+      };
+
+      const attachDrinkCardInteractions = (container) => {
+        if (!container) return;
+        container.querySelectorAll(".drink-order-btn").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            handleOrderDrink(btn.dataset.drinkId, false);
+          });
+        });
+        container.querySelectorAll(".drink-redeem-btn").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            handleOrderDrink(btn.dataset.drinkId, true);
+          });
+        });
+
+        // Interactive 3D Card Tilt with Specular Motion
+        container.querySelectorAll(".drink-card").forEach((card) => {
+          card.addEventListener("mousemove", (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const rotateX = ((y / rect.height) - 0.5) * -10;
+            const rotateY = ((x / rect.width) - 0.5) * 10;
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
+          });
+          card.addEventListener("mouseleave", () => {
+            card.style.transform = "";
+          });
+        });
+      };
+
+      renderDrinkCards = (category = activeDrinkCategory) => {
+        activeDrinkCategory = category;
+        const rewardsGrid = document.querySelector("#drink-cards-container");
+        const lifestyleGrid = document.querySelector("#lifestyle-drink-cards");
+
+        renderRewardsPoints();
+
+        if (rewardsGrid) {
+          const list = category === "all" ? state.drinks : state.drinks.filter((d) => d.category === category);
+          if (!list || list.length === 0) {
+            rewardsGrid.innerHTML = `
+              <div style="grid-column: 1 / -1; padding: 40px 20px; text-align: center; background: var(--surface); border-radius: 16px; border: 1px dashed var(--line);">
+                <div style="font-size: 2.2rem; margin-bottom: 10px;">🧪</div>
+                <h3 style="margin: 0 0 6px;">No beverages in this category yet</h3>
+                <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 14px;">Use the AI Barista Studio to synthesize a custom molecular drink!</p>
+                <button class="button button--primary button--sm" type="button" onclick="document.querySelector('#launch-ai-crafter-btn')?.click()"><i class="fa-solid fa-wand-magic-sparkles"></i> Open AI Barista Studio</button>
+              </div>
+            `;
+          } else {
+            rewardsGrid.innerHTML = list.map((drink) => createDrinkCardHTML(drink)).join("");
+            attachDrinkCardInteractions(rewardsGrid);
+          }
+        }
+
+        if (lifestyleGrid) {
+          // Top 3 featured or custom synthesized drinks
+          const featured = [...state.drinks].sort((a, b) => (b.isCustom ? 1 : 0) - (a.isCustom ? 1 : 0)).slice(0, 3);
+          lifestyleGrid.innerHTML = featured.map((drink) => createDrinkCardHTML(drink)).join("");
+          attachDrinkCardInteractions(lifestyleGrid);
+        }
+      };
+
+      // Category Tabs Switching
+      const categoryTabsContainer = document.querySelector("#drink-category-tabs");
+      if (categoryTabsContainer) {
+        categoryTabsContainer.querySelectorAll(".drink-tab-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            categoryTabsContainer.querySelectorAll(".drink-tab-btn").forEach((b) => b.classList.remove("is-active"));
+            btn.classList.add("is-active");
+            playSound("tap", state.soundEnabled);
+            renderDrinkCards(btn.dataset.cat || "all");
+          });
+        });
+      }
+
+      // Handle Drink Order & Redeem
+      handleOrderDrink = (drinkId, isPointsRedeem = false) => {
+        const drink = state.drinks.find((d) => d.id === drinkId);
+        if (!drink) {
+          toast("Drink not found.", "error");
+          return;
+        }
+
+        if (isPointsRedeem) {
+          const requiredPts = drink.points || 50;
+          const currentPts = state.rewardPoints ?? 150;
+          if (currentPts < requiredPts) {
+            toast(`Insufficient reward points! You need ${requiredPts} pts, but have ${currentPts} pts.`, "error");
+            return;
+          }
+          state.rewardPoints = currentPts - requiredPts;
+          addTransaction("drink-order", 0, `${drink.name} (Redeemed with ${requiredPts} pts)`, "Café Reward Drink", 0);
+        } else {
+          if (state.balance < drink.price) {
+            toast(`Insufficient balance (৳${money(state.balance)}) to order ${drink.name} (৳${money(drink.price)}).`, "error");
+            return;
+          }
+          // Deduct price and award 10 bonus points per purchase
+          state.rewardPoints = (state.rewardPoints ?? 150) + 10;
+          addTransaction("drink-order", drink.price, `${drink.name} · Gulshan 2 Flagship Lounge`, "Payoo Café Drink Order", 0);
+        }
+
+        drink.orders = (drink.orders || 0) + 1;
+        save();
+        renderDrinkCards();
+
+        // Populate Drink Voucher Sheet
+        const orderId = `DRK-${Math.floor(100000 + Math.random() * 900000)}`;
+        const nameEl = document.querySelector("#voucher-drink-name");
+        const orderIdEl = document.querySelector("#voucher-order-id");
+        const methodEl = document.querySelector("#voucher-payment-method");
+        const amountEl = document.querySelector("#voucher-amount-paid");
+        const qrBox = document.querySelector("#voucher-qr-container");
+
+        if (nameEl) nameEl.textContent = drink.name;
+        if (orderIdEl) orderIdEl.textContent = orderId;
+        if (methodEl) methodEl.textContent = isPointsRedeem ? `Reward Points (${drink.points} pts)` : "Virtual Platinum Card (•••• 9184)";
+        if (amountEl) amountEl.textContent = isPointsRedeem ? "৳0.00 (Redeemed)" : `৳${money(drink.price)}`;
+
+        if (qrBox) {
+          const payload = `PAYOO-CAFE:${orderId}:${drink.id}:${Date.now()}`;
+          qrBox.innerHTML = generateQRSvg(payload);
+        }
+
+        if (drinkOrderModal) {
+          if (typeof drinkOrderModal.showModal === "function") drinkOrderModal.showModal();
+          else drinkOrderModal.setAttribute("open", "");
+        }
+
+        triggerConfetti(55);
+        toast(`☕ Order placed! Pickup voucher for ${drink.name} generated.`, "success");
+      };
+
+      // Voucher Modal Close and Print
+      if (drinkOrderClose) drinkOrderClose.addEventListener("click", () => drinkOrderModal?.close());
+      if (doneVoucherBtn) doneVoucherBtn.addEventListener("click", () => drinkOrderModal?.close());
+      if (printVoucherBtn) printVoucherBtn.addEventListener("click", () => window.print());
+
+      // AI Drink Crafter Studio Open / Close
+      openAiCrafterStudio = () => {
+        if (!aiDrinkModal) return;
+        playSound("tap", state.soundEnabled);
+        document.querySelector("#crafter-inputs-step")?.classList.remove("hidden");
+        document.querySelector("#crafter-synthesis-step")?.classList.add("hidden");
+        if (typeof aiDrinkModal.showModal === "function") aiDrinkModal.showModal();
+        else aiDrinkModal.setAttribute("open", "");
+      };
+
+      if (launchAiCrafterBtn) launchAiCrafterBtn.addEventListener("click", openAiCrafterStudio);
+      if (openCrafterFromCardsBtn) openCrafterFromCardsBtn.addEventListener("click", openAiCrafterStudio);
+      if (aiDrinkClose) aiDrinkClose.addEventListener("click", () => aiDrinkModal?.close());
+
+      // Tile selection in Crafter
+      ["#base-options", "#vibe-options", "#booster-options"].forEach((gridSelector) => {
+        const grid = document.querySelector(gridSelector);
+        if (!grid) return;
+        grid.querySelectorAll(".crafter-tile").forEach((tile) => {
+          tile.addEventListener("click", () => {
+            grid.querySelectorAll(".crafter-tile").forEach((t) => t.classList.remove("is-selected"));
+            tile.classList.add("is-selected");
+            playSound("tap", state.soundEnabled);
+          });
+        });
+      });
+
+      // Sweetness Slider
+      const sweetnessSlider = document.querySelector("#sweetness-slider");
+      const sweetnessValLabel = document.querySelector("#sweetness-val");
+      if (sweetnessSlider && sweetnessValLabel) {
+        const SWEET_LABELS = {
+          "0": "0% (Unsweetened)",
+          "25": "25% (Subtle Sweet)",
+          "50": "50% (Standard)",
+          "75": "75% (Sweet Velvet)",
+          "100": "100% (Extra Sweet)"
+        };
+        sweetnessSlider.addEventListener("input", () => {
+          sweetnessValLabel.textContent = SWEET_LABELS[sweetnessSlider.value] || `${sweetnessSlider.value}%`;
+        });
+      }
+
+      // AI Crafter Form Submission & Molecular Synthesis Animation
+      if (aiDrinkForm) {
+        aiDrinkForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const selectedBaseTile = document.querySelector("#base-options .crafter-tile.is-selected");
+          const selectedVibeTile = document.querySelector("#vibe-options .crafter-tile.is-selected");
+          const selectedBoosterTile = document.querySelector("#booster-options .crafter-tile.is-selected");
+
+          const baseName = selectedBaseTile?.dataset.base || "Nitro Cold Brew";
+          const baseEmoji = selectedBaseTile?.dataset.emoji || "☕";
+          const baseGrad = selectedBaseTile?.dataset.grad || "linear-gradient(135deg, #10b981, #6955f6)";
+
+          const vibeName = selectedVibeTile?.dataset.vibe || "Cyber Energy";
+          const vibeFlavor = selectedVibeTile?.dataset.flavor || "Crisp aromatics with velvet body";
+          const boosterName = selectedBoosterTile?.dataset.booster || "Superfood Booster";
+          const sweetnessText = sweetnessValLabel?.textContent || "50% (Standard)";
+
+          const inputsStep = document.querySelector("#crafter-inputs-step");
+          const synthStep = document.querySelector("#crafter-synthesis-step");
+          const synthEmoji = document.querySelector("#synthesis-emoji");
+          const synthStatus = document.querySelector("#synthesis-status-text");
+          const synthSub = document.querySelector("#synthesis-subtext");
+
+          if (synthEmoji) synthEmoji.textContent = baseEmoji;
+          if (inputsStep) inputsStep.classList.add("hidden");
+          if (synthStep) synthStep.classList.remove("hidden");
+
+          playSound("tap", state.soundEnabled);
+
+          if (synthStatus) synthStatus.textContent = "Analyzing flavor harmonics & molecular density...";
+          if (synthSub) synthSub.textContent = `Aligning ${baseName} with ${vibeName} profile...`;
+
+          setTimeout(() => {
+            if (synthStatus) synthStatus.textContent = `Infusing ${boosterName} into ${baseName}...`;
+            if (synthSub) synthSub.textContent = "Calibrating pH balance, temperature, and micro-foam texture...";
+            playSound("beep", state.soundEnabled);
+          }, 800);
+
+          setTimeout(() => {
+            if (synthStatus) synthStatus.textContent = "Finalizing aromatic volatile compounds & crystal seal...";
+            if (synthSub) synthSub.textContent = "Synthesizing printable digital card & pricing matrix...";
+          }, 1600);
+
+          setTimeout(() => {
+            const customId = `custom-ai-${Date.now()}`;
+            const newDrink = {
+              id: customId,
+              name: `AI ${vibeName.split(" ")[0]} ${baseName}`,
+              category: "custom-ai",
+              price: 320,
+              points: 70,
+              rating: "5.00",
+              orders: 1,
+              icon: baseEmoji,
+              tag: "AI Custom Special",
+              vibe: vibeName,
+              notes: `${vibeFlavor}. Infused with ${boosterName}, calibrated at ${sweetnessText} sweetness.`,
+              color: baseGrad,
+              isCustom: true
+            };
+
+            state.drinks.unshift(newDrink);
+            save();
+
+            if (inputsStep) inputsStep.classList.remove("hidden");
+            if (synthStep) synthStep.classList.add("hidden");
+            aiDrinkModal?.close();
+
+            renderDrinkCards("all");
+            triggerConfetti(65);
+            playSound("success", state.soundEnabled);
+            toast(`✨ Synthesized "${newDrink.name}"! Added to your drink cards menu.`, "success");
+          }, 2400);
+        });
+      }
+
+      // Initial render of cards & points
+      renderDrinkCards();
+    };
+
+    initAiDrinksAndAmbiance();
     initScreenLock();
     initAICoach();
     initBankStatement();

@@ -16,6 +16,8 @@
       <img src="https://img.shields.io/badge/CI%2FCD-Automated%20Deploy-6955f6?style=for-the-badge&logo=githubactions&logoColor=white" alt="CI/CD"/>
     </a>
     <img src="https://img.shields.io/badge/3D%20Engine-Three.js%20WebGL-ff5e7e?style=for-the-badge&logo=three.js&logoColor=white" alt="Three.js"/>
+    <img src="https://img.shields.io/badge/AI%20Barista-Artisan%20Drink%20Studio-10b981?style=for-the-badge&logo=coffeescript&logoColor=white" alt="AI Barista"/>
+    <img src="https://img.shields.io/badge/Cinematics-Ambient%20Motion%20Video-f59e0b?style=for-the-badge&logo=quicktime&logoColor=white" alt="Cinematic Video"/>
     <img src="https://img.shields.io/badge/PWA-Installable%20Offline-38bdf8?style=for-the-badge&logo=pwa&logoColor=white" alt="PWA"/>
     <img src="https://img.shields.io/badge/License-MIT-ffd066?style=for-the-badge" alt="License"/>
   </p>
@@ -308,6 +310,44 @@ Try the complete wallet immediately without manual registration using the pre-co
 - **Interactive Keypad**: Real-time clock, animated 4-digit PIN indicator dots, haptic audio clicks, error shake on invalid PIN, and 1-tap Touch ID / Face ID simulation.
 
 , `€`, `£`, `✦`) gently float across the dark glass background with organic physics.
+
+</details>
+
+---
+
+<details>
+<summary><strong>☕ Payoo Café &amp; AI Artisan Drink Cards (Lifestyle &amp; Member Perks)</strong> (Click to expand)</summary>
+
+<br/>
+
+Payoo integrates an exclusive lifestyle loyalty ecosystem with high-tech artisan beverage cards and automated barista fulfillment:
+- **AI-Crafted Beverage Menu**: 8 handcrafted signature creations with fluid liquid wave animations, floating 3D emoji badges, and real-time category filtering (*Matcha &amp; Teas*, *Cold Brew &amp; Coffee*, *Sparklers &amp; Tonics*, *AI Custom Specials*):
+  - 🍵 **Cyber Matcha Cloud** (৳280 · 60 pts) — Ceremonial Grade Uji Matcha, oat milk foam &amp; Madagascar vanilla caviar.
+  - ☕ **Neon Nitro Cold Brew** (৳260 · 55 pts) — 18-hr single-origin Ethiopian cold brew with nitrogen cascade.
+  - 🌺 **Electric Velvet Pitaya** (৳290 · 65 pts) — Cold-pressed dragonfruit, lychee nectar &amp; edible 24k gold flakes.
+  - 🪐 **Nebula Salted Macchiato** (৳310 · 70 pts) — Double ristretto espresso, smoked Himalayan salt &amp; lavender foam.
+  - 🍊 **Solar Citrus Cold Drip** (৳240 · 50 pts) — Yuzu citrus extract, blood orange reduction &amp; cascara coffee cherry tea.
+  - 🍷 **Ruby Hibiscus Botanical** (৳220 · 45 pts) — Wild Egyptian hibiscus, lemongrass mist &amp; clarified pomegranate pearls.
+  - 🍫 **Obsidian Belgian Mocha** (৳320 · 75 pts) — 85% Belgian dark chocolate, almond velouté &amp; torched marshmallow cream.
+  - ✨ **Zen Cardamom Pistachio** (৳340 · 80 pts) — Stone-ground Sicilian pistachio cream, green cardamom &amp; saffron threads.
+- **1-Tap Wallet Checkout &amp; Rewards Points**: Order in one tap using available wallet balance or redeem accumulated Payoo reward points (earns +10 pts on every order).
+- **Interactive AI Barista Studio (Molecular Beverage Synthesis)**: Launch the AI Crafter to synthesize customized drinks by selecting base, flavor mood profile, superfood booster (Nootropic Lion's Mane, Electrolytes, 24K Gold Flakes), and calibrated sweetness slider. Features a live multi-stage molecular synthesis animation before minting the custom drink card into your active menu.
+- **Official Barista Pickup Voucher with Dynamic QR Code**: Generates a verified digital pickup pass with a scannable SVG QR voucher code, unique order reference (`DRK-XXXXXX`), sound chimes, confetti celebration, and 1-click printable receipt slip.
+- **Lifestyle Perk Cards Deck**: Embedded inside `#cards-view` alongside the Virtual Platinum Card with the VIP **Payoo Café Gold Member Pass** offering 15% partner cashback.
+
+</details>
+
+<details>
+<summary><strong>🎬 Cinematic Motion Video &amp; Multi-Atmosphere Switcher</strong> (Click to expand)</summary>
+
+<br/>
+
+- **Landing Page Atmosphere Switcher**: 1-click navigation pill cycling between three live visual themes:
+  - 🟢 **Cinematic Video**: High-definition ambient motion background video with glassmorphism overlays and soft lighting.
+  - 🟣 **3D Cyber Mesh**: Hardware-accelerated Three.js WebGL particle mesh with interactive mouse repulsion physics.
+  - ⚪ **Obsidian Dark**: Ultra-minimal, distraction-free matte dark obsidian mode.
+- **Dashboard Video Ambiance Toggle**: Seamless topbar button (`#dashboard-video-toggle-btn`) that toggles a subtle, blurred cinematic video backdrop behind glassmorphism widgets.
+- **100% Offline PWA Caching**: Stored locally in `assets/video/bg-cinematic.mp4` and pre-cached via Service Worker `payoo-v3.2` for zero bandwidth consumption and offline availability.
 
 </details>
 

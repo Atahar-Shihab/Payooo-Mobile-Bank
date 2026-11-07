@@ -19,6 +19,13 @@
     <link rel="stylesheet" href="./assets/css/app.css" />
   </head>
   <body class="app-page">
+    <!-- Dashboard Ambient Background Video Layer (Toggleable) -->
+    <div id="dashboard-bg-video-container" class="dashboard-bg-video-container" aria-hidden="true">
+      <video id="dashboard-bg-video" class="dashboard-bg-video" autoplay muted loop playsinline preload="auto">
+        <source src="./assets/video/bg-cinematic.mp4" type="video/mp4" />
+      </video>
+    </div>
+
     <!-- Ambient Floating Currency Motion Mesh -->
     <div class="ambient-currency-mesh" aria-hidden="true">
       <span class="floating-glyph" style="top: 15%; left: 6%; font-size: 3.5rem;">৳</span>
@@ -65,6 +72,7 @@
               <span id="soundwave-label" style="font-size: 0.68rem; margin-left: 2px;">FX</span>
             </button>
             <button id="ai-coach-btn" class="round-button" aria-label="Payoo Intelligence AI" title="Payoo AI Money Coach"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+            <button id="dashboard-video-toggle-btn" class="round-button" aria-label="Toggle cinematic background video" title="Toggle Dashboard Video Ambiance"><i class="fa-solid fa-film"></i></button>
             <button id="theme-toggle-btn" class="round-button" aria-label="Toggle dark/light theme" title="Toggle Theme (Alt+T)"><i class="fa-solid fa-moon"></i></button>
             <button id="lock-wallet-btn" class="round-button" aria-label="Lock wallet" title="Lock Wallet Screen"><i class="fa-solid fa-lock"></i></button>
             <button id="my-qr-btn" class="round-button" aria-label="My QR Code" title="Show my Payoo QR Code"><i class="fa-solid fa-qrcode"></i></button>
@@ -306,6 +314,42 @@
                 </div>
               </div>
             </div>
+
+            <!-- Payoo Lifestyle & Member Perk Cards Deck -->
+            <div class="section-header" style="margin-top: 36px;">
+              <div>
+                <p class="eyebrow">LIFESTYLE &amp; MEMBERSHIP</p>
+                <h2>Payoo Café Gold Member Pass</h2>
+              </div>
+              <button id="view-all-drinks-cta" class="text-cta" data-view="rewards">Browse AI Drink Lounge <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+
+            <div class="member-pass-card">
+              <div class="member-pass-info">
+                <span class="member-pass-badge"><i class="fa-solid fa-crown"></i> VIP ACCESS</span>
+                <h3>Payoo Café Gold Pass</h3>
+                <p>15% instant cashback across 120+ partner artisan cafés &amp; 1 complimentary AI specialty beverage monthly.</p>
+                <div style="display: flex; gap: 14px; margin-top: 12px; font-size: 0.75rem; color: #ffd066;">
+                  <span><i class="fa-solid fa-percent"></i> 15% Cashback</span>
+                  <span><i class="fa-solid fa-star"></i> Tier: Platinum Barista</span>
+                  <span><i class="fa-solid fa-shield-halved"></i> Active</span>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
+                <button id="open-crafter-from-cards-btn" class="button button--gold button--sm" type="button"><i class="fa-solid fa-wand-magic-sparkles"></i> Craft AI Drink</button>
+                <small style="color: rgba(255,255,255,0.6); font-size: 0.7rem;">Member ID: PAYOO-CAFE-9184</small>
+              </div>
+            </div>
+
+            <div class="section-header" style="margin-top: 24px;">
+              <div>
+                <p class="eyebrow">ACTIVE DRINK CARDS</p>
+                <h2>Your Featured Beverage Cards</h2>
+              </div>
+              <span class="shortcut-hint"><i class="fa-solid fa-bolt"></i> 1-Tap Wallet Checkout</span>
+            </div>
+            <div id="lifestyle-drink-cards" class="drink-cards-grid" style="margin-bottom: 20px;"></div>
+
           </section>
 
           <!-- Vaults & Gold View -->
@@ -501,21 +545,48 @@
             </article>
           </section>
 
-          <!-- Rewards View -->
+                    <!-- Rewards / Payoo Café View -->
           <section id="rewards-view" class="app-view hidden">
-            <div class="rewards-hero">
-              <div>
-                <p class="eyebrow">PAYOO PLUS</p>
-                <h2>A little more for every move.</h2>
-                <p>Unlock exclusive treats, cashbacks, and vouchers as you transact.</p>
-                <button class="button button--light" data-action="bonus">Claim welcome bonus <i class="fa-solid fa-arrow-right"></i></button>
+            <div class="cafe-hero-banner">
+              <div class="cafe-hero-copy">
+                <span class="points-pill"><i class="fa-solid fa-sparkles"></i> PAYOO CAFÉ × AI BARISTA</span>
+                <h2>Sip the future of artisan coffee.</h2>
+                <p>Handcrafted single-origin roasts, nitrogen cold brews &amp; AI-formulated wellness elixirs. Order in 1-tap with your Payoo balance or redeem reward points.</p>
               </div>
-              <div class="reward-orb"><i class="fa-solid fa-gift"></i><span>150</span><small style="font-size: 0.65rem; font-weight: 700; opacity: 0.9;">pts</small></div>
+              <div class="cafe-hero-actions">
+                <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 14px; padding: 10px 14px; text-align: center;">
+                  <span style="font-size: 0.7rem; color: rgba(255,255,255,0.7); text-transform: uppercase; font-weight: 700;">Reward Points Balance</span>
+                  <strong id="rewards-pts-display" style="display: block; font-family: Manrope, sans-serif; font-size: 1.5rem; color: #ffd066;">150 pts</strong>
+                </div>
+                <button id="launch-ai-crafter-btn" class="button button--primary button--sm" type="button">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> AI Drink Crafter Studio
+                </button>
+              </div>
+            </div>
+
+            <!-- Category Tabs -->
+            <div class="drink-category-tabs" id="drink-category-tabs">
+              <button class="drink-tab-btn is-active" data-cat="all"><i class="fa-solid fa-border-all"></i> All Creations</button>
+              <button class="drink-tab-btn" data-cat="coffee"><i class="fa-solid fa-mug-hot"></i> Cold Brew &amp; Coffee</button>
+              <button class="drink-tab-btn" data-cat="matcha"><i class="fa-solid fa-leaf"></i> Matcha &amp; Teas</button>
+              <button class="drink-tab-btn" data-cat="sparkler"><i class="fa-solid fa-bottle-droplet"></i> Sparklers &amp; Tonics</button>
+              <button class="drink-tab-btn" data-cat="custom-ai"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Custom Specials</button>
+            </div>
+
+            <!-- Dynamic Drink Cards Grid -->
+            <div id="drink-cards-container" class="drink-cards-grid"></div>
+
+            <!-- Member Benefits & Promo Vouchers Row -->
+            <div class="section-header" style="margin-top: 10px;">
+              <div>
+                <p class="eyebrow">PARTNER DISCOUNTS</p>
+                <h2>Exclusive Member Vouchers</h2>
+              </div>
             </div>
             <div class="reward-grid">
               <article class="surface-card reward-card">
                 <span class="reward-card__emoji">☕</span>
-                <p>PAYOO CAFÉ</p>
+                <p>PAYOO CAFÉ GULSHAN</p>
                 <h3>50% off your next coffee</h3>
                 <small>Use code <strong>CAFE50</strong> at checkout</small>
                 <button class="subtle-button copy-promo" data-code="CAFE50" type="button"><i class="fa-regular fa-copy"></i> Copy code</button>
@@ -931,6 +1002,148 @@
 
     <!-- Particle Confetti Canvas -->
     <canvas id="confetti-canvas"></canvas>
+
+    
+    <!-- AI Drink Crafter Studio Modal -->
+    <dialog id="ai-drink-modal" class="ai-crafter-dialog">
+      <div class="crafter-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #10b981, #6955f6); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1rem;"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+          <div>
+            <h3 style="margin: 0; font-size: 1.05rem;">AI Barista Studio</h3>
+            <small style="color: var(--mint); font-weight: 700;">● Molecular Beverage Synthesis Engine</small>
+          </div>
+        </div>
+        <button id="ai-drink-close" class="round-button small-round" type="button" aria-label="Close crafter"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      
+      <form id="ai-drink-form" class="crafter-body">
+        <div id="crafter-inputs-step">
+          <!-- Step 1: Base -->
+          <p class="crafter-section-title">Step 1: Select Beverage Base</p>
+          <div class="crafter-options-grid" id="base-options">
+            <div class="crafter-tile is-selected" data-base="Nitro Cold Brew" data-emoji="☕" data-grad="linear-gradient(135deg, #3b82f6 0%, #1e1b4b 100%)">
+              <span>☕</span>
+              <strong>Nitro Cold Brew</strong>
+            </div>
+            <div class="crafter-tile" data-base="Kyoto Matcha" data-emoji="🍵" data-grad="linear-gradient(135deg, #10b981 0%, #064e3b 100%)">
+              <span>🍵</span>
+              <strong>Kyoto Matcha</strong>
+            </div>
+            <div class="crafter-tile" data-base="Espresso Crema" data-emoji="⚡" data-grad="linear-gradient(135deg, #f59e0b 0%, #78350f 100%)">
+              <span>⚡</span>
+              <strong>Espresso Crema</strong>
+            </div>
+            <div class="crafter-tile" data-base="Sparkling Tonic" data-emoji="🫧" data-grad="linear-gradient(135deg, #06b6d4 0%, #083344 100%)">
+              <span>🫧</span>
+              <strong>Sparkling Tonic</strong>
+            </div>
+            <div class="crafter-tile" data-base="Velvet Oat Milk" data-emoji="🥛" data-grad="linear-gradient(135deg, #a855f7 0%, #3b0764 100%)">
+              <span>🥛</span>
+              <strong>Velvet Oat Milk</strong>
+            </div>
+            <div class="crafter-tile" data-base="Wild Pitaya" data-emoji="🫐" data-grad="linear-gradient(135deg, #ec4899 0%, #4c1d95 100%)">
+              <span>🫐</span>
+              <strong>Wild Pitaya</strong>
+            </div>
+          </div>
+
+          <!-- Step 2: Vibe / Mood -->
+          <p class="crafter-section-title">Step 2: Flavor Mood Profile</p>
+          <div class="crafter-options-grid" id="vibe-options">
+            <div class="crafter-tile is-selected" data-vibe="Cyber Energy" data-flavor="High caffeine &amp; crisp vanilla notes">
+              <span>⚡</span>
+              <strong>Cyber Energy</strong>
+            </div>
+            <div class="crafter-tile" data-vibe="Midnight Calm" data-flavor="Lavender mist, oat cream &amp; chamomile">
+              <span>🌙</span>
+              <strong>Midnight Calm</strong>
+            </div>
+            <div class="crafter-tile" data-vibe="Tropical Nebula" data-flavor="Passionfruit, lime pearls &amp; pink salt">
+              <span>🌺</span>
+              <strong>Tropical Nebula</strong>
+            </div>
+          </div>
+
+          <!-- Step 3: Molecular Booster -->
+          <p class="crafter-section-title">Step 3: Superfood Booster</p>
+          <div class="crafter-options-grid" id="booster-options">
+            <div class="crafter-tile is-selected" data-booster="Lion's Mane Nootropic">
+              <span>🧠</span>
+              <strong>Nootropic Focus</strong>
+            </div>
+            <div class="crafter-tile" data-booster="Electrolyte Salts">
+              <span>💧</span>
+              <strong>Electrolytes</strong>
+            </div>
+            <div class="crafter-tile" data-booster="Edible 24K Gold Flakes">
+              <span>✨</span>
+              <strong>24K Gold Flakes</strong>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <label style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; color: var(--ink); margin-bottom: 6px;">
+              <span>Sweetness Calibration:</span>
+              <strong id="sweetness-val" style="color: var(--violet);">50% (Standard)</strong>
+            </label>
+            <input type="range" id="sweetness-slider" class="limit-range-input" min="0" max="100" step="25" value="50" />
+          </div>
+
+          <button class="button button--primary button--wide button--lg" type="submit">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Synthesize Drink with AI
+          </button>
+        </div>
+
+        <!-- Step 4: Live Synthesis Animation (Hidden initially) -->
+        <div id="crafter-synthesis-step" class="synthesis-overlay hidden">
+          <div class="synthesis-rings">
+            <div class="ring-spin"></div>
+            <div class="ring-spin ring-spin--reverse"></div>
+            <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 1.8rem;" id="synthesis-emoji">☕</div>
+          </div>
+          <div class="synthesis-status-text" id="synthesis-status-text">Analyzing flavor harmonics...</div>
+          <p class="synthesis-subtext" id="synthesis-subtext">Calibrating sweetness, viscosity, and aromatic density</p>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Drink Order Pickup Voucher Modal -->
+    <dialog id="drink-order-modal" class="drink-voucher-dialog">
+      <div class="modal-top" style="padding: 16px 24px; border-bottom: 1px solid var(--line);">
+        <span class="eyebrow" style="margin: 0;"><i class="fa-solid fa-mug-hot"></i> PAYOO CAFÉ ORDER VOUCHER</span>
+        <button id="drink-order-close" class="round-button small-round" type="button" aria-label="Close voucher"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="voucher-content-sheet">
+        <div class="voucher-brand-header">
+          <img src="./assets/logo.png" alt="Payoo" style="width: 28px; height: 28px;" />
+          <span>pay<span>oo</span> Café</span>
+        </div>
+        <div class="voucher-prep-badge"><i class="fa-solid fa-circle-check"></i> Order Confirmed • Prep in 3-5 mins</div>
+        <h2 id="voucher-drink-name" style="margin: 0 0 6px; font-family: Manrope, sans-serif; font-size: 1.4rem;">Cyber Matcha Cloud</h2>
+        <div class="voucher-order-id" id="voucher-order-id">DRK-918420</div>
+        
+        <div class="voucher-qr-box" id="voucher-qr-container"></div>
+        
+        <p style="font-size: 0.8rem; color: var(--muted); margin: 6px 0 16px;">Scan this contactless QR at <strong>Gulshan 2 Flagship Lounge</strong> for instant barista pickup.</p>
+        
+        <div style="background: var(--canvas); border-radius: 12px; padding: 12px; font-size: 0.78rem; text-align: left; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span style="color: var(--muted);">Payment Method:</span>
+            <strong style="color: var(--ink);" id="voucher-payment-method">Virtual Platinum Card (•••• 9184)</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--muted);">Amount Paid:</span>
+            <strong style="color: var(--violet);" id="voucher-amount-paid">৳380.00</strong>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+          <button id="print-voucher-btn" class="button button--soft button--sm" type="button" style="flex: 1;"><i class="fa-solid fa-print"></i> Print Voucher</button>
+          <button id="done-voucher-btn" class="button button--primary button--sm" type="button" style="flex: 1;">Done</button>
+        </div>
+      </div>
+    </dialog>
 
     <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
     <script src="./script/app.js"></script>

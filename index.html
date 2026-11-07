@@ -21,9 +21,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   </head>
   <body class="landing-body">
-    <!-- Subtle 3D Ambient Canvas Background -->
-    <div id="cinematic-canvas-container" class="cinematic-canvas-container" aria-hidden="true">
-      <canvas id="cinematic-canvas"></canvas>
+    <!-- Cinematic Video & 3D Ambient Background Layer -->
+    <div id="cinematic-bg-container" class="cinematic-bg-container" aria-hidden="true">
+      <video id="cinematic-bg-video" class="cinematic-bg-video" autoplay muted loop playsinline preload="auto" poster="./assets/logo.png">
+        <source src="./assets/video/bg-cinematic.mp4" type="video/mp4" />
+      </video>
+      <div class="cinematic-video-overlay"></div>
+      <div id="cinematic-canvas-container" class="cinematic-canvas-container" style="position: absolute; inset: 0;">
+        <canvas id="cinematic-canvas"></canvas>
+      </div>
     </div>
 
     <!-- Main Landing Page Shell -->
@@ -40,9 +46,16 @@
           <a href="#security">Security</a>
           <a href="#faq">FAQ</a>
         </nav>
-        <a href="#signin-portal" class="button button--primary button--sm">
-          Launch Demo <i class="fa-solid fa-arrow-right"></i>
-        </a>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button id="atmosphere-toggle-btn" class="atmosphere-pill-btn" type="button" title="Switch visual atmosphere (Cinematic Video / 3D Mesh / Minimal)">
+            <span class="atmosphere-dot"></span>
+            <span id="atmosphere-label">Cinematic Video</span>
+            <i class="fa-solid fa-sparkles"></i>
+          </button>
+          <a href="#signin-portal" class="button button--primary button--sm">
+            Launch Demo <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
       </header>
 
       <!-- Hero Section with Value Proposition & Instant Access Portal -->
@@ -208,6 +221,14 @@
             <p>Separate funds into dedicated savings vaults, monitor monthly budget burn with health gauges, and hold 99.9% pure fractional 24K digital gold.</p>
           </article>
 
+          
+          <article class="feature-card--glass">
+            <div class="feature-icon-box feature-icon-box--emerald">
+              <i class="fa-solid fa-mug-hot"></i>
+            </div>
+            <h3>Payoo Café &amp; AI Artisan Drinks</h3>
+            <p>Explore an exclusive AI-crafted beverage collection, formulate custom drinks in the AI Barista Studio, and enjoy instant 1-tap checkout with live pickup vouchers.</p>
+          </article>
           <article class="feature-card--glass">
             <div class="feature-icon-box feature-icon-box--mint">
               <i class="fa-solid fa-wand-magic-sparkles"></i>
